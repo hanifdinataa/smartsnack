@@ -1,0 +1,451 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "id": "370b7cce",
+   "metadata": {},
+   "source": [
+    "# SmartSnack Product Package Classifier (.tflite)\n",
+    "Notebook untuk melatih klasifikasi kemasan produk dari `product-images/food` dan `product-images/drink`, lalu export `.tflite` + `labels.txt`.\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "id": "28e278db",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Note: you may need to restart the kernel to use updated packages.\n"
+     ]
+    },
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "\n",
+      "[notice] A new release of pip available: 22.3 -> 26.1\n",
+      "[notice] To update, run: python.exe -m pip install --upgrade pip\n"
+     ]
+    }
+   ],
+   "source": [
+    "%pip install -q tensorflow pandas scikit-learn pillow\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "id": "7147a9d7",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Total images: 365\n",
+      "Unique labels: 356\n"
+     ]
+    }
+   ],
+   "source": [
+    "from pathlib import Path\n",
+    "import re\n",
+    "import numpy as np\n",
+    "import pandas as pd\n",
+    "import tensorflow as tf\n",
+    "from sklearn.model_selection import train_test_split\n",
+    "\n",
+    "ROOT = Path.cwd()\n",
+    "DATA_ROOT = ROOT / 'product-images'\n",
+    "OUT_DIR = ROOT / 'artifacts'\n",
+    "OUT_DIR.mkdir(parents=True, exist_ok=True)\n",
+    "IMG_EXTS = {'.jpg', '.jpeg', '.png', '.webp'}\n",
+    "\n",
+    "def clean_label(stem: str) -> str:\n",
+    "    s = re.sub(r'^\\d+[ _-]*', '', stem.strip())\n",
+    "    s = s.lower()\n",
+    "    s = re.sub(r'[^a-z0-9]+', '_', s)\n",
+    "    s = re.sub(r'_+', '_', s).strip('_')\n",
+    "    return s or 'unknown'\n",
+    "\n",
+    "rows = []\n",
+    "for cat_dir in [DATA_ROOT / 'food', DATA_ROOT / 'drink']:\n",
+    "    if not cat_dir.exists():\n",
+    "        continue\n",
+    "    category = cat_dir.name.lower()\n",
+    "    for p in cat_dir.rglob('*'):\n",
+    "        if p.is_file() and p.suffix.lower() in IMG_EXTS:\n",
+    "            rows.append({'filepath': str(p), 'label': clean_label(p.stem), 'category': category})\n",
+    "\n",
+    "df = pd.DataFrame(rows)\n",
+    "print('Total images:', len(df))\n",
+    "print('Unique labels:', df['label'].nunique())\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "id": "78f1a1ad",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Stability mode aktif (CPU-safe).\n"
+     ]
+    }
+   ],
+   "source": [
+    "# Stability mode untuk mencegah kernel crash\n",
+    "import os, gc\n",
+    "os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'\n",
+    "\n",
+    "try:\n",
+    "    tf.config.set_visible_devices([], 'GPU')\n",
+    "except Exception:\n",
+    "    pass\n",
+    "\n",
+    "try:\n",
+    "    tf.config.threading.set_intra_op_parallelism_threads(1)\n",
+    "    tf.config.threading.set_inter_op_parallelism_threads(1)\n",
+    "except Exception:\n",
+    "    pass\n",
+    "\n",
+    "SEED = 42\n",
+    "tf.keras.utils.set_random_seed(SEED)\n",
+    "print('Stability mode aktif (CPU-safe).')\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "id": "f9faf1fa",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "After filtering: 18 images | classes: 9\n"
+     ]
+    }
+   ],
+   "source": [
+    "MIN_SAMPLES_PER_LABEL = 2\n",
+    "counts = df['label'].value_counts()\n",
+    "valid_labels = counts[counts >= MIN_SAMPLES_PER_LABEL].index\n",
+    "df2 = df[df['label'].isin(valid_labels)].copy()\n",
+    "print('After filtering:', len(df2), 'images | classes:', df2['label'].nunique())\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "id": "d7f7e462",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Train: 10 Val: 8 Classes: 9\n"
+     ]
+    }
+   ],
+   "source": [
+    "num_classes_all = df2['label'].nunique()\n",
+    "min_val_size = max(num_classes_all, int(0.2 * len(df2)))\n",
+    "test_size = max(0.2, min_val_size / max(len(df2), 1))\n",
+    "test_size = min(test_size, 0.4)\n",
+    "\n",
+    "can_stratify = (df2['label'].value_counts().min() >= 2) and (int(round(test_size * len(df2))) >= num_classes_all)\n",
+    "if can_stratify:\n",
+    "    train_df, val_df = train_test_split(df2, test_size=test_size, random_state=42, stratify=df2['label'])\n",
+    "else:\n",
+    "    train_df, val_df = train_test_split(df2, test_size=test_size, random_state=42, shuffle=True)\n",
+    "\n",
+    "labels = sorted(df2['label'].unique().tolist())\n",
+    "num_classes = len(labels)\n",
+    "label_to_idx = {l:i for i,l in enumerate(labels)}\n",
+    "train_df['label_idx'] = train_df['label'].map(label_to_idx)\n",
+    "val_df['label_idx'] = val_df['label'].map(label_to_idx)\n",
+    "train_df = train_df.dropna(subset=['label_idx']).copy()\n",
+    "val_df = val_df.dropna(subset=['label_idx']).copy()\n",
+    "train_df['label_idx'] = train_df['label_idx'].astype('int32')\n",
+    "val_df['label_idx'] = val_df['label_idx'].astype('int32')\n",
+    "print('Train:', len(train_df), 'Val:', len(val_df), 'Classes:', num_classes)\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "id": "1e01da6a",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "IMG_SIZE = (160, 160)\n",
+    "BATCH_SIZE = 8\n",
+    "AUTOTUNE = tf.data.AUTOTUNE\n",
+    "CACHE_DATASET = False\n",
+    "\n",
+    "def load_and_preprocess(path, label):\n",
+    "    img = tf.io.read_file(path)\n",
+    "    img = tf.io.decode_image(img, channels=3, expand_animations=False)\n",
+    "    img = tf.image.resize(img, IMG_SIZE)\n",
+    "    img = tf.cast(img, tf.float32)\n",
+    "    return img, label\n",
+    "\n",
+    "def make_ds(dataframe, training=False):\n",
+    "    paths = dataframe['filepath'].values\n",
+    "    labs = dataframe['label_idx'].values.astype(np.int32)\n",
+    "    ds = tf.data.Dataset.from_tensor_slices((paths, labs))\n",
+    "    ds = ds.map(load_and_preprocess, num_parallel_calls=AUTOTUNE)\n",
+    "    if training:\n",
+    "        ds = ds.shuffle(min(2048, len(dataframe)), seed=42)\n",
+    "    if CACHE_DATASET:\n",
+    "        ds = ds.cache()\n",
+    "    return ds.batch(BATCH_SIZE).prefetch(1)\n",
+    "\n",
+    "train_ds = make_ds(train_df, training=True)\n",
+    "val_ds = make_ds(val_df, training=False)\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "id": "900c4796",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "data_aug = tf.keras.Sequential([\n",
+    "    tf.keras.layers.RandomFlip('horizontal'),\n",
+    "    tf.keras.layers.RandomRotation(0.08),\n",
+    "    tf.keras.layers.RandomZoom(0.12),\n",
+    "])\n",
+    "\n",
+    "base = tf.keras.applications.MobileNetV2(input_shape=IMG_SIZE + (3,), include_top=False, weights='imagenet')\n",
+    "base.trainable = False\n",
+    "\n",
+    "inputs = tf.keras.Input(shape=IMG_SIZE + (3,))\n",
+    "x = data_aug(inputs)\n",
+    "x = tf.keras.applications.mobilenet_v2.preprocess_input(x)\n",
+    "x = base(x, training=False)\n",
+    "x = tf.keras.layers.GlobalAveragePooling2D()(x)\n",
+    "x = tf.keras.layers.Dropout(0.2)(x)\n",
+    "outputs = tf.keras.layers.Dense(num_classes, activation='softmax')(x)\n",
+    "model = tf.keras.Model(inputs, outputs)\n",
+    "\n",
+    "model.compile(optimizer=tf.keras.optimizers.Adam(1e-3), loss='sparse_categorical_crossentropy', metrics=['accuracy'])\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "id": "aa9263e3",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Epoch 1/8\n",
+      "\u001b[1m2/2\u001b[0m \u001b[32m━━━━━━━━━━━━━━━━━━━━\u001b[0m\u001b[37m\u001b[0m \u001b[1m26s\u001b[0m 10s/step - accuracy: 0.1000 - loss: 3.4063 - val_accuracy: 0.1250 - val_loss: 2.7611 - learning_rate: 0.0010\n",
+      "Epoch 2/8\n",
+      "\u001b[1m2/2\u001b[0m \u001b[32m━━━━━━━━━━━━━━━━━━━━\u001b[0m\u001b[37m\u001b[0m \u001b[1m2s\u001b[0m 855ms/step - accuracy: 0.3000 - loss: 2.4592 - val_accuracy: 0.0000e+00 - val_loss: 2.7744 - learning_rate: 0.0010\n",
+      "Epoch 3/8\n",
+      "\u001b[1m2/2\u001b[0m \u001b[32m━━━━━━━━━━━━━━━━━━━━\u001b[0m\u001b[37m\u001b[0m \u001b[1m1s\u001b[0m 525ms/step - accuracy: 0.2000 - loss: 2.1568 - val_accuracy: 0.0000e+00 - val_loss: 2.7682 - learning_rate: 0.0010\n",
+      "Epoch 4/8\n",
+      "\u001b[1m2/2\u001b[0m \u001b[32m━━━━━━━━━━━━━━━━━━━━\u001b[0m\u001b[37m\u001b[0m \u001b[1m1s\u001b[0m 618ms/step - accuracy: 0.3000 - loss: 2.0419 - val_accuracy: 0.1250 - val_loss: 2.7885 - learning_rate: 5.0000e-04\n",
+      "Epoch 5/8\n",
+      "\u001b[1m2/2\u001b[0m \u001b[32m━━━━━━━━━━━━━━━━━━━━\u001b[0m\u001b[37m\u001b[0m \u001b[1m1s\u001b[0m 800ms/step - accuracy: 0.2000 - loss: 1.8246 - val_accuracy: 0.1250 - val_loss: 2.8128 - learning_rate: 5.0000e-04\n",
+      "Epoch 6/8\n",
+      "\u001b[1m2/2\u001b[0m \u001b[32m━━━━━━━━━━━━━━━━━━━━\u001b[0m\u001b[37m\u001b[0m \u001b[1m2s\u001b[0m 999ms/step - accuracy: 0.3000 - loss: 1.6154 - val_accuracy: 0.1250 - val_loss: 2.8194 - learning_rate: 2.5000e-04\n"
+     ]
+    }
+   ],
+   "source": [
+    "callbacks = [\n",
+    "    tf.keras.callbacks.EarlyStopping(monitor='val_accuracy', patience=5, restore_best_weights=True),\n",
+    "    tf.keras.callbacks.ReduceLROnPlateau(monitor='val_loss', factor=0.5, patience=2),\n",
+    "]\n",
+    "history = model.fit(train_ds, validation_data=val_ds, epochs=8, callbacks=callbacks)\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 9,
+   "id": "fcb4edaf",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Skip fine-tuning untuk stabilitas kernel.\n"
+     ]
+    }
+   ],
+   "source": [
+    "# Fine-tuning dimatikan untuk mencegah kernel OOM/crash di laptop.\n",
+    "# Jika nanti environment lebih kuat, cell ini bisa diaktifkan lagi.\n",
+    "print('Skip fine-tuning untuk stabilitas kernel.')\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 10,
+   "id": "83ce24ed",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Validation accuracy: 0.1250\n"
+     ]
+    }
+   ],
+   "source": [
+    "val_loss, val_acc = model.evaluate(val_ds, verbose=0)\n",
+    "print(f'Validation accuracy: {val_acc:.4f}')\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 11,
+   "id": "e5c32a33",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Saved inference keras: c:\\Hanif-Dinata\\SEMESTER6\\TA\\ANDROID\\MODEL\\artifacts\\product_classifier_export.keras\n",
+      "Saved labels: c:\\Hanif-Dinata\\SEMESTER6\\TA\\ANDROID\\MODEL\\artifacts\\labels.txt count: 9\n",
+      "WARNING:tensorflow:From c:\\Users\\User\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\keras\\src\\backend\\common\\global_state.py:82: The name tf.reset_default_graph is deprecated. Please use tf.compat.v1.reset_default_graph instead.\n",
+      "\n",
+      "Ready for external conversion step.\n"
+     ]
+    }
+   ],
+   "source": [
+    "# Export preparation: simpan model inferensi + labels dulu (aman untuk kernel)\n",
+    "infer_inputs = tf.keras.Input(shape=IMG_SIZE + (3,), name='image')\n",
+    "x = tf.keras.applications.mobilenet_v2.preprocess_input(infer_inputs)\n",
+    "x = base(x, training=False)\n",
+    "x = tf.keras.layers.GlobalAveragePooling2D()(x)\n",
+    "classifier = tf.keras.layers.Dense(num_classes, activation='softmax', name='classifier')\n",
+    "out = classifier(x)\n",
+    "infer_model = tf.keras.Model(infer_inputs, out, name='product_classifier_infer')\n",
+    "\n",
+    "trained_dense = None\n",
+    "for lyr in reversed(model.layers):\n",
+    "    if isinstance(lyr, tf.keras.layers.Dense):\n",
+    "        trained_dense = lyr\n",
+    "        break\n",
+    "if trained_dense is None:\n",
+    "    raise RuntimeError('Dense classifier layer tidak ditemukan')\n",
+    "classifier.set_weights(trained_dense.get_weights())\n",
+    "\n",
+    "keras_export_path = OUT_DIR / 'product_classifier_export.keras'\n",
+    "infer_model.save(keras_export_path)\n",
+    "\n",
+    "labels_path = OUT_DIR / 'labels.txt'\n",
+    "labels_path.write_text('\\n'.join(labels), encoding='utf-8')\n",
+    "print('Saved inference keras:', keras_export_path)\n",
+    "print('Saved labels:', labels_path, 'count:', len(labels))\n",
+    "\n",
+    "# Bersihkan memori sebelum konversi terpisah\n",
+    "import gc\n",
+    "try:\n",
+    "    tf.keras.backend.clear_session()\n",
+    "except Exception:\n",
+    "    pass\n",
+    "gc.collect()\n",
+    "print('Ready for external conversion step.')\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 13,
+   "id": "f6e6287e",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "returncode: 1\n",
+      "\n",
+      "  File \"c:\\Hanif-Dinata\\SEMESTER6\\TA\\ANDROID\\MODEL\\artifacts\\convert_tflite_external.py\", line 5\n",
+      "    OUT_DIR = Path(r'c:\\\\Hanif-Dinata\\\\SEMESTER6\\\\TA\\\\ANDROID\\\\MODEL\\\\artifacts'\")\n",
+      "                                                                                ^\n",
+      "SyntaxError: unterminated string literal (detected at line 5)\n",
+      "\n"
+     ]
+    },
+    {
+     "ename": "RuntimeError",
+     "evalue": "External conversion failed, lihat stderr di atas.",
+     "output_type": "error",
+     "traceback": [
+      "\u001b[31m---------------------------------------------------------------------------\u001b[39m",
+      "\u001b[31mRuntimeError\u001b[39m                              Traceback (most recent call last)",
+      "\u001b[36mCell\u001b[39m\u001b[36m \u001b[39m\u001b[32mIn[13]\u001b[39m\u001b[32m, line 30\u001b[39m\n\u001b[32m     28\u001b[39m \u001b[38;5;28;01mif\u001b[39;00m res.returncode != \u001b[32m0\u001b[39m:\n\u001b[32m     29\u001b[39m     \u001b[38;5;28mprint\u001b[39m(res.stderr)\n\u001b[32m---> \u001b[39m\u001b[32m30\u001b[39m     \u001b[38;5;28;01mraise\u001b[39;00m \u001b[38;5;167;01mRuntimeError\u001b[39;00m(\u001b[33m'\u001b[39m\u001b[33mExternal conversion failed, lihat stderr di atas.\u001b[39m\u001b[33m'\u001b[39m)\n",
+      "\u001b[31mRuntimeError\u001b[39m: External conversion failed, lihat stderr di atas."
+     ]
+    }
+   ],
+   "source": [
+    "# External conversion: jalankan converter di proses Python terpisah (lebih tahan crash)\n",
+    "import subprocess, sys\n",
+    "from pathlib import Path\n",
+    "\n",
+    "script_path = OUT_DIR / 'convert_tflite_external.py'\n",
+    "script_path.write_text('''\n",
+    "from pathlib import Path\n",
+    "import tensorflow as tf\n",
+    "\n",
+    "OUT_DIR = Path(r'{}'\")\n",
+    "model_path = OUT_DIR / 'product_classifier_export.keras'\n",
+    "out_path = OUT_DIR / 'product_classifier.tflite'\n",
+    "\n",
+    "model = tf.keras.models.load_model(model_path)\n",
+    "converter = tf.lite.TFLiteConverter.from_keras_model(model)\n",
+    "converter.optimizations = [tf.lite.Optimize.DEFAULT]\n",
+    "# keep builtin only for max compatibility\n",
+    "converter.target_spec.supported_ops = [tf.lite.OpsSet.TFLITE_BUILTINS]\n",
+    "\n",
+    "buf = converter.convert()\n",
+    "out_path.write_bytes(buf)\n",
+    "print('OK', out_path, len(buf))\n",
+    "'''.format(str(OUT_DIR).replace('\\\\','\\\\\\\\')) , encoding='utf-8')\n",
+    "\n",
+    "res = subprocess.run([sys.executable, str(script_path)], capture_output=True, text=True)\n",
+    "print('returncode:', res.returncode)\n",
+    "print(res.stdout)\n",
+    "if res.returncode != 0:\n",
+    "    print(res.stderr)\n",
+    "    raise RuntimeError('External conversion failed, lihat stderr di atas.')\n"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "name": "python",
+   "version": "3.11.0"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}

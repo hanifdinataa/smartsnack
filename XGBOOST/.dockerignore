@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.png
+*.csv
+train_xgboost.py
+tips.txt

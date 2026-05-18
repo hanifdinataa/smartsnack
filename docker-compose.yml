@@ -1,0 +1,142 @@
+﻿services:
+  mysql:
+    image: mysql:8.0
+    container_name: smartsnack-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: db_smartsnack
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: smartsnack
+      MYSQL_PASSWORD: smartsnack
+    command: --default-authentication-plugin=mysql_native_password
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-proot"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  phpmyadmin:
+    image: phpmyadmin:5-apache
+    container_name: smartsnack-phpmyadmin
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      PMA_USER: root
+      PMA_PASSWORD: root
+    ports:
+      - "8081:80"
+
+  mqtt:
+    image: eclipse-mosquitto:2
+    container_name: smartsnack-mqtt
+    restart: unless-stopped
+    ports:
+      - "1884:1884"
+    volumes:
+      - ./mqtt/mosquitto_local.conf:/mosquitto/config/mosquitto.conf:ro
+
+  label-gizi-service:
+    build:
+      context: .
+      dockerfile: label-gizi-service/Dockerfile
+    container_name: smartsnack-label-gizi
+    restart: unless-stopped
+    ports:
+      - "5060:5060"
+
+  xgboost:
+    build:
+      context: ./XGBOOST
+      dockerfile: Dockerfile
+    container_name: smartsnack-xgboost
+    restart: unless-stopped
+    ports:
+      - "5001:5001"
+
+  backend:
+    build:
+      context: ./smartsnack-backend
+      dockerfile: Dockerfile
+    container_name: smartsnack-backend
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+      mqtt:
+        condition: service_started
+      label-gizi-service:
+        condition: service_started
+      xgboost:
+        condition: service_started
+    environment:
+      APP_ENV: production
+      APP_DEBUG: "false"
+      APP_URL: http://54.80.25.12:8000
+      CACHE_STORE: file
+      SESSION_DRIVER: file
+      QUEUE_CONNECTION: sync
+      DB_CONNECTION: mysql
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_DATABASE: db_smartsnack
+      DB_USERNAME: smartsnack
+      DB_PASSWORD: smartsnack
+      MQTT_HOST: mqtt
+      MQTT_PORT: 1884
+      LABEL_GIZI_ENDPOINT: http://label-gizi-service:5060
+      LABEL_GIZI_TIMEOUT: 120
+      NUTRITION_VISION_ENDPOINT: http://label-gizi-service:5060
+      DIABETES_XGBOOST_ENDPOINT: http://xgboost:5001/predict
+      AUTO_START_SERVO_LISTENER: "false"
+    ports:
+      - "8000:80"
+    volumes:
+      - ./smartsnack-backend/storage:/var/www/html/storage
+      - ./Test2:/var/www/Test2:ro
+      - ./MODEL/product-images:/var/www/product-images:ro
+      
+
+  servo-listener:
+    build:
+      context: ./smartsnack-backend
+      dockerfile: Dockerfile
+    container_name: smartsnack-servo-listener
+    restart: unless-stopped
+    depends_on:
+      backend:
+        condition: service_started
+      mqtt:
+        condition: service_started
+    working_dir: /var/www/html
+    entrypoint: ["php", "artisan", "snackbox:listen-servo"]
+    environment:
+      APP_ENV: production
+      APP_DEBUG: "false"
+      CACHE_STORE: file
+      SESSION_DRIVER: file
+      QUEUE_CONNECTION: sync
+      DB_CONNECTION: mysql
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_DATABASE: db_smartsnack
+      DB_USERNAME: smartsnack
+      DB_PASSWORD: smartsnack
+      MQTT_HOST: mqtt
+      MQTT_PORT: 1884
+      LABEL_GIZI_ENDPOINT: http://label-gizi-service:5060
+      LABEL_GIZI_TIMEOUT: 120
+      NUTRITION_VISION_ENDPOINT: http://label-gizi-service:5060
+      DIABETES_XGBOOST_ENDPOINT: http://xgboost:5001/predict
+      AUTO_START_SERVO_LISTENER: "false"
+
+volumes:
+  mysql_data:
+

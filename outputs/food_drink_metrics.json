@@ -1,0 +1,13 @@
+{
+  "test_accuracy": 0.75,
+  "best_params": {
+    "clf__C": 0.1,
+    "clf__solver": "lbfgs"
+  },
+  "classes": [
+    "food",
+    "drink"
+  ],
+  "feature_dim": 80,
+  "total_samples": 120
+}

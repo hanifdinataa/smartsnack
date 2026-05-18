@@ -1,0 +1,38 @@
+============================================================
+  LAPORAN EVALUASI MODEL XGBOOST
+  Deteksi Dini Risiko Diabetes
+  Tugas Akhir - Hanif Dinata (2301083015)
+  Politeknik Negeri Padang
+============================================================
+
+Dataset       : nhanes_complete_dataset.csv
+Total data    : 8709 baris
+Split         : 80% Train / 20% Test
+
+HYPERPARAMETER TERBAIK (GridSearchCV):
+  colsample_bytree         : 0.8
+  learning_rate            : 0.01
+  max_depth                : 7
+  n_estimators             : 200
+  subsample                : 0.8
+
+HASIL EVALUASI:
+  Accuracy       : 0.7767
+  Precision      : 0.2892
+  Recall         : 0.8045
+  F1-Score       : 0.4254
+  AUC-ROC        : 0.8487
+
+CONFUSION MATRIX:
+  TN=1209  FP=354
+  FN=35  TP=144
+
+CLASSIFICATION REPORT:
+              precision    recall  f1-score   support
+
+ No Diabetes       0.97      0.77      0.86      1563
+    Diabetes       0.29      0.80      0.43       179
+
+    accuracy                           0.78      1742
+   macro avg       0.63      0.79      0.64      1742
+weighted avg       0.90      0.78      0.82      1742

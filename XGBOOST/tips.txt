@@ -1,0 +1,2 @@
+pip install xgboost scikit-learn pandas numpy matplotlib joblib
+python train_xgboost.py

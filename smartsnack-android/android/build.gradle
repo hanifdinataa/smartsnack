@@ -1,0 +1,20 @@
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+// Keep Android artifacts inside the repo so Flutter web run does not resolve
+// an invalid cross-root relative path from custom external build directories.
+rootProject.buildDir = "${rootDir}/.build/smartsnack_android"
+subprojects {
+    project.buildDir = "${rootProject.buildDir}/${project.name}"
+}
+subprojects {
+    project.evaluationDependsOn(":app")
+}
+
+tasks.register("clean", Delete) {
+    delete rootProject.buildDir
+}

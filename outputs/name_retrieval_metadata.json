@@ -1,0 +1,7 @@
+{
+  "total_samples": 120,
+  "total_unique_names": 120,
+  "top1_simulated": 0.4875,
+  "top3_simulated": 0.50625,
+  "approach": "nearest-neighbor image retrieval"
+}
