@@ -1208,8 +1208,8 @@ class ApiService {
   static const _apiBaseListFromDefine = String.fromEnvironment('API_BASE_URLS', defaultValue: '');
   static const _snackBoxDeviceId = String.fromEnvironment('SNACK_BOX_DEVICE_ID', defaultValue: 'esp32_health_01');
 
-  static String get _fallbackProductionBaseUrl => 'http://54.80.25.12:8000';
-  static const _defaultLocalApiWeb = 'http://54.80.25.12:8000';
+  static String get _fallbackProductionBaseUrl => 'http://54.144.6.206:8000';
+  static const _defaultLocalApiWeb = 'http://54.144.6.206:8000';
 
   static String get _resolvedBaseUrl {
     final defineBase = _sanitizeBaseUrl(_apiBaseFromDefine);
@@ -1227,7 +1227,7 @@ class ApiService {
 
     // Default non-web saat debug lokal via USB (butuh `adb reverse tcp:8000 tcp:8000`).
     if (kDebugMode) {
-      return 'http://54.80.25.12:8000';
+      return 'http://54.144.6.206:8000';
     }
 
     // Fallback production.
@@ -1254,7 +1254,7 @@ class ApiService {
     }
 
     if (kIsWeb) {
-      add('http://54.80.25.12:8000');
+      add('http://54.144.6.206:8000');
       add('http://127.0.0.1:8000');
       final browserHost = Uri.base.host;
       if (browserHost.isNotEmpty && browserHost != 'localhost' && browserHost != '127.0.0.1') {
@@ -1268,7 +1268,7 @@ class ApiService {
 
     // Kandidat lokal untuk HP fisik + backend lokal (Docker) via adb reverse.
     if (!kIsWeb) {
-      add('http://54.80.25.12:8000');
+      add('http://54.144.6.206:8000');
       add('http://127.0.0.1:8000'); // device + adb reverse
     }
 

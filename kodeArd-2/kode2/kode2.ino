@@ -1,0 +1,933 @@
+#include <Wire.h>
+#include <WiFi.h>
+#include <PubSubClient.h>
+#include <ESP32Servo.h>
+#include <math.h>
+#include "MAX30105.h"
+#include "heartRate.h"
+#include <Adafruit_MLX90614.h>
+
+MAX30105 particleSensor;
+Adafruit_MLX90614 mlx = Adafruit_MLX90614();
+
+WiFiClient espClient;
+PubSubClient mqtt(espClient);
+Servo snackServo;
+
+const char* WIFI_SSID = "H";
+const char* WIFI_PASS = "87654321";
+
+const char* MQTT_HOST = "54.144.6.206";
+const int   MQTT_PORT = 1884;
+const char* MQTT_USER = "";
+const char* MQTT_PASS = "";
+const char* DEVICE_ID = "esp32_health_01";
+
+String commandTopic;
+String resultTopic;
+String boxEventTopic;
+String boxDecisionTopic;
+
+// ===== KONSTANTA =====
+const unsigned long HEART_DURATION_MS           = 60000;
+const int           TEMP_SAMPLES                = 25;
+const int           TEMP_WARMUP_SAMPLES         = 5;
+const unsigned long TEMP_SAMPLE_DELAY_MS        = 120;
+const float         TEMP_CALIBRATION_OFFSET_C   = 0.3f;
+const float         TEMP_MAX_DEVIATION_FROM_MEDIAN_C = 1.2f;
+const long          FINGER_IR_THRESHOLD         = 8000;
+const unsigned long FINGER_WAIT_TIMEOUT_MS      = 45000;
+const int           SERVO_PIN                   = 18;
+const int           BUTTON_PIN                  = 15;
+const int           SERVO_CLOSED_ANGLE          = 0;
+const int           SERVO_OPEN_ANGLE            = 45;
+const int           BUTTON_ACTIVE_STATE         = LOW;
+const unsigned long BUTTON_DEBOUNCE_MS          = 120;
+const unsigned long BUTTON_COOLDOWN_MS          = 1000;
+const unsigned long BOX_DECISION_TIMEOUT_MS     = 20000;
+const int           BOX_DECISION_MAX_RETRY      = 2;
+const bool          ENABLE_SERVO_BOOT_TEST      = true;
+const int           BUZZER_PIN                  = 4;  // Active Buzzer GPIO4
+
+// ===== STATE VARIABLES =====
+unsigned long lastMqttReconnectMs     = 0;
+unsigned long lastMqttLoopKickMs      = 0;
+unsigned long lastButtonEdgeMs        = 0;
+unsigned long lastButtonPublishMs     = 0;
+unsigned long buttonDecisionRequestedAt = 0;
+bool          lastButtonReading       = HIGH;
+bool          buttonPressLatched      = false;
+bool          waitingBoxDecision      = false;
+int           boxDecisionRetryCount   = 0;
+bool          servoIsOpen             = false;
+unsigned long servoOpenedAtMs         = 0;
+unsigned long servoAutoCloseMs        = 6000;
+unsigned long lastNetworkDiagMs       = 0;
+unsigned long lastWifiRetryMs         = 0;
+bool          mlxReady                = false;
+float         lastGoodBodyTempC       = NAN;
+unsigned long lastGoodBodyTempMs      = 0;
+const unsigned long TEMP_CACHE_TTL_MS = 10UL * 60UL * 1000UL;
+
+// ========== FORWARD DECLARATIONS ==========
+void connectMqtt();
+void connectWifi();
+
+// ========== DIAGNOSTIC HELPERS ==========
+void printSeparator() {
+  Serial.println("----------------------------------------");
+}
+
+void scanI2cBus() {
+  Serial.println("[I2C] Scanning bus...");
+  int found = 0;
+  for (uint8_t addr = 1; addr < 127; addr++) {
+    Wire.beginTransmission(addr);
+    uint8_t err = Wire.endTransmission();
+    if (err == 0) {
+      Serial.print("[I2C] Found device at 0x");
+      if (addr < 16) Serial.print("0");
+      Serial.println(addr, HEX);
+      found++;
+    }
+  }
+  if (found == 0) Serial.println("[I2C] Tidak ada device terdeteksi.");
+}
+
+bool testBrokerTcpReachable() {
+  WiFiClient tester;
+  bool ok = tester.connect(MQTT_HOST, MQTT_PORT);
+  tester.stop();
+  return ok;
+}
+
+void logNetworkDiag() {
+  printSeparator();
+  Serial.println("[NET] Network Diagnostic");
+  Serial.print("[NET] WiFi Status     : ");
+  Serial.println(WiFi.status() == WL_CONNECTED ? "CONNECTED" : "DISCONNECTED");
+  Serial.print("[NET] ESP32 IP        : "); Serial.println(WiFi.localIP());
+  Serial.print("[NET] Gateway         : "); Serial.println(WiFi.gatewayIP());
+  Serial.print("[NET] DNS             : "); Serial.println(WiFi.dnsIP());
+  Serial.print("[NET] Broker Target   : ");
+  Serial.print(MQTT_HOST); Serial.print(":"); Serial.println(MQTT_PORT);
+  bool tcpOk = testBrokerTcpReachable();
+  Serial.print("[NET] TCP Broker Test : ");
+  Serial.println(tcpOk ? "OK" : "FAIL");
+  printSeparator();
+}
+
+// ========== JSON HELPERS ==========
+String jsonEscape(const String& input) {
+  String out = "";
+  for (size_t i = 0; i < input.length(); i++) {
+    char c = input.charAt(i);
+    if (c == '\"' || c == '\\') { out += '\\'; out += c; }
+    else if (c == '\n') out += "\\n";
+    else out += c;
+  }
+  return out;
+}
+
+String extractJsonValue(const String& payload, const String& key) {
+  String token = "\"" + key + "\"";
+  int keyPos = payload.indexOf(token);
+  if (keyPos < 0) return "";
+  int colonPos = payload.indexOf(':', keyPos + token.length());
+  if (colonPos < 0) return "";
+  int start = colonPos + 1;
+  while (start < (int)payload.length() && (payload[start] == ' ' || payload[start] == '\t')) start++;
+  if (start >= (int)payload.length()) return "";
+  if (payload[start] == '\"') {
+    int end = payload.indexOf('\"', start + 1);
+    if (end < 0) return "";
+    return payload.substring(start + 1, end);
+  }
+  int end = start;
+  while (end < (int)payload.length() &&
+         payload[end] != ',' && payload[end] != '}' && payload[end] != '\n') end++;
+  return payload.substring(start, end);
+}
+
+// ========== BUZZER ==========
+void beepBuzzer(unsigned long durationMs = 1000) {
+  digitalWrite(BUZZER_PIN, HIGH);
+  delay(durationMs);
+  digitalWrite(BUZZER_PIN, LOW);
+}
+
+// ========== SENSOR INIT ==========
+bool ensureMax30102Ready() {
+  // Kembalikan clock ke 100kHz untuk MAX30102
+  Wire.setClock(100000);
+  delay(50);
+  if (particleSensor.begin(Wire, I2C_SPEED_STANDARD)) {
+    particleSensor.setup();
+    particleSensor.setPulseAmplitudeRed(0x1F);
+    particleSensor.setPulseAmplitudeIR(0x24);
+    return true;
+  }
+  return false;
+}
+
+/*
+ * ensureMlxReady() — Perbaikan utama bug Codex:
+ * MLX90614 address = 0x5A, bukan 0x57 (0x57 itu EEPROM MAX30102).
+ * Root cause kegagalan: clock 100kHz + kurang delay power-on.
+ * Fix: turunkan clock ke 50kHz, tambah delay stabilisasi yang cukup,
+ *      lakukan Wire.end() + Wire.begin() ulang sebelum retry.
+ */
+bool ensureMlxReady() {
+  if (mlxReady) return true;
+
+  Serial.println("[TEMP] Mencoba recovery MLX90614...");
+
+  // Coba 3 clock speed berbeda dari lambat ke cepat
+  const uint32_t clockSpeeds[] = {50000, 25000, 10000};
+
+  for (int s = 0; s < 3; s++) {
+    // Reset bus sepenuhnya sebelum setiap percobaan
+    Wire.end();
+    delay(150);
+    Wire.begin(21, 22);
+    Wire.setClock(clockSpeeds[s]);
+    delay(500); // MLX90614 butuh waktu stabilisasi setelah power-on / bus reset
+
+    Serial.print("[TEMP] Coba clock speed: "); Serial.println(clockSpeeds[s]);
+    scanI2cBus(); // Print device yang terdeteksi — kalau 0x5A muncul berarti hardware OK
+
+    for (int attempt = 1; attempt <= 3; attempt++) {
+      Serial.print("[TEMP] Coba init MLX90614 ke-"); Serial.print(attempt);
+      Serial.print(" (clock="); Serial.print(clockSpeeds[s]); Serial.println(")");
+
+      if (mlx.begin()) {
+        mlxReady = true;
+        Serial.println("[TEMP] MLX90614 recovery berhasil!");
+        // Kembalikan clock ke 100kHz untuk MAX30102 setelah MLX berhasil init
+        Wire.setClock(100000);
+        return true;
+      }
+      delay(500);
+    }
+  }
+
+  Serial.println("[TEMP] MLX90614 recovery gagal semua clock speed.");
+  Serial.println("[TEMP] >> Pastikan 0x5A terdeteksi di I2C scan di atas!");
+  // Kembalikan clock ke 100kHz supaya MAX30102 tetap bisa jalan
+  Wire.setClock(100000);
+  return false;
+}
+
+// ========== HEART RATE ==========
+float measureHeartRateBpm(String& errorCode) {
+  if (!ensureMax30102Ready()) {
+    Serial.println("[HR] Status            : GAGAL - MAX30102 tidak siap.");
+    errorCode = "sensor_unavailable";
+    return 0.0f;
+  }
+
+  const int MAX_RATE_SAMPLES = 180;
+  float rates[MAX_RATE_SAMPLES];
+  int   validRates    = 0;
+  long  lastBeatMs    = 0;
+  int   fingerSamples = 0;
+  const unsigned long WARMUP_MS = 8000;
+
+  printSeparator();
+  Serial.println("[HR] === Pengukuran Detak Jantung ===");
+  Serial.println("[HR] Menunggu jari diletakkan di sensor...");
+
+  // Kalibrasi baseline IR adaptif
+  long baselineTotal = 0;
+  const int BASELINE_SAMPLES = 40;
+  for (int i = 0; i < BASELINE_SAMPLES; i++) {
+    baselineTotal += particleSensor.getIR();
+    delay(8);
+  }
+  long irBaseline       = baselineTotal / BASELINE_SAMPLES;
+  long adaptiveThreshold = irBaseline + 2500;
+  if (adaptiveThreshold < FINGER_IR_THRESHOLD) adaptiveThreshold = FINGER_IR_THRESHOLD;
+  if (adaptiveThreshold > 25000)               adaptiveThreshold = 25000;
+
+  Serial.print("[HR] Baseline IR        : "); Serial.println(irBaseline);
+  Serial.print("[HR] Adaptive Threshold : "); Serial.println(adaptiveThreshold);
+
+  // Tunggu jari
+  unsigned long fingerWaitStart  = millis();
+  bool          fingerDetected   = false;
+  int           consecutiveDetected = 0;
+
+  while (millis() - fingerWaitStart < FINGER_WAIT_TIMEOUT_MS) {
+    if (mqtt.connected()) mqtt.loop();
+    long irValue = particleSensor.getIR();
+
+    static unsigned long lastIrPrint = 0;
+    if (millis() - lastIrPrint > 1000) {
+      Serial.print("[HR] RAW IR            : "); Serial.print(irValue);
+      Serial.print("  | Threshold       : "); Serial.println(adaptiveThreshold);
+      lastIrPrint = millis();
+    }
+
+    if (irValue > adaptiveThreshold) {
+      consecutiveDetected++;
+      if (consecutiveDetected >= 8) {
+        fingerDetected = true;
+        printSeparator();
+        Serial.println("[HR] Status            : Jari Terdeteksi!");
+        Serial.print("[HR] Nilai IR Sensor   : "); Serial.println(irValue);
+        Serial.println("[HR] Mulai pengukuran 60 detik...");
+        printSeparator();
+        break;
+      }
+    } else {
+      consecutiveDetected = 0;
+    }
+    delay(20);
+  }
+
+  if (!fingerDetected) {
+    Serial.println("[HR] Status            : GAGAL - Jari tidak terdeteksi dalam batas waktu.");
+    errorCode = "finger_not_detected";
+    return 0.0f;
+  }
+
+  unsigned long startTime       = millis();
+  int           beatCount       = 0;
+  unsigned long lastProgressPrint = 0;
+
+  while (millis() - startTime < HEART_DURATION_MS) {
+    if (mqtt.connected()) mqtt.loop();
+    else connectMqtt();
+
+    long irValue = particleSensor.getIR();
+    if (irValue > adaptiveThreshold) {
+      fingerSamples++;
+      if (checkForBeat(irValue)) {
+        long nowMs = millis();
+        if (lastBeatMs > 0) {
+          long delta = nowMs - lastBeatMs;
+          if (delta > 0) {
+            float bpm = 60.0f / (delta / 1000.0f);
+            if ((millis() - startTime) > WARMUP_MS && bpm >= 40.0f && bpm <= 180.0f) {
+              if (validRates < MAX_RATE_SAMPLES) rates[validRates++] = bpm;
+              beatCount++;
+              Serial.print("[HR] Beat #"); Serial.print(beatCount);
+              Serial.print("   BPM Instan      : "); Serial.print(bpm, 1);
+              Serial.print("  | IR : "); Serial.println(irValue);
+            }
+          }
+        }
+        lastBeatMs = nowMs;
+      }
+    }
+
+    if (millis() - lastProgressPrint > 10000) {
+      unsigned long elapsed = (millis() - startTime) / 1000;
+      Serial.print("[HR] Progress          : "); Serial.print(elapsed);
+      Serial.print(" / 60 detik | Sampel valid: "); Serial.println(validRates);
+      lastProgressPrint = millis();
+    }
+    delay(10);
+  }
+
+  if (fingerSamples < 100 || validRates < 12) {
+    Serial.println("[HR] Status            : GAGAL - Sinyal tidak valid (kurang sampel).");
+    errorCode = "signal_invalid";
+    return 0.0f;
+  }
+
+  // Sorting untuk median
+  float sorted[MAX_RATE_SAMPLES];
+  for (int i = 0; i < validRates; i++) sorted[i] = rates[i];
+  for (int i = 0; i < validRates - 1; i++) {
+    for (int j = i + 1; j < validRates; j++) {
+      if (sorted[j] < sorted[i]) { float tmp = sorted[i]; sorted[i] = sorted[j]; sorted[j] = tmp; }
+    }
+  }
+  float median = sorted[validRates / 2];
+
+  float total = 0.0f;
+  int   used  = 0;
+  for (int i = 0; i < validRates; i++) {
+    if (fabsf(rates[i] - median) <= 15.0f) { total += rates[i]; used++; }
+  }
+
+  if (used < 8) {
+    Serial.println("[HR] Status            : GAGAL - Sampel outlier terlalu banyak.");
+    errorCode = "signal_invalid";
+    return 0.0f;
+  }
+
+  float avgBpm = total / used;
+  if (avgBpm < 45.0f || avgBpm > 180.0f) {
+    Serial.println("[HR] Status            : GAGAL - Hasil BPM di luar rentang normal.");
+    errorCode = "signal_invalid";
+    return 0.0f;
+  }
+
+  printSeparator();
+  Serial.println("[HR] === Hasil Pengukuran Detak Jantung ===");
+  Serial.print("[HR] Total Sampel      : ");  Serial.println(validRates);
+  Serial.print("[HR] Sampel Digunakan  : ");  Serial.println(used);
+  Serial.print("[HR] Median BPM        : ");  Serial.println(median, 2);
+  Serial.print("[HR] Rata-rata BPM     : ");  Serial.println(avgBpm, 2);
+  Serial.print("[HR] Status            : ");
+  if      (avgBpm < 60.0f)  Serial.println("Bradikardi (Rendah)");
+  else if (avgBpm <= 100.0f) Serial.println("Normal");
+  else                       Serial.println("Takikardi (Tinggi)");
+  printSeparator();
+
+  return avgBpm;
+}
+
+// ========== BODY TEMPERATURE ==========
+float measureBodyTemperatureC(String& errorCode) {
+  if (!ensureMlxReady()) {
+    if (!isnan(lastGoodBodyTempC) && (millis() - lastGoodBodyTempMs) <= TEMP_CACHE_TTL_MS) {
+      Serial.println("[TEMP] MLX90614 belum siap, pakai cache suhu terakhir.");
+      return lastGoodBodyTempC;
+    }
+    Serial.println("[TEMP] Status           : GAGAL - MLX90614 belum siap.");
+    errorCode = "sensor_unavailable";
+    return 0.0f;
+  }
+
+  printSeparator();
+  Serial.println("[TEMP] === Pengukuran Suhu Tubuh ===");
+  Serial.println("[TEMP] Warmup sensor MLX90614...");
+
+  for (int i = 0; i < TEMP_WARMUP_SAMPLES; i++) {
+    if (mqtt.connected()) mqtt.loop();
+    else connectMqtt();
+
+    float warmObj = mlx.readObjectTempC();
+    float warmAmb = mlx.readAmbientTempC();
+
+    // Kedua NaN = sensor disconnect
+    if (isnan(warmObj) && isnan(warmAmb)) {
+      if (!isnan(lastGoodBodyTempC) && (millis() - lastGoodBodyTempMs) <= TEMP_CACHE_TTL_MS) {
+        Serial.println("[TEMP] Warmup gagal, pakai cache suhu terakhir.");
+        return lastGoodBodyTempC;
+      }
+      Serial.println("[TEMP] Status           : GAGAL - Sensor tidak merespons saat warmup.");
+      mlxReady = false; // paksa re-init berikutnya
+      errorCode = "sensor_unavailable";
+      return 0.0f;
+    }
+
+    float warm = !isnan(warmObj) ? warmObj : warmAmb;
+    Serial.print("[TEMP] Warmup #"); Serial.print(i + 1);
+    Serial.print("       : "); Serial.print(warm, 2); Serial.println(" C");
+    delay(TEMP_SAMPLE_DELAY_MS);
+  }
+
+  float readings[TEMP_SAMPLES];
+  int   count = 0;
+  Serial.println("[TEMP] Mulai pengambilan sampel...");
+
+  for (int i = 0; i < TEMP_SAMPLES; i++) {
+    if (mqtt.connected()) mqtt.loop();
+    else connectMqtt();
+
+    float obj = mlx.readObjectTempC();
+    float amb = mlx.readAmbientTempC();
+
+    // Kedua NaN = sensor disconnect saat sampling
+    if (isnan(obj) && isnan(amb)) {
+      if (!isnan(lastGoodBodyTempC) && (millis() - lastGoodBodyTempMs) <= TEMP_CACHE_TTL_MS) {
+        Serial.println("[TEMP] Disconnect saat sampling, pakai cache suhu terakhir.");
+        return lastGoodBodyTempC;
+      }
+      Serial.println("[TEMP] Sensor disconnect saat sampling! Abort.");
+      mlxReady = false; // paksa re-init berikutnya
+      errorCode = "sensor_unavailable";
+      return 0.0f;
+    }
+
+    float t = !isnan(obj) ? obj : amb;
+    if (isnan(t) || t < 20.0f || t > 50.0f) {
+      Serial.print("[TEMP] Sampel #"); Serial.print(i + 1);
+      Serial.println("       : DIBUANG (di luar rentang 20-50 C)");
+      continue;
+    }
+
+    readings[count++] = t;
+    Serial.print("[TEMP] Sampel #"); Serial.print(i + 1);
+    Serial.print("        Obj/Amb     : "); Serial.print(obj, 2);
+    Serial.print(" / "); Serial.print(amb, 2);
+    Serial.print(" C -> Pakai: "); Serial.print(t, 2); Serial.println(" C");
+    delay(TEMP_SAMPLE_DELAY_MS);
+  }
+
+  if (count < 8) {
+    Serial.println("[TEMP] Status           : GAGAL - Sampel valid terlalu sedikit.");
+    errorCode = "signal_invalid";
+    return 0.0f;
+  }
+
+  // Sorting untuk median
+  for (int i = 0; i < count - 1; i++) {
+    for (int j = i + 1; j < count; j++) {
+      if (readings[j] < readings[i]) { float tmp = readings[i]; readings[i] = readings[j]; readings[j] = tmp; }
+    }
+  }
+
+  float median = readings[count / 2];
+  float total  = 0.0f;
+  int   used   = 0;
+  for (int i = 0; i < count; i++) {
+    if (fabsf(readings[i] - median) <= TEMP_MAX_DEVIATION_FROM_MEDIAN_C) { total += readings[i]; used++; }
+  }
+
+  if (used < 5) {
+    Serial.println("[TEMP] Status           : GAGAL - Tidak cukup sampel valid.");
+    errorCode = "signal_invalid";
+    return 0.0f;
+  }
+
+  float avg        = total / used;
+  float calibrated = avg + TEMP_CALIBRATION_OFFSET_C;
+  lastGoodBodyTempC = calibrated;
+  lastGoodBodyTempMs = millis();
+
+  printSeparator();
+  Serial.println("[TEMP] === Hasil Pengukuran Suhu Tubuh ===");
+  Serial.print("[TEMP] Total Sampel     : "); Serial.println(count);
+  Serial.print("[TEMP] Sampel Digunakan : "); Serial.println(used);
+  Serial.print("[TEMP] Median           : "); Serial.print(median, 2);   Serial.println(" C");
+  Serial.print("[TEMP] Rata-rata Raw    : "); Serial.print(avg, 2);       Serial.println(" C");
+  Serial.print("[TEMP] Offset Kalibrasi : +"); Serial.print(TEMP_CALIBRATION_OFFSET_C, 2); Serial.println(" C");
+  Serial.print("[TEMP] Suhu Terukur     : "); Serial.print(calibrated, 2); Serial.println(" C");
+  Serial.print("[TEMP] Status           : ");
+  if      (calibrated < 36.1f)  Serial.println("Hipotermia (Rendah)");
+  else if (calibrated <= 37.2f) Serial.println("Normal");
+  else if (calibrated <= 38.0f) Serial.println("Subfebris");
+  else                          Serial.println("Demam");
+  printSeparator();
+
+  return calibrated;
+}
+
+// ========== PUBLISH FUNCTIONS ==========
+void publishError(const String& checkId, const String& action, const String& errorCode) {
+  String payload = "{";
+  payload += "\"status\":\"error\",";
+  payload += "\"action\":\"" + jsonEscape(action) + "\",";
+  payload += "\"check_id\":" + checkId + ",";
+  payload += "\"error\":\"" + jsonEscape(errorCode) + "\",";
+  payload += "\"device_id\":\"" + jsonEscape(DEVICE_ID) + "\"";
+  payload += "}";
+  bool sent = false;
+  for (int i = 0; i < 3 && !sent; i++) {
+    if (!mqtt.connected()) connectMqtt();
+    sent = mqtt.publish(resultTopic.c_str(), payload.c_str());
+    if (!sent) { delay(120); mqtt.loop(); }
+  }
+  Serial.print("[MQTT] Publish Error    check_id="); Serial.print(checkId);
+  Serial.print(" | error="); Serial.print(errorCode);
+  Serial.print(" | sent="); Serial.println(sent ? "OK" : "FAIL");
+}
+
+void publishHeartRate(const String& checkId, float bpm) {
+  String payload = "{";
+  payload += "\"status\":\"ok\",";
+  payload += "\"action\":\"heart_rate\",";
+  payload += "\"check_id\":" + checkId + ",";
+  payload += "\"heart_rate\":" + String(bpm, 2) + ",";
+  payload += "\"device_id\":\"" + jsonEscape(DEVICE_ID) + "\"";
+  payload += "}";
+  bool sent = false;
+  for (int i = 0; i < 3 && !sent; i++) {
+    if (!mqtt.connected()) connectMqtt();
+    sent = mqtt.publish(resultTopic.c_str(), payload.c_str());
+    if (!sent) { delay(120); mqtt.loop(); }
+  }
+  Serial.print("[MQTT] Publish HeartRate  check_id="); Serial.print(checkId);
+  Serial.print(" | BPM="); Serial.print(bpm, 2);
+  Serial.print(" | sent="); Serial.println(sent ? "OK" : "FAIL");
+  if (sent) beepBuzzer(1000);  // Buzzer 1 detik setelah publish berhasil
+}
+
+void publishBodyTemperature(const String& checkId, float temp) {
+  String payload = "{";
+  payload += "\"status\":\"ok\",";
+  payload += "\"action\":\"body_temperature\",";
+  payload += "\"check_id\":" + checkId + ",";
+  payload += "\"body_temp\":" + String(temp, 2) + ",";
+  payload += "\"device_id\":\"" + jsonEscape(DEVICE_ID) + "\"";
+  payload += "}";
+  bool sent = false;
+  for (int i = 0; i < 3 && !sent; i++) {
+    if (!mqtt.connected()) connectMqtt();
+    sent = mqtt.publish(resultTopic.c_str(), payload.c_str());
+    if (!sent) { delay(120); mqtt.loop(); }
+  }
+  Serial.print("[MQTT] Publish BodyTemp   check_id="); Serial.print(checkId);
+  Serial.print(" | Temp="); Serial.print(temp, 2); Serial.print(" C");
+  Serial.print(" | sent="); Serial.println(sent ? "OK" : "FAIL");
+  if (sent) beepBuzzer(1000);  // Buzzer 1 detik setelah publish berhasil
+}
+
+// ========== COMMAND HANDLER ==========
+void handleCommandPayload(const String& payload) {
+  String action  = extractJsonValue(payload, "action");
+  String checkId = extractJsonValue(payload, "check_id");
+  action.trim(); checkId.trim();
+  if (checkId.length() == 0) checkId = "0";
+
+  printSeparator();
+  Serial.print("[MQTT] Command Diterima action="); Serial.print(action);
+  Serial.print(" | check_id="); Serial.println(checkId);
+
+  String errorCode = "";
+  if (action == "heart_rate") {
+    float bpm = measureHeartRateBpm(errorCode);
+    if (errorCode.length() > 0) { publishError(checkId, action, errorCode); return; }
+    publishHeartRate(checkId, bpm);
+    return;
+  }
+  if (action == "body_temperature") {
+    float temp = measureBodyTemperatureC(errorCode);
+    if (errorCode.length() > 0) { publishError(checkId, action, errorCode); return; }
+    publishBodyTemperature(checkId, temp);
+    return;
+  }
+  publishError(checkId, action, "unknown_action");
+}
+
+// ========== SERVO ==========
+// PERUBAHAN: durationMs dari pemanggil SENGAJA DIABAIKAN untuk alur box-decision.
+// Durasi buka kotak dikunci permanen ke 6000 ms di dalam fungsi ini sendiri,
+// sehingga nilai "open_duration_ms" apa pun yang dikirim backend (mis. 3000 ms)
+// tidak akan pernah mempengaruhi lamanya servo terbuka.
+// Parameter durationMs tetap dipertahankan pada signature fungsi supaya
+// pemanggil lain (mis. perintah debug serial "servo_open" yang memakai 60000 ms)
+// tidak perlu diubah dan tetap bisa kompilasi tanpa error.
+void openServoForDuration(unsigned long durationMs) {
+  (void)durationMs; // nilai dari pemanggil diabaikan untuk alur box-decision
+  servoAutoCloseMs = 6000;
+  snackServo.write(SERVO_OPEN_ANGLE);
+  servoIsOpen      = true;
+  servoOpenedAtMs  = millis();
+  Serial.print("[SERVO] Buka kotak selama "); Serial.print(servoAutoCloseMs);
+  Serial.println(" ms (durasi dikunci, mengabaikan nilai dari backend)");
+}
+
+void runServoBootTest() {
+  if (!ENABLE_SERVO_BOOT_TEST) return;
+  Serial.println("[SERVO] Boot test: tutup -> buka -> tutup");
+  snackServo.write(SERVO_CLOSED_ANGLE); delay(500);
+  snackServo.write(SERVO_OPEN_ANGLE);   delay(900);
+  snackServo.write(SERVO_CLOSED_ANGLE); delay(500);
+  Serial.println("[SERVO] Boot test selesai.");
+}
+
+void closeServoIfNeeded() {
+  if (!servoIsOpen) return;
+  if (millis() - servoOpenedAtMs < servoAutoCloseMs) return;
+  snackServo.write(SERVO_CLOSED_ANGLE);
+  servoIsOpen = false;
+  Serial.println("[SERVO] Kotak tertutup otomatis.");
+}
+
+// ========== SERIAL DEBUG ==========
+void handleSerialDebugCommand() {
+  if (!Serial.available()) return;
+  String cmd = Serial.readStringUntil('\n');
+  cmd.trim(); cmd.toLowerCase();
+  if (cmd.length() == 0) return;
+
+  if (cmd == "servo_test")  { runServoBootTest(); return; }
+  if (cmd == "servo_open")  {
+    snackServo.write(SERVO_OPEN_ANGLE);
+    servoIsOpen = true; servoOpenedAtMs = millis(); servoAutoCloseMs = 60000;
+    Serial.println("[DEBUG] Servo dibuka manual (60 detik).");
+    return;
+  }
+  if (cmd == "servo_close") {
+    snackServo.write(SERVO_CLOSED_ANGLE); servoIsOpen = false;
+    Serial.println("[DEBUG] Servo ditutup manual.");
+    return;
+  }
+  if (cmd == "button") {
+    int state = digitalRead(BUTTON_PIN);
+    Serial.print("[DEBUG] Button state="); Serial.print(state);
+    Serial.print(" | Active state="); Serial.println(BUTTON_ACTIVE_STATE);
+    return;
+  }
+  if (cmd == "mqtt_status") {
+    Serial.print("[DEBUG] MQTT connected="); Serial.println(mqtt.connected() ? "YES" : "NO");
+    Serial.print("[DEBUG] WiFi status="); Serial.println(WiFi.status() == WL_CONNECTED ? "CONNECTED" : "DISCONNECTED");
+    return;
+  }
+  if (cmd == "scan_i2c") {
+    scanI2cBus();
+    return;
+  }
+  if (cmd == "mlx_reset") {
+    mlxReady = false;
+    Serial.println("[DEBUG] mlxReady di-reset, akan di-reinit saat pengukuran berikutnya.");
+    return;
+  }
+  Serial.print("[DEBUG] Perintah tidak dikenal: "); Serial.println(cmd);
+}
+
+// ========== BOX BUTTON ==========
+void publishButtonEvent(bool isRetry = false) {
+  String payload = "{";
+  payload += "\"event\":\"button_pressed\",";
+  payload += "\"device_id\":\"" + jsonEscape(DEVICE_ID) + "\",";
+  payload += "\"sent_at_ms\":" + String(millis());
+  payload += "}";
+  bool sent = false;
+  for (int i = 0; i < 3 && !sent; i++) {
+    if (!mqtt.connected()) connectMqtt();
+    sent = mqtt.publish(boxEventTopic.c_str(), payload.c_str());
+    if (!sent) { delay(100); mqtt.loop(); }
+  }
+  if (sent) {
+    waitingBoxDecision          = true;
+    buttonDecisionRequestedAt   = millis();
+    if (!isRetry) boxDecisionRetryCount = 0;
+  }
+  Serial.print("[BOX] Tombol ditekan - event sent="); Serial.print(sent ? "OK" : "FAIL");
+  if (isRetry) { Serial.print(" (retry ke-"); Serial.print(boxDecisionRetryCount); Serial.print(")"); }
+  Serial.println();
+}
+
+// PERUBAHAN: open_duration_ms dari backend HANYA dipakai untuk logging/debug.
+// Durasi aktual servo terbuka SELALU dikunci ke FIXED_OPEN_DURATION_MS (6000 ms),
+// apa pun nilai yang dikirim backend (3000, 5000, 10000, dll).
+void handleBoxDecisionPayload(const String& payload) {
+  String allowOpen    = extractJsonValue(payload, "allow_open");
+  String reason       = extractJsonValue(payload, "reason");
+  String durationText = extractJsonValue(payload, "open_duration_ms");
+  allowOpen.trim(); reason.trim(); durationText.trim();
+  waitingBoxDecision   = false;
+  boxDecisionRetryCount = 0;
+
+  // Nilai durasi dari backend hanya untuk keperluan log/audit — TIDAK dipakai untuk servo.
+  long backendDurationMs = durationText.length() == 0 ? -1 : durationText.toInt();
+  const unsigned long FIXED_OPEN_DURATION_MS = 6000;
+
+  printSeparator();
+  Serial.println("[BOX] === Keputusan Buka Kotak ===");
+  Serial.print("[BOX] Allow Open        : "); Serial.println(allowOpen);
+  Serial.print("[BOX] Reason            : "); Serial.println(reason);
+  Serial.print("[BOX] Durasi dari Backend (diabaikan) : ");
+  if (backendDurationMs >= 0) Serial.print(backendDurationMs); else Serial.print("(kosong)");
+  Serial.println(" ms");
+  Serial.print("[BOX] Durasi Aktual Dipakai           : ");
+  Serial.print(FIXED_OPEN_DURATION_MS); Serial.println(" ms");
+
+  if ((allowOpen == "true" || allowOpen == "1") && reason == "allowed") {
+    Serial.println("[BOX] Status            : DIIZINKAN - Kotak dibuka.");
+    openServoForDuration(FIXED_OPEN_DURATION_MS);
+  } else {
+    Serial.println("[BOX] Status            : DITOLAK - Kotak tetap tertutup.");
+  }
+  printSeparator();
+}
+
+// ========== MQTT CALLBACK ==========
+void mqttCallback(char* topic, byte* payload, unsigned int length) {
+  String message = "";
+  for (unsigned int i = 0; i < length; i++) message += (char)payload[i];
+  String incomingTopic = String(topic);
+  Serial.print("[MQTT] Pesan masuk dari : "); Serial.println(incomingTopic);
+  if (incomingTopic == commandTopic)    { handleCommandPayload(message); return; }
+  if (incomingTopic == boxDecisionTopic) { handleBoxDecisionPayload(message); }
+}
+
+// ========== WIFI ==========
+void connectWifi() {
+  WiFi.mode(WIFI_STA);
+  WiFi.begin(WIFI_SSID, WIFI_PASS);
+  Serial.print("[WiFi] Menghubungkan ke "); Serial.println(WIFI_SSID);
+  unsigned long startMs = millis();
+  while (WiFi.status() != WL_CONNECTED && (millis() - startMs) < 20000) {
+    delay(500);
+    Serial.print(".");
+  }
+  if (WiFi.status() != WL_CONNECTED) {
+    Serial.println();
+    Serial.println("[WiFi] GAGAL terhubung (timeout 20 detik).");
+    return;
+  }
+  Serial.println();
+  Serial.print("[WiFi] Terhubung! IP    : "); Serial.println(WiFi.localIP());
+  logNetworkDiag();
+}
+
+// ========== MQTT CONNECT ==========
+void connectMqtt() {
+  if (mqtt.connected()) return;
+  String clientId = String("esp32_") + DEVICE_ID + "_" + String((uint32_t)ESP.getEfuseMac(), HEX);
+  Serial.print("[MQTT] Menghubungkan ke broker "); Serial.print(MQTT_HOST); Serial.print(":"); Serial.println(MQTT_PORT);
+  bool ok = strlen(MQTT_USER) > 0
+            ? mqtt.connect(clientId.c_str(), MQTT_USER, MQTT_PASS)
+            : mqtt.connect(clientId.c_str());
+  if (ok) {
+    Serial.println("[MQTT] Berhasil terhubung!");
+    mqtt.subscribe(commandTopic.c_str());
+    mqtt.subscribe(boxDecisionTopic.c_str());
+    Serial.print("[MQTT] Subscribe       : "); Serial.println(commandTopic);
+    Serial.print("[MQTT] Subscribe       : "); Serial.println(boxDecisionTopic);
+  } else {
+    Serial.print("[MQTT] Gagal terhubung rc="); Serial.println(mqtt.state());
+    if (millis() - lastNetworkDiagMs > 8000) { lastNetworkDiagMs = millis(); logNetworkDiag(); }
+  }
+}
+
+// ========== SETUP ==========
+void setup() {
+  Serial.begin(115200);
+  delay(1200);
+  Serial.println();
+  printSeparator();
+  Serial.println("=== ESP32 SMART SNACK BOX - HEALTH SENSOR BOOT ===");
+  Serial.print("Device ID              : "); Serial.println(DEVICE_ID);
+  printSeparator();
+
+  // ===== I2C Init =====
+  // Mulai dengan clock 50kHz agar MLX90614 tidak gagal saat boot
+  Wire.begin(21, 22);
+  Wire.setClock(50000);
+  delay(500); // beri waktu semua sensor power-on
+  scanI2cBus();
+
+  // ===== Init MAX30102 =====
+  // Naikkan clock ke 100kHz untuk MAX30102
+  Wire.setClock(100000);
+  bool maxOk = false;
+  for (int attempt = 1; attempt <= 3; attempt++) {
+    Serial.print("[SENSOR] Coba init MAX30102 ke-"); Serial.println(attempt);
+    if (particleSensor.begin(Wire, I2C_SPEED_STANDARD)) {
+      maxOk = true;
+      break;
+    }
+    delay(500);
+  }
+  if (!maxOk) {
+    Serial.println("[ERROR] MAX30102 tidak ditemukan! Periksa koneksi I2C.");
+    while (1) delay(1000);
+  }
+  particleSensor.setup();
+  particleSensor.setPulseAmplitudeRed(0x1F);
+  particleSensor.setPulseAmplitudeIR(0x24);
+  Serial.println("[SENSOR] MAX30102 OK");
+
+  // ===== Init MLX90614 =====
+  // Turunkan clock dulu — MLX90614 lebih stabil di 50kHz saat init awal
+  Wire.setClock(50000);
+  delay(300);
+  Serial.println("[SENSOR] Mencoba init MLX90614...");
+  for (int attempt = 1; attempt <= 5; attempt++) {
+    Serial.print("[SENSOR] MLX90614 init attempt ke-"); Serial.println(attempt);
+    if (mlx.begin()) {
+      mlxReady = true;
+      Serial.println("[SENSOR] MLX90614 OK");
+      break;
+    }
+    delay(500);
+  }
+  if (!mlxReady) {
+    Serial.println("[WARN] MLX90614 tidak ditemukan saat boot.");
+    Serial.println("[WARN] Fitur suhu dinonaktifkan sementara, akan retry saat pengukuran.");
+  }
+
+  // Kembalikan clock ke 100kHz untuk MAX30102
+  Wire.setClock(100000);
+
+  // ===== Topics =====
+  commandTopic     = String("smartsnack/health/command/") + DEVICE_ID;
+  resultTopic      = String("smartsnack/health/result/")  + DEVICE_ID;
+  boxEventTopic    = String("smartsnack/box/event/")       + DEVICE_ID;
+  boxDecisionTopic = String("smartsnack/box/decision/")    + DEVICE_ID;
+
+  // ===== Button & Servo =====
+  pinMode(BUTTON_PIN, INPUT_PULLUP);
+  snackServo.setPeriodHertz(50);
+  snackServo.attach(SERVO_PIN, 500, 2400);
+  snackServo.write(SERVO_CLOSED_ANGLE);
+  Serial.println("[SERVO] Servo terpasang di pin 18 | Posisi awal: TUTUP");
+  runServoBootTest();
+
+  // ===== Buzzer =====
+  pinMode(BUZZER_PIN, OUTPUT);
+  digitalWrite(BUZZER_PIN, LOW);
+  Serial.println("[BUZZER] Active buzzer terpasang di pin 4 | Posisi awal: MATI");
+
+  // ===== Network =====
+  connectWifi();
+  mqtt.setServer(MQTT_HOST, MQTT_PORT);
+  mqtt.setCallback(mqttCallback);
+  mqtt.setBufferSize(1024);
+  mqtt.setKeepAlive(120);
+  mqtt.setSocketTimeout(15);
+  connectMqtt();
+
+  printSeparator();
+  Serial.println("[BOOT] Sistem siap. Menunggu perintah...");
+  Serial.println("[DEBUG] Serial commands: servo_test | servo_open | servo_close | button | mqtt_status | scan_i2c | mlx_reset");
+  printSeparator();
+}
+
+// ========== LOOP ==========
+void loop() {
+  // WiFi reconnect
+  if (WiFi.status() != WL_CONNECTED) {
+    if (millis() - lastWifiRetryMs > 5000) {
+      lastWifiRetryMs = millis();
+      Serial.println("[WiFi] Koneksi terputus, mencoba reconnect...");
+      connectWifi();
+    }
+    delay(20);
+    return;
+  }
+
+  // MQTT reconnect & loop
+  if (!mqtt.connected()) {
+    if (millis() - lastMqttReconnectMs > 3000) {
+      lastMqttReconnectMs = millis();
+      connectMqtt();
+    }
+  } else {
+    mqtt.loop();
+    if (millis() - lastMqttLoopKickMs > 5000) {
+      lastMqttLoopKickMs = millis();
+      Serial.println("[MQTT] Koneksi broker: AKTIF");
+    }
+  }
+
+  // Button debounce & latch
+  bool reading = digitalRead(BUTTON_PIN);
+  if (reading != lastButtonReading) { lastButtonEdgeMs = millis(); lastButtonReading = reading; }
+  if ((millis() - lastButtonEdgeMs) > BUTTON_DEBOUNCE_MS) {
+    if (reading == BUTTON_ACTIVE_STATE && !buttonPressLatched &&
+        !waitingBoxDecision && !servoIsOpen &&
+        (millis() - lastButtonPublishMs) > BUTTON_COOLDOWN_MS) {
+      buttonPressLatched  = true;
+      lastButtonPublishMs = millis();
+      publishButtonEvent();
+    }
+    if (reading != BUTTON_ACTIVE_STATE) buttonPressLatched = false;
+  }
+
+  // Timeout retry box decision
+  if (waitingBoxDecision && (millis() - buttonDecisionRequestedAt) > BOX_DECISION_TIMEOUT_MS) {
+    if (boxDecisionRetryCount < BOX_DECISION_MAX_RETRY) {
+      boxDecisionRetryCount++;
+      Serial.print("[BOX] Timeout menunggu keputusan, kirim ulang (");
+      Serial.print(boxDecisionRetryCount); Serial.println(")");
+      publishButtonEvent(true);
+    } else {
+      waitingBoxDecision    = false;
+      boxDecisionRetryCount = 0;
+      Serial.println("[BOX] Timeout - tidak ada keputusan dari backend.");
+    }
+  }
+
+  closeServoIfNeeded();
+  handleSerialDebugCommand();
+}

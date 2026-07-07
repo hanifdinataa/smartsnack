@@ -79,7 +79,7 @@
     environment:
       APP_ENV: production
       APP_DEBUG: "false"
-      APP_URL: http://54.80.25.12:8000
+      APP_URL: http://54.144.6.206:8000
       CACHE_STORE: file
       SESSION_DRIVER: file
       QUEUE_CONNECTION: sync

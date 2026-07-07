@@ -75,4 +75,15 @@ afterEvaluate {
             }
         }
     }
+
+    def assembleReleaseTask = tasks.findByName("assembleRelease")
+    if (assembleReleaseTask != null) {
+        assembleReleaseTask.doLast {
+            copy {
+                from(new File(rootProject.buildDir, "app/outputs/flutter-apk"))
+                into(flutterToolExpectedOutputDir)
+                include("app-release.apk")
+            }
+        }
+    }
 }

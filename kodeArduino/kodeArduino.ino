@@ -14,10 +14,10 @@ WiFiClient espClient;
 PubSubClient mqtt(espClient);
 Servo snackServo;
 
-const char* WIFI_SSID = "YEY23";
-const char* WIFI_PASS = "yyyyyyyy";
+const char* WIFI_SSID = "H";
+const char* WIFI_PASS = "87654321";
 
-const char* MQTT_HOST = "54.80.25.12";
+const char* MQTT_HOST = "54.144.6.206";
 const int   MQTT_PORT = 1884;
 const char* MQTT_USER = "";
 const char* MQTT_PASS = "";
