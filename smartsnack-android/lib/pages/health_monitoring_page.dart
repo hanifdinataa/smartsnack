@@ -47,6 +47,10 @@ class _HealthMonitoringPageState extends ConsumerState<HealthMonitoringPage>
   // ── Result ───────────────────────────────────────────
   HealthMonitoringRecord? _result;
 
+  bool _profileInitialized = false;
+  final TextEditingController _ageController = TextEditingController();
+  String? _selectedGender;
+
   // ── Animation ────────────────────────────────────────
   late AnimationController _successAnimController;
   late Animation<double>    _successAnim;
@@ -86,6 +90,7 @@ class _HealthMonitoringPageState extends ConsumerState<HealthMonitoringPage>
     _weightTimer?.cancel();
     _heightTimer?.cancel();
     _successAnimController.dispose();
+    _ageController.dispose();
     super.dispose();
   }
 
@@ -261,7 +266,11 @@ class _HealthMonitoringPageState extends ConsumerState<HealthMonitoringPage>
 
     setState(() => _processing = true);
     try {
-      final result = await ref.read(apiServiceProvider).analyzeHealthMonitoring(checkId: checkId);
+      final result = await ref.read(apiServiceProvider).analyzeHealthMonitoring(
+        checkId: checkId,
+        age: int.tryParse(_ageController.text),
+        gender: _selectedGender,
+      );
       await ref.read(localStorageProvider).saveHealthMonitoringRecord(result);
       await ref.read(localStorageProvider).appendHealthMonitoringHistory(result);
       if (!mounted) return;
@@ -293,6 +302,11 @@ class _HealthMonitoringPageState extends ConsumerState<HealthMonitoringPage>
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(sessionProvider).user;
+    if (!_profileInitialized && user != null) {
+      if (user.age != null) _ageController.text = user.age.toString();
+      if (user.gender != null) _selectedGender = user.gender;
+      _profileInitialized = true;
+    }
     final bmi  = _bmi;
 
     return Scaffold(
@@ -558,18 +572,6 @@ class _HealthMonitoringPageState extends ConsumerState<HealthMonitoringPage>
                 user?.name ?? '-',
                 style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w800, color: Color(0xFF111827)),
               ),
-              const SizedBox(height: 4),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFD1FAE5),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: const Text(
-                  'Data dari akun • Tidak dapat diubah',
-                  style: TextStyle(fontSize: 11, color: Color(0xFF065F46), fontWeight: FontWeight.w600),
-                ),
-              ),
             ]),
           ),
         ]),
@@ -577,32 +579,43 @@ class _HealthMonitoringPageState extends ConsumerState<HealthMonitoringPage>
         const Divider(height: 1, color: Color(0xFFF0F0F0)),
         const SizedBox(height: 14),
         Row(children: [
-          _profileItem(Icons.cake_outlined, 'Umur', user?.age != null ? '${user!.age} tahun' : '-'),
+          Expanded(
+            child: TextFormField(
+              controller: _ageController,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                labelText: 'Umur',
+                prefixIcon: const Icon(Icons.cake_outlined, size: 18),
+                filled: true,
+                fillColor: const Color(0xFFF9FAFB),
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
+                contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              ),
+            ),
+          ),
           const SizedBox(width: 12),
-          _profileItem(Icons.wc_outlined, 'Gender',
-              user?.gender == 'Male' ? 'Laki-laki' : (user?.gender == 'Female' ? 'Perempuan' : '-')),
+          Expanded(
+            child: DropdownButtonFormField<String>(
+              value: _selectedGender,
+              decoration: InputDecoration(
+                labelText: 'Gender',
+                prefixIcon: const Icon(Icons.wc_outlined, size: 18),
+                filled: true,
+                fillColor: const Color(0xFFF9FAFB),
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
+                contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              ),
+              items: const [
+                DropdownMenuItem(value: 'Male', child: Text('Laki-laki')),
+                DropdownMenuItem(value: 'Female', child: Text('Perempuan')),
+              ],
+              onChanged: (val) {
+                setState(() { _selectedGender = val; });
+              },
+            ),
+          ),
         ]),
       ]),
-    );
-  }
-
-  Widget _profileItem(IconData icon, String label, String value) {
-    return Expanded(
-      child: Container(
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: const Color(0xFFF9FAFB),
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Row(children: [
-          Icon(icon, size: 18, color: const Color(0xFF6B7280)),
-          const SizedBox(width: 8),
-          Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text(label, style: const TextStyle(fontSize: 11, color: Color(0xFF9CA3AF))),
-            Text(value, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: Color(0xFF111827))),
-          ])),
-        ]),
-      ),
     );
   }
 

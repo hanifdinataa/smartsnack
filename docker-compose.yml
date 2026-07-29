@@ -1,4 +1,4 @@
-﻿services:
+services:
   mysql:
     image: mysql:8.0
     container_name: smartsnack-mysql
@@ -52,15 +52,6 @@
     ports:
       - "5060:5060"
 
-  xgboost:
-    build:
-      context: ./XGBOOST
-      dockerfile: Dockerfile
-    container_name: smartsnack-xgboost
-    restart: unless-stopped
-    ports:
-      - "5001:5001"
-
   backend:
     build:
       context: ./smartsnack-backend
@@ -73,8 +64,6 @@
       mqtt:
         condition: service_started
       label-gizi-service:
-        condition: service_started
-      xgboost:
         condition: service_started
     environment:
       APP_ENV: production
@@ -94,7 +83,6 @@
       LABEL_GIZI_ENDPOINT: http://label-gizi-service:5060
       LABEL_GIZI_TIMEOUT: 120
       NUTRITION_VISION_ENDPOINT: http://label-gizi-service:5060
-      DIABETES_XGBOOST_ENDPOINT: http://xgboost:5001/predict
       AUTO_START_SERVO_LISTENER: "false"
     ports:
       - "8000:80"
@@ -134,7 +122,6 @@
       LABEL_GIZI_ENDPOINT: http://label-gizi-service:5060
       LABEL_GIZI_TIMEOUT: 120
       NUTRITION_VISION_ENDPOINT: http://label-gizi-service:5060
-      DIABETES_XGBOOST_ENDPOINT: http://xgboost:5001/predict
       AUTO_START_SERVO_LISTENER: "false"
 
 volumes:

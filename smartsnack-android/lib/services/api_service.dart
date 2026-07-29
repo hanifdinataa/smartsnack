@@ -1922,9 +1922,13 @@ class ApiService {
   // evaluasi status (rule-based tanpa ML), simpan hasil, dan buka servo box.
   Future<HealthMonitoringRecord> analyzeHealthMonitoring({
     required int checkId,
+    int? age,
+    String? gender,
   }) async {
     final map = await _post('/api/health-monitoring/analyze', data: {
       'check_id': checkId,
+      if (age != null) 'age': age,
+      if (gender != null) 'gender': gender,
     });
     final envelope = ApiEnvelope<HealthMonitoringRecord>.fromJson(
       map,

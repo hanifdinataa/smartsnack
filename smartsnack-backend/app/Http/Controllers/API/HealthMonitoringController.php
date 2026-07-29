@@ -174,6 +174,8 @@ class HealthMonitoringController extends Controller
     {
         $validated = $request->validate([
             'check_id' => 'required|integer|exists:health_checks,id',
+            'age' => 'nullable|integer|min:1',
+            'gender' => 'nullable|in:Male,Female',
         ]);
 
         $check = HealthCheck::query()
@@ -204,9 +206,9 @@ class HealthMonitoringController extends Controller
         $heightM = $heightCm / 100;
         $bmi     = round($weightKg / ($heightM * $heightM), 2);
 
-        // Ambil age dari profil user
-        $age    = (int) ($user->age ?? 10);
-        $gender = (string) ($user->gender ?? 'Male');
+        // Ambil age dari input, fallback ke profil user
+        $age    = (int) ($request->input('age') ?? $user->age ?? 10);
+        $gender = (string) ($request->input('gender') ?? $user->gender ?? 'Male');
 
         // Evaluasi status kesehatan (rule-based, tanpa ML)
         $evaluation = $this->service->evaluateHealthStatus([
