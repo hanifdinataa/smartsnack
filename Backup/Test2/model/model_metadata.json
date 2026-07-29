@@ -1,0 +1,2495 @@
+[
+  {
+    "name": "ABC Choco Malt",
+    "category": "drink",
+    "filename": "3440224600292_ABC_Choco_Malt.jpg",
+    "image_path": "storage/products/3440224600292_ABC_Choco_Malt.jpg",
+    "gr_sugar_content": "18.0",
+    "net_weight": "200",
+    "label_index": 0
+  },
+  {
+    "name": "ABC Jambu",
+    "category": "drink",
+    "filename": "32_ABC Jambu.jpg",
+    "image_path": "storage/products/32_ABC Jambu.jpg",
+    "gr_sugar_content": "20.0",
+    "net_weight": "250",
+    "label_index": 1
+  },
+  {
+    "name": "ABC Jeruk",
+    "category": "drink",
+    "filename": "33_ABC Jeruk.jpg",
+    "image_path": "storage/products/33_ABC Jeruk.jpg",
+    "gr_sugar_content": "22.0",
+    "net_weight": "250",
+    "label_index": 2
+  },
+  {
+    "name": "ABC Kopi Gula Susu",
+    "category": "drink",
+    "filename": "8991002101654_ABC_Kopi_Gula___Susu.jpg",
+    "image_path": "storage/products/8991002101654_ABC_Kopi_Gula___Susu.jpg",
+    "gr_sugar_content": "16.0",
+    "net_weight": "200",
+    "label_index": 3
+  },
+  {
+    "name": "ABC Kopi Susu",
+    "category": "drink",
+    "filename": "6_ABC Kopi Susu.jpg",
+    "image_path": "storage/products/6_ABC Kopi Susu.jpg",
+    "gr_sugar_content": "16.0",
+    "net_weight": "200",
+    "label_index": 4
+  },
+  {
+    "name": "ABC Mangga",
+    "category": "drink",
+    "filename": "31_ABC Mangga.jpg",
+    "image_path": "storage/products/31_ABC Mangga.jpg",
+    "gr_sugar_content": "20.0",
+    "net_weight": "250",
+    "label_index": 5
+  },
+  {
+    "name": "ABC Minuman Soya",
+    "category": "drink",
+    "filename": "85_ABC Minuman Soya.jpg",
+    "image_path": "storage/products/85_ABC Minuman Soya.jpg",
+    "gr_sugar_content": "10.0",
+    "net_weight": "250",
+    "label_index": 6
+  },
+  {
+    "name": "ABC Sari Kacang Ijo",
+    "category": "drink",
+    "filename": "7_ABC Sari Kacang Ijo.jpg",
+    "image_path": "storage/products/7_ABC Sari Kacang Ijo.jpg",
+    "gr_sugar_content": "18.0",
+    "net_weight": "250",
+    "label_index": 7
+  },
+  {
+    "name": "AMO Spark Lemon C",
+    "category": "drink",
+    "filename": "87_AMO Spark Lemon C.jpg",
+    "image_path": "storage/products/87_AMO Spark Lemon C.jpg",
+    "gr_sugar_content": "0.0",
+    "net_weight": "330",
+    "label_index": 8
+  },
+  {
+    "name": "AOKA Roti Bun Isian Vanilla panggang",
+    "category": "food",
+    "filename": "69_AOKA Roti Bun Isian Vanilla panggang.jpg",
+    "image_path": "storage/products/69_AOKA Roti Bun Isian Vanilla panggang.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 9
+  },
+  {
+    "name": "AOKA Roti Bun Isian cokelat panggang",
+    "category": "food",
+    "filename": "70_AOKA Roti Bun Isian cokelat panggang.jpg",
+    "image_path": "storage/products/70_AOKA Roti Bun Isian cokelat panggang.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 10
+  },
+  {
+    "name": "Aice Chocolate crispy",
+    "category": "food",
+    "filename": "55_Aice Chocolate crispy.jpg",
+    "image_path": "storage/products/55_Aice Chocolate crispy.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 11
+  },
+  {
+    "name": "Alfamart popcorn karamel",
+    "category": "food",
+    "filename": "8994016001026_Alfamart_popcorn_karamel.jpg",
+    "image_path": "storage/products/8994016001026_Alfamart_popcorn_karamel.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 12
+  },
+  {
+    "name": "Almond Chocolate",
+    "category": "drink",
+    "filename": "9556863110789_Almond_Chocolate.jpg",
+    "image_path": "storage/products/9556863110789_Almond_Chocolate.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 13
+  },
+  {
+    "name": "Amo Spark Cola",
+    "category": "drink",
+    "filename": "81_Amo Spark Cola.jpg",
+    "image_path": "storage/products/81_Amo Spark Cola.jpg",
+    "gr_sugar_content": "0.0",
+    "net_weight": "330",
+    "label_index": 14
+  },
+  {
+    "name": "Apollo Checker Wafer Chocolate Strawberry",
+    "category": "food",
+    "filename": "52_Apollo Checker Wafer Chocolate - Strawberry.jpg",
+    "image_path": "storage/products/52_Apollo Checker Wafer Chocolate - Strawberry.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 15
+  },
+  {
+    "name": "Arabica Gold",
+    "category": "food",
+    "filename": "8991002102231_Arabica_Gold.jpg",
+    "image_path": "storage/products/8991002102231_Arabica_Gold.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 16
+  },
+  {
+    "name": "BALAJI CREAM ONION",
+    "category": "food",
+    "filename": "8906010500870_BALAJI_CREAM_ONION.jpg",
+    "image_path": "storage/products/8906010500870_BALAJI_CREAM_ONION.jpg",
+    "gr_sugar_content": "2.0",
+    "net_weight": "60",
+    "label_index": 17
+  },
+  {
+    "name": "Banoffee",
+    "category": "food",
+    "filename": "8994251001867_Banoffee.jpg",
+    "image_path": "storage/products/8994251001867_Banoffee.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 18
+  },
+  {
+    "name": "Bear brand",
+    "category": "drink",
+    "filename": "8_Bear brand.jpg",
+    "image_path": "storage/products/8_Bear brand.jpg",
+    "gr_sugar_content": "0.0",
+    "net_weight": "140",
+    "label_index": 19
+  },
+  {
+    "name": "Beng beng",
+    "category": "food",
+    "filename": "8996001355756_Beng_beng.jpg",
+    "image_path": "storage/products/8996001355756_Beng_beng.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 20
+  },
+  {
+    "name": "Better Sandwich Biscuit",
+    "category": "food",
+    "filename": "8996001318430_Better_Sandwich_Biscuit.jpg",
+    "image_path": "storage/products/8996001318430_Better_Sandwich_Biscuit.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 21
+  },
+  {
+    "name": "Better Sandwich Biscuit Vanilla Cream",
+    "category": "food",
+    "filename": "82_Better Sandwich Biscuit Vanilla Cream.jpg",
+    "image_path": "storage/products/82_Better Sandwich Biscuit Vanilla Cream.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 22
+  },
+  {
+    "name": "Biskuat Biskuit Chocolate Regular",
+    "category": "food",
+    "filename": "104_Biskuat Biskuit Chocolate Regular.jpg",
+    "image_path": "storage/products/104_Biskuat Biskuit Chocolate Regular.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 23
+  },
+  {
+    "name": "Biskuat Biskuit Original Regular",
+    "category": "food",
+    "filename": "105_Biskuat Biskuit Original Regular.jpg",
+    "image_path": "storage/products/105_Biskuat Biskuit Original Regular.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 24
+  },
+  {
+    "name": "Biskuit Stik Rasa Sayuran dan Keju",
+    "category": "food",
+    "filename": "8993083932141_Biskuit_Stik_Rasa_Sayuran_dan_Keju.jpg",
+    "image_path": "storage/products/8993083932141_Biskuit_Stik_Rasa_Sayuran_dan_Keju.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 25
+  },
+  {
+    "name": "Boncabe Kulit Pangsit Lev 10",
+    "category": "food",
+    "filename": "8995899219126_Boncabe_Kulit_Pangsit_Lev_10.jpg",
+    "image_path": "storage/products/8995899219126_Boncabe_Kulit_Pangsit_Lev_10.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 26
+  },
+  {
+    "name": "Bourbon Gandum",
+    "category": "food",
+    "filename": "8888166343788_Bourbon_Gandum.jpg",
+    "image_path": "storage/products/8888166343788_Bourbon_Gandum.jpg",
+    "gr_sugar_content": "6.0",
+    "net_weight": "200",
+    "label_index": 27
+  },
+  {
+    "name": "Brownies Crispy",
+    "category": "food",
+    "filename": "8997232970046_Brownies_Crispy.jpg",
+    "image_path": "storage/products/8997232970046_Brownies_Crispy.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 28
+  },
+  {
+    "name": "Buavita Jambu",
+    "category": "drink",
+    "filename": "30_Buavita Jambu.jpg",
+    "image_path": "storage/products/30_Buavita Jambu.jpg",
+    "gr_sugar_content": "24.0",
+    "net_weight": "250",
+    "label_index": 29
+  },
+  {
+    "name": "Buavita Mango Juice",
+    "category": "drink",
+    "filename": "9_Buavita Mango Juice.jpg",
+    "image_path": "storage/products/9_Buavita Mango Juice.jpg",
+    "gr_sugar_content": "24.0",
+    "net_weight": "250",
+    "label_index": 30
+  },
+  {
+    "name": "Buavita Orange Juice",
+    "category": "drink",
+    "filename": "10_Buavita Orange Juice.jpg",
+    "image_path": "storage/products/10_Buavita Orange Juice.jpg",
+    "gr_sugar_content": "24.0",
+    "net_weight": "250",
+    "label_index": 31
+  },
+  {
+    "name": "CHIMI KERIPIK UBI",
+    "category": "food",
+    "filename": "8997014021867_CHIMI_KERIPIK_UBI.jpg",
+    "image_path": "storage/products/8997014021867_CHIMI_KERIPIK_UBI.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 32
+  },
+  {
+    "name": "CLEVO UHT Milk Cokelat",
+    "category": "drink",
+    "filename": "29_CLEVO UHT Milk Cokelat.jpg",
+    "image_path": "storage/products/29_CLEVO UHT Milk Cokelat.jpg",
+    "gr_sugar_content": "12.0",
+    "net_weight": "200",
+    "label_index": 33
+  },
+  {
+    "name": "Caramel Cream Egg Cookies",
+    "category": "food",
+    "filename": "8934760212897_Caramel_Cream_Egg_Cookies.jpg",
+    "image_path": "storage/products/8934760212897_Caramel_Cream_Egg_Cookies.jpg",
+    "gr_sugar_content": "9.0",
+    "net_weight": "200",
+    "label_index": 34
+  },
+  {
+    "name": "Carman s Super Berry Muesli Bars Cranbe",
+    "category": "food",
+    "filename": "9319133333574_Carman_s_Super_Berry_Muesli_Bars__Cranbe.jpg",
+    "image_path": "storage/products/9319133333574_Carman_s_Super_Berry_Muesli_Bars__Cranbe.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 35
+  },
+  {
+    "name": "Cheese",
+    "category": "food",
+    "filename": "7622202217630_Cheese.jpg",
+    "image_path": "storage/products/7622202217630_Cheese.jpg",
+    "gr_sugar_content": "2.0",
+    "net_weight": "104",
+    "label_index": 36
+  },
+  {
+    "name": "Cheese Cake Duo",
+    "category": "food",
+    "filename": "8992907001728_Cheese_Cake_Duo.jpg",
+    "image_path": "storage/products/8992907001728_Cheese_Cake_Duo.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 37
+  },
+  {
+    "name": "Cheese and Onion Chips",
+    "category": "food",
+    "filename": "8997216840020_Cheese_and_Onion_Chips.jpg",
+    "image_path": "storage/products/8997216840020_Cheese_and_Onion_Chips.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 38
+  },
+  {
+    "name": "Chi Forest Sparkling Water White Peach",
+    "category": "drink",
+    "filename": "88_Chi Forest Sparkling Water White Peach.jpg",
+    "image_path": "storage/products/88_Chi Forest Sparkling Water White Peach.jpg",
+    "gr_sugar_content": "0.0",
+    "net_weight": "480",
+    "label_index": 39
+  },
+  {
+    "name": "Chic Choc Biscuit",
+    "category": "food",
+    "filename": "8991001501011_Chic_Choc_Biscuit.jpg",
+    "image_path": "storage/products/8991001501011_Chic_Choc_Biscuit.jpg",
+    "gr_sugar_content": "8.0",
+    "net_weight": "150",
+    "label_index": 40
+  },
+  {
+    "name": "Chiki Twist Jagung Bakar",
+    "category": "food",
+    "filename": "0089686723021_Chiki_Twist_Jagung_Bakar.jpg",
+    "image_path": "storage/products/0089686723021_Chiki_Twist_Jagung_Bakar.jpg",
+    "gr_sugar_content": "1.5",
+    "net_weight": "55",
+    "label_index": 41
+  },
+  {
+    "name": "Chitato Keju Supreme 68gr",
+    "category": "food",
+    "filename": "0089686598957_Chitato_Keju_Supreme_68gr.jpg",
+    "image_path": "storage/products/0089686598957_Chitato_Keju_Supreme_68gr.jpg",
+    "gr_sugar_content": "1.5",
+    "net_weight": "68",
+    "label_index": 42
+  },
+  {
+    "name": "Chitato Sapi Bumbu Bakar 68gr",
+    "category": "food",
+    "filename": "0089686598599_Chitato_Sapi_Bumbu_Bakar_68gr.jpg",
+    "image_path": "storage/products/0089686598599_Chitato_Sapi_Bumbu_Bakar_68gr.jpg",
+    "gr_sugar_content": "1.0",
+    "net_weight": "68",
+    "label_index": 43
+  },
+  {
+    "name": "Cho Cho Chocolate Egg Telur Surprise Toy",
+    "category": "food",
+    "filename": "98_Cho Cho Chocolate Egg Telur Surprise Toy.jpg",
+    "image_path": "storage/products/98_Cho Cho Chocolate Egg Telur Surprise Toy.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 44
+  },
+  {
+    "name": "Cho cho Strawberry Flavor",
+    "category": "food",
+    "filename": "47_Cho cho Strawberry Flavor.jpg",
+    "image_path": "storage/products/47_Cho cho Strawberry Flavor.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 45
+  },
+  {
+    "name": "Choco Chocolate Flavor",
+    "category": "food",
+    "filename": "49_Choco Chocolate Flavor.jpg",
+    "image_path": "storage/products/49_Choco Chocolate Flavor.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 46
+  },
+  {
+    "name": "Choco Pie",
+    "category": "food",
+    "filename": "8990333811317_Choco_Pie.jpg",
+    "image_path": "storage/products/8990333811317_Choco_Pie.jpg",
+    "gr_sugar_content": "11.0",
+    "net_weight": "28",
+    "label_index": 47
+  },
+  {
+    "name": "Chocolate Chip Cookie",
+    "category": "food",
+    "filename": "0749921040213_Chocolate_Chip_Cookie.jpg",
+    "image_path": "storage/products/0749921040213_Chocolate_Chip_Cookie.jpg",
+    "gr_sugar_content": "10.0",
+    "net_weight": "100",
+    "label_index": 48
+  },
+  {
+    "name": "Chocolatos Drink Botol",
+    "category": "drink",
+    "filename": "14_Chocolatos Drink Botol.jpg",
+    "image_path": "storage/products/14_Chocolatos Drink Botol.jpg",
+    "gr_sugar_content": "19.0",
+    "net_weight": "200",
+    "label_index": 49
+  },
+  {
+    "name": "Chocolatos Vanilla Flavour",
+    "category": "food",
+    "filename": "54_Chocolatos Vanilla Flavour.jpg",
+    "image_path": "storage/products/54_Chocolatos Vanilla Flavour.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 50
+  },
+  {
+    "name": "Chocolatos chocolate flavor",
+    "category": "food",
+    "filename": "68_Chocolatos chocolate flavor.jpg",
+    "image_path": "storage/products/68_Chocolatos chocolate flavor.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 51
+  },
+  {
+    "name": "Chocopie",
+    "category": "food",
+    "filename": "8936036025712_Chocopie.jpg",
+    "image_path": "storage/products/8936036025712_Chocopie.jpg",
+    "gr_sugar_content": "11.0",
+    "net_weight": "28",
+    "label_index": 52
+  },
+  {
+    "name": "Cimory Fresh Milk Almond",
+    "category": "drink",
+    "filename": "11_Cimory Fresh Milk Almond.jpg",
+    "image_path": "storage/products/11_Cimory Fresh Milk Almond.jpg",
+    "gr_sugar_content": "9.0",
+    "net_weight": "200",
+    "label_index": 53
+  },
+  {
+    "name": "Cimory Yogurt Drink Strawberry",
+    "category": "drink",
+    "filename": "12_Cimory Yogurt Drink Strawberry.jpg",
+    "image_path": "storage/products/12_Cimory Yogurt Drink Strawberry.jpg",
+    "gr_sugar_content": "16.0",
+    "net_weight": "250",
+    "label_index": 54
+  },
+  {
+    "name": "Coca Cola",
+    "category": "drink",
+    "filename": "22_Coca Cola.jpg",
+    "image_path": "storage/products/22_Coca Cola.jpg",
+    "gr_sugar_content": "27.0",
+    "net_weight": "250",
+    "label_index": 55
+  },
+  {
+    "name": "Coca Cola Zero Sugar",
+    "category": "drink",
+    "filename": "19_Coca Cola Zero Sugar.jpg",
+    "image_path": "storage/products/19_Coca Cola Zero Sugar.jpg",
+    "gr_sugar_content": "0.0",
+    "net_weight": "250",
+    "label_index": 56
+  },
+  {
+    "name": "Coffeemix 3 in 1",
+    "category": "drink",
+    "filename": "9311931024036_Coffeemix_3_in_1.jpg",
+    "image_path": "storage/products/9311931024036_Coffeemix_3_in_1.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 57
+  },
+  {
+    "name": "Colatta",
+    "category": "drink",
+    "filename": "8992993260351_Colatta.jpg",
+    "image_path": "storage/products/8992993260351_Colatta.jpg",
+    "gr_sugar_content": "16.0",
+    "net_weight": "200",
+    "label_index": 58
+  },
+  {
+    "name": "Collagena Susu Steril",
+    "category": "drink",
+    "filename": "89_Collagena Susu Steril.jpg",
+    "image_path": "storage/products/89_Collagena Susu Steril.jpg",
+    "gr_sugar_content": "8.0",
+    "net_weight": "150",
+    "label_index": 59
+  },
+  {
+    "name": "Cookies Dark Chocolate",
+    "category": "food",
+    "filename": "8992802099011_Cookies__Dark_Chocolate.jpg",
+    "image_path": "storage/products/8992802099011_Cookies__Dark_Chocolate.jpg",
+    "gr_sugar_content": "9.0",
+    "net_weight": "100",
+    "label_index": 60
+  },
+  {
+    "name": "Cool Time Air Kelapa",
+    "category": "drink",
+    "filename": "90_Cool Time Air Kelapa.jpg",
+    "image_path": "storage/products/90_Cool Time Air Kelapa.jpg",
+    "gr_sugar_content": "9.0",
+    "net_weight": "310",
+    "label_index": 61
+  },
+  {
+    "name": "DELIZIO CAFFINO",
+    "category": "food",
+    "filename": "8991998110012_DELIZIO_CAFFINO.jpg",
+    "image_path": "storage/products/8991998110012_DELIZIO_CAFFINO.jpg",
+    "gr_sugar_content": "12.0",
+    "net_weight": "200",
+    "label_index": 62
+  },
+  {
+    "name": "DENEX WAFER ROLL STRAWBERRY",
+    "category": "food",
+    "filename": "8993083940559_DENEX_WAFER_ROLL_STRAWBERRY.jpg",
+    "image_path": "storage/products/8993083940559_DENEX_WAFER_ROLL_STRAWBERRY.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 63
+  },
+  {
+    "name": "Dark Chocolate Cookies",
+    "category": "food",
+    "filename": "8997026411380_Dark_Chocolate_Cookies.jpg",
+    "image_path": "storage/products/8997026411380_Dark_Chocolate_Cookies.jpg",
+    "gr_sugar_content": "9.0",
+    "net_weight": "100",
+    "label_index": 64
+  },
+  {
+    "name": "Delfi Chocolate Wafer Top Triple Choc",
+    "category": "food",
+    "filename": "100_Delfi Chocolate Wafer Top Triple Choc.jpg",
+    "image_path": "storage/products/100_Delfi Chocolate Wafer Top Triple Choc.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 65
+  },
+  {
+    "name": "Delfi TOP Black In White",
+    "category": "food",
+    "filename": "99_Delfi TOP Black In White.jpg",
+    "image_path": "storage/products/99_Delfi TOP Black In White.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 66
+  },
+  {
+    "name": "Delfi TOP Chocolate Extra Large",
+    "category": "food",
+    "filename": "101_Delfi TOP Chocolate Extra Large.jpg",
+    "image_path": "storage/products/101_Delfi TOP Chocolate Extra Large.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 67
+  },
+  {
+    "name": "Delizio Caffino Milky Espresso",
+    "category": "drink",
+    "filename": "77_Delizio Caffino Milky Espresso.jpg",
+    "image_path": "storage/products/77_Delizio Caffino Milky Espresso.jpg",
+    "gr_sugar_content": "12.0",
+    "net_weight": "200",
+    "label_index": 68
+  },
+  {
+    "name": "Delizio Caffino Oat Marie Latte",
+    "category": "drink",
+    "filename": "79_Delizio Caffino Oat Marie Latte.jpg",
+    "image_path": "storage/products/79_Delizio Caffino Oat Marie Latte.jpg",
+    "gr_sugar_content": "13.0",
+    "net_weight": "200",
+    "label_index": 69
+  },
+  {
+    "name": "Delizio Caffino Spanish Latte",
+    "category": "drink",
+    "filename": "78_Delizio Caffino Spanish Latte.jpg",
+    "image_path": "storage/products/78_Delizio Caffino Spanish Latte.jpg",
+    "gr_sugar_content": "13.0",
+    "net_weight": "200",
+    "label_index": 70
+  },
+  {
+    "name": "Dilan Bon Bon Milk Chocolate",
+    "category": "food",
+    "filename": "39_Dilan Bon Bon Milk Chocolate.jpg",
+    "image_path": "storage/products/39_Dilan Bon Bon Milk Chocolate.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 71
+  },
+  {
+    "name": "Espresso Kopi Susu",
+    "category": "drink",
+    "filename": "8991002306813_Espresso_Kopi_Susu.jpg",
+    "image_path": "storage/products/8991002306813_Espresso_Kopi_Susu.jpg",
+    "gr_sugar_content": "12.0",
+    "net_weight": "200",
+    "label_index": 72
+  },
+  {
+    "name": "Fanta",
+    "category": "drink",
+    "filename": "23_Fanta.jpg",
+    "image_path": "storage/products/23_Fanta.jpg",
+    "gr_sugar_content": "26.0",
+    "net_weight": "250",
+    "label_index": 73
+  },
+  {
+    "name": "Fiesta Sosis Ready To Go Saus Pedas Korea",
+    "category": "food",
+    "filename": "120_Fiesta Sosis Ready To Go Saus Pedas Korea.jpg",
+    "image_path": "storage/products/120_Fiesta Sosis Ready To Go Saus Pedas Korea.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 74
+  },
+  {
+    "name": "Fitbar",
+    "category": "food",
+    "filename": "8992802063173_Fitbar.jpg",
+    "image_path": "storage/products/8992802063173_Fitbar.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 75
+  },
+  {
+    "name": "Fitbar multigrain fruits delight",
+    "category": "food",
+    "filename": "8992802063012_Fitbar_multigrain_fruits_delight.jpg",
+    "image_path": "storage/products/8992802063012_Fitbar_multigrain_fruits_delight.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 76
+  },
+  {
+    "name": "Floridina Orange",
+    "category": "drink",
+    "filename": "37_Floridina Orange.jpg",
+    "image_path": "storage/products/37_Floridina Orange.jpg",
+    "gr_sugar_content": "22.0",
+    "net_weight": "350",
+    "label_index": 77
+  },
+  {
+    "name": "Foxs gummy emot HappySad",
+    "category": "food",
+    "filename": "8997212801391_Foxs_gummy_emot_HappySad.jpg",
+    "image_path": "storage/products/8997212801391_Foxs_gummy_emot_HappySad.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 78
+  },
+  {
+    "name": "Franzzi Cheese Chocolate Flavor Cookie",
+    "category": "food",
+    "filename": "6947929617534_Franzzi_Cheese_Chocolate_Flavor_Cookie.jpg",
+    "image_path": "storage/products/6947929617534_Franzzi_Cheese_Chocolate_Flavor_Cookie.jpg",
+    "gr_sugar_content": "8.0",
+    "net_weight": "80",
+    "label_index": 79
+  },
+  {
+    "name": "Franzzi Yogurt Chocolate Flavor Cookie",
+    "category": "drink",
+    "filename": "6947929617428_Franzzi_Yogurt_Chocolate_Flavor_Cookie.jpg",
+    "image_path": "storage/products/6947929617428_Franzzi_Yogurt_Chocolate_Flavor_Cookie.jpg",
+    "gr_sugar_content": "9.0",
+    "net_weight": "80",
+    "label_index": 80
+  },
+  {
+    "name": "Frestea Madu",
+    "category": "drink",
+    "filename": "91_Frestea Madu.jpg",
+    "image_path": "storage/products/91_Frestea Madu.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 81
+  },
+  {
+    "name": "Fried Cookies",
+    "category": "food",
+    "filename": "8888166990104_Fried_Cookies.jpg",
+    "image_path": "storage/products/8888166990104_Fried_Cookies.jpg",
+    "gr_sugar_content": "6.0",
+    "net_weight": "200",
+    "label_index": 82
+  },
+  {
+    "name": "Frisian Flag Energo+ Mixed Berries",
+    "category": "drink",
+    "filename": "116_Frisian Flag Energo+ Mixed Berries.jpg",
+    "image_path": "storage/products/116_Frisian Flag Energo+ Mixed Berries.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 83
+  },
+  {
+    "name": "Frisian Flag Full Cream",
+    "category": "drink",
+    "filename": "36_Frisian Flag Full Cream.jpg",
+    "image_path": "storage/products/36_Frisian Flag Full Cream.jpg",
+    "gr_sugar_content": "10.0",
+    "net_weight": "225",
+    "label_index": 84
+  },
+  {
+    "name": "Frisian Flag Nutribrain Strawberry",
+    "category": "drink",
+    "filename": "117_Frisian Flag Nutribrain Strawberry.jpg",
+    "image_path": "storage/products/117_Frisian Flag Nutribrain Strawberry.jpg",
+    "gr_sugar_content": "14.0",
+    "net_weight": "225",
+    "label_index": 85
+  },
+  {
+    "name": "Frisian Flag Nutribrain stroberi",
+    "category": "drink",
+    "filename": "94_Frisian Flag Nutribrain stroberi.jpg",
+    "image_path": "storage/products/94_Frisian Flag Nutribrain stroberi.jpg",
+    "gr_sugar_content": "14.0",
+    "net_weight": "225",
+    "label_index": 86
+  },
+  {
+    "name": "Fruit Tea Apple",
+    "category": "drink",
+    "filename": "92_Fruit Tea Apple.jpg",
+    "image_path": "storage/products/92_Fruit Tea Apple.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 87
+  },
+  {
+    "name": "GARUDA ROSTA KACANG PANGGANG 95G",
+    "category": "food",
+    "filename": "8992775203422_GARUDA_ROSTA_KACANG_PANGGANG_95G.jpg",
+    "image_path": "storage/products/8992775203422_GARUDA_ROSTA_KACANG_PANGGANG_95G.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 88
+  },
+  {
+    "name": "Gabin super",
+    "category": "food",
+    "filename": "8999918182095_Gabin_super.jpg",
+    "image_path": "storage/products/8999918182095_Gabin_super.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 89
+  },
+  {
+    "name": "Garlic Bread Almond",
+    "category": "food",
+    "filename": "8809617944941_Garlic_Bread_Almond.jpg",
+    "image_path": "storage/products/8809617944941_Garlic_Bread_Almond.jpg",
+    "gr_sugar_content": "3.0",
+    "net_weight": "70",
+    "label_index": 90
+  },
+  {
+    "name": "Genji Soft Pie biscuits",
+    "category": "food",
+    "filename": "8888166989832_Genji_Soft_Pie_biscuits.jpg",
+    "image_path": "storage/products/8888166989832_Genji_Soft_Pie_biscuits.jpg",
+    "gr_sugar_content": "8.0",
+    "net_weight": "180",
+    "label_index": 91
+  },
+  {
+    "name": "Gilus Mix Sweet Ginger",
+    "category": "food",
+    "filename": "8998666003072_Gilus_Mix_Sweet_Ginger.jpg",
+    "image_path": "storage/products/8998666003072_Gilus_Mix_Sweet_Ginger.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 92
+  },
+  {
+    "name": "Golda Coffee Cappucino",
+    "category": "drink",
+    "filename": "2_Golda Coffee Cappucino.jpg",
+    "image_path": "storage/products/2_Golda Coffee Cappucino.jpg",
+    "gr_sugar_content": "15.0",
+    "net_weight": "200",
+    "label_index": 93
+  },
+  {
+    "name": "Golda Coffee Dolce Latte",
+    "category": "drink",
+    "filename": "15_Golda Coffee Dolce Latte.jpg",
+    "image_path": "storage/products/15_Golda Coffee Dolce Latte.jpg",
+    "gr_sugar_content": "18.0",
+    "net_weight": "200",
+    "label_index": 94
+  },
+  {
+    "name": "Golda Coffee cappuchino",
+    "category": "drink",
+    "filename": "8998866202893_Golda_Coffee_cappuchino.jpg",
+    "image_path": "storage/products/8998866202893_Golda_Coffee_cappuchino.jpg",
+    "gr_sugar_content": "15.0",
+    "net_weight": "200",
+    "label_index": 95
+  },
+  {
+    "name": "Golda Dolce latte coffee 200",
+    "category": "drink",
+    "filename": "05306150_Golda_Dolce_latte_coffee_200.jpg",
+    "image_path": "storage/products/05306150_Golda_Dolce_latte_coffee_200.jpg",
+    "gr_sugar_content": "18.0",
+    "net_weight": "200",
+    "label_index": 96
+  },
+  {
+    "name": "Good Day Funtastic Mocacinno",
+    "category": "drink",
+    "filename": "18_Good Day Funtastic Mocacinno.jpg",
+    "image_path": "storage/products/18_Good Day Funtastic Mocacinno.jpg",
+    "gr_sugar_content": "14.0",
+    "net_weight": "220",
+    "label_index": 97
+  },
+  {
+    "name": "Good Day Mocacinno",
+    "category": "food",
+    "filename": "8991002103238_Good_Day_Mocacinno.jpg",
+    "image_path": "storage/products/8991002103238_Good_Day_Mocacinno.jpg",
+    "gr_sugar_content": "14.0",
+    "net_weight": "220",
+    "label_index": 98
+  },
+  {
+    "name": "Good Day Originale Cappucino",
+    "category": "drink",
+    "filename": "16_Good Day Originale Cappucino.jpg",
+    "image_path": "storage/products/16_Good Day Originale Cappucino.jpg",
+    "gr_sugar_content": "14.0",
+    "net_weight": "200",
+    "label_index": 99
+  },
+  {
+    "name": "Good Time Double Choc",
+    "category": "food",
+    "filename": "46_Good Time Double Choc.jpg",
+    "image_path": "storage/products/46_Good Time Double Choc.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 100
+  },
+  {
+    "name": "Good day funtastic mocachino",
+    "category": "drink",
+    "filename": "8991002121010_Good_day_funtastic_mocachino.jpg",
+    "image_path": "storage/products/8991002121010_Good_day_funtastic_mocachino.jpg",
+    "gr_sugar_content": "14.0",
+    "net_weight": "220",
+    "label_index": 101
+  },
+  {
+    "name": "Grand Classic Chocolate Cream Wafer",
+    "category": "food",
+    "filename": "8888166609327_Grand_Classic_Chocolate_Cream_Wafer.jpg",
+    "image_path": "storage/products/8888166609327_Grand_Classic_Chocolate_Cream_Wafer.jpg",
+    "gr_sugar_content": "7.0",
+    "net_weight": "100",
+    "label_index": 102
+  },
+  {
+    "name": "Ground Coffee",
+    "category": "drink",
+    "filename": "8997031720149_Ground_Coffee.jpg",
+    "image_path": "storage/products/8997031720149_Ground_Coffee.jpg",
+    "gr_sugar_content": "0.0",
+    "net_weight": "180",
+    "label_index": 103
+  },
+  {
+    "name": "Happydent cool white 24g",
+    "category": "food",
+    "filename": "8990800021898_Happydent_cool_white_24g.jpg",
+    "image_path": "storage/products/8990800021898_Happydent_cool_white_24g.jpg",
+    "gr_sugar_content": "0.0",
+    "net_weight": "24",
+    "label_index": 104
+  },
+  {
+    "name": "Haribo Happy Cola",
+    "category": "drink",
+    "filename": "8691216090446_Haribo_Happy_Cola.jpg",
+    "image_path": "storage/products/8691216090446_Haribo_Happy_Cola.jpg",
+    "gr_sugar_content": "17.0",
+    "net_weight": "100",
+    "label_index": 105
+  },
+  {
+    "name": "Hydro Coco Original",
+    "category": "drink",
+    "filename": "27_Hydro Coco Original.jpg",
+    "image_path": "storage/products/27_Hydro Coco Original.jpg",
+    "gr_sugar_content": "7.0",
+    "net_weight": "310",
+    "label_index": 106
+  },
+  {
+    "name": "INACO I'm Coco Strawberry",
+    "category": "drink",
+    "filename": "75_INACO I'm Coco Strawberry.jpg",
+    "image_path": "storage/products/75_INACO I'm Coco Strawberry.jpg",
+    "gr_sugar_content": "17.0",
+    "net_weight": "350",
+    "label_index": 107
+  },
+  {
+    "name": "Ichitan Thai Milk Green Tea",
+    "category": "drink",
+    "filename": "13_Ichitan Thai Milk Green Tea.jpg",
+    "image_path": "storage/products/13_Ichitan Thai Milk Green Tea.jpg",
+    "gr_sugar_content": "13.0",
+    "net_weight": "310",
+    "label_index": 108
+  },
+  {
+    "name": "Inaco Im Coco Lychee",
+    "category": "drink",
+    "filename": "25_Inaco Im Coco Lychee.jpg",
+    "image_path": "storage/products/25_Inaco Im Coco Lychee.jpg",
+    "gr_sugar_content": "17.0",
+    "net_weight": "350",
+    "label_index": 109
+  },
+  {
+    "name": "Inaco jelly ast",
+    "category": "food",
+    "filename": "8992726938199_Inaco_jelly_ast.jpg",
+    "image_path": "storage/products/8992726938199_Inaco_jelly_ast.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 110
+  },
+  {
+    "name": "Instant Coffee",
+    "category": "drink",
+    "filename": "8998866623032_Instant_Coffee.jpg",
+    "image_path": "storage/products/8998866623032_Instant_Coffee.jpg",
+    "gr_sugar_content": "5.0",
+    "net_weight": "180",
+    "label_index": 111
+  },
+  {
+    "name": "Kalpa Wafer Cokelat Kelapa",
+    "category": "food",
+    "filename": "67_Kalpa Wafer Cokelat Kelapa.jpg",
+    "image_path": "storage/products/67_Kalpa Wafer Cokelat Kelapa.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 112
+  },
+  {
+    "name": "Kapal Api Grande Java Latte",
+    "category": "food",
+    "filename": "8991002115101_Kapal_Api_Grande_Java_Latte.jpg",
+    "image_path": "storage/products/8991002115101_Kapal_Api_Grande_Java_Latte.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 113
+  },
+  {
+    "name": "Kapal Api Special Mix",
+    "category": "food",
+    "filename": "8991002105485_Kapal_Api_Special_Mix.jpg",
+    "image_path": "storage/products/8991002105485_Kapal_Api_Special_Mix.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 114
+  },
+  {
+    "name": "Kelapa Cream Cokelat",
+    "category": "drink",
+    "filename": "8996001314081_Kelapa_Cream_Cokelat.jpg",
+    "image_path": "storage/products/8996001314081_Kelapa_Cream_Cokelat.jpg",
+    "gr_sugar_content": "5.0",
+    "net_weight": "200",
+    "label_index": 115
+  },
+  {
+    "name": "Kellogg's Corn Flakes Honey Crunch",
+    "category": "food",
+    "filename": "106_Kellogg's Corn Flakes Honey Crunch.jpg",
+    "image_path": "storage/products/106_Kellogg's Corn Flakes Honey Crunch.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 116
+  },
+  {
+    "name": "Kellogg's Froot Loops",
+    "category": "food",
+    "filename": "97_Kellogg's Froot Loops.jpg",
+    "image_path": "storage/products/97_Kellogg's Froot Loops.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 117
+  },
+  {
+    "name": "Khong Guan biscuits 1600g",
+    "category": "food",
+    "filename": "8888166603554_Khong_Guan_biscuits_1600g.jpg",
+    "image_path": "storage/products/8888166603554_Khong_Guan_biscuits_1600g.jpg",
+    "gr_sugar_content": "8.0",
+    "net_weight": "1600",
+    "label_index": 118
+  },
+  {
+    "name": "Kopi Latte Choco Hazelnut",
+    "category": "drink",
+    "filename": "8991998110210_Kopi_Latte_Choco_Hazelnut.jpg",
+    "image_path": "storage/products/8991998110210_Kopi_Latte_Choco_Hazelnut.jpg",
+    "gr_sugar_content": "13.0",
+    "net_weight": "200",
+    "label_index": 119
+  },
+  {
+    "name": "Kopi Luwak Dukung Indonesia Mendunia",
+    "category": "drink",
+    "filename": "9065330001081_Kopi_Luwak_Dukung_Indonesia_Mendunia.jpg",
+    "image_path": "storage/products/9065330001081_Kopi_Luwak_Dukung_Indonesia_Mendunia.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 120
+  },
+  {
+    "name": "Kopiko lucky day thai coffee drink",
+    "category": "drink",
+    "filename": "76_Kopiko lucky day thai coffee drink.jpg",
+    "image_path": "storage/products/76_Kopiko lucky day thai coffee drink.jpg",
+    "gr_sugar_content": "14.0",
+    "net_weight": "240",
+    "label_index": 121
+  },
+  {
+    "name": "Kraft Keju Cake",
+    "category": "food",
+    "filename": "53_Kraft Keju Cake.jpg",
+    "image_path": "storage/products/53_Kraft Keju Cake.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 122
+  },
+  {
+    "name": "Kukis Kelapa coconut cookies",
+    "category": "food",
+    "filename": "8993083940023_Kukis_Kelapa_coconut_cookies.jpg",
+    "image_path": "storage/products/8993083940023_Kukis_Kelapa_coconut_cookies.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 123
+  },
+  {
+    "name": "Lemonia",
+    "category": "food",
+    "filename": "8888166336940_Lemonia.jpg",
+    "image_path": "storage/products/8888166336940_Lemonia.jpg",
+    "gr_sugar_content": "7.0",
+    "net_weight": "130",
+    "label_index": 124
+  },
+  {
+    "name": "Lemonia Lemon Flavored Biscuit",
+    "category": "food",
+    "filename": "86_Lemonia Lemon Flavored Biscuit.jpg",
+    "image_path": "storage/products/86_Lemonia Lemon Flavored Biscuit.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 125
+  },
+  {
+    "name": "Lemonilo Brownies Crispy Strawberry Cheese",
+    "category": "food",
+    "filename": "44_Lemonilo Brownies Crispy Strawberry Cheese.jpg",
+    "image_path": "storage/products/44_Lemonilo Brownies Crispy Strawberry Cheese.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 126
+  },
+  {
+    "name": "Luwak White Koffie Original",
+    "category": "food",
+    "filename": "8994171101289_Luwak_White_Koffie_Original.jpg",
+    "image_path": "storage/products/8994171101289_Luwak_White_Koffie_Original.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 127
+  },
+  {
+    "name": "Luwak kopi gula",
+    "category": "drink",
+    "filename": "8994171101081_Luwak_kopi_gula.jpg",
+    "image_path": "storage/products/8994171101081_Luwak_kopi_gula.jpg",
+    "gr_sugar_content": "14.0",
+    "net_weight": "200",
+    "label_index": 128
+  },
+  {
+    "name": "M Ms Chocolate Bar Cookies",
+    "category": "food",
+    "filename": "9300682051422_M_Ms_Chocolate_Bar_Cookies.jpg",
+    "image_path": "storage/products/9300682051422_M_Ms_Chocolate_Bar_Cookies.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 129
+  },
+  {
+    "name": "MOMOGI Chocolate",
+    "category": "food",
+    "filename": "61_MOMOGI Chocolate.jpg",
+    "image_path": "storage/products/61_MOMOGI Chocolate.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 130
+  },
+  {
+    "name": "Malkist",
+    "category": "food",
+    "filename": "8996001302620_Malkist.jpg",
+    "image_path": "storage/products/8996001302620_Malkist.jpg",
+    "gr_sugar_content": "7.0",
+    "net_weight": "200",
+    "label_index": 131
+  },
+  {
+    "name": "Mangosteen",
+    "category": "food",
+    "filename": "8997225273819_Mangosteen.jpg",
+    "image_path": "storage/products/8997225273819_Mangosteen.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 132
+  },
+  {
+    "name": "Marie susu",
+    "category": "drink",
+    "filename": "8997025914042_Marie_susu.jpg",
+    "image_path": "storage/products/8997025914042_Marie_susu.jpg",
+    "gr_sugar_content": "6.0",
+    "net_weight": "200",
+    "label_index": 133
+  },
+  {
+    "name": "Marie susu milk biscuit",
+    "category": "drink",
+    "filename": "8996001300053_Marie_susu_milk_biscuit.jpg",
+    "image_path": "storage/products/8996001300053_Marie_susu_milk_biscuit.jpg",
+    "gr_sugar_content": "6.0",
+    "net_weight": "200",
+    "label_index": 134
+  },
+  {
+    "name": "Marshmallow kepang stick",
+    "category": "food",
+    "filename": "6921823505159_Marshmallow_kepang_stick.jpg",
+    "image_path": "storage/products/6921823505159_Marshmallow_kepang_stick.jpg",
+    "gr_sugar_content": "22.0",
+    "net_weight": "50",
+    "label_index": 135
+  },
+  {
+    "name": "Mi goreng Fried Noodles Flavour",
+    "category": "food",
+    "filename": "0089686599077_Mi_goreng_Fried_Noodles_Flavour.jpg",
+    "image_path": "storage/products/0089686599077_Mi_goreng_Fried_Noodles_Flavour.jpg",
+    "gr_sugar_content": "1.0",
+    "net_weight": "85",
+    "label_index": 136
+  },
+  {
+    "name": "Migi Migi Wafer krim vanilla cokelat",
+    "category": "food",
+    "filename": "62_Migi Migi Wafer krim vanilla cokelat.jpg",
+    "image_path": "storage/products/62_Migi Migi Wafer krim vanilla cokelat.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 137
+  },
+  {
+    "name": "Migi Migi Wafer krim vanilla strawberry",
+    "category": "food",
+    "filename": "63_Migi Migi Wafer krim vanilla strawberry.jpeg",
+    "image_path": "storage/products/63_Migi Migi Wafer krim vanilla strawberry.jpeg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 138
+  },
+  {
+    "name": "Migi migi wafer krim keju",
+    "category": "food",
+    "filename": "72_Migi migi wafer krim keju.jpg",
+    "image_path": "storage/products/72_Migi migi wafer krim keju.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 139
+  },
+  {
+    "name": "Milku Made With Belgian Cow Susu Uht Cokelat",
+    "category": "drink",
+    "filename": "80_Milku Made With Belgian Cow Susu Uht Cokelat.jpg",
+    "image_path": "storage/products/80_Milku Made With Belgian Cow Susu Uht Cokelat.jpg",
+    "gr_sugar_content": "11.0",
+    "net_weight": "200",
+    "label_index": 140
+  },
+  {
+    "name": "MoMogi",
+    "category": "food",
+    "filename": "8994075260013_MoMogi.jpg",
+    "image_path": "storage/products/8994075260013_MoMogi.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 141
+  },
+  {
+    "name": "Momogi Corn Stick Roasted Corn Flavor",
+    "category": "food",
+    "filename": "66_Momogi Corn Stick Roasted Corn Flavor.jpg",
+    "image_path": "storage/products/66_Momogi Corn Stick Roasted Corn Flavor.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 142
+  },
+  {
+    "name": "Momogi Malkist Crackers",
+    "category": "food",
+    "filename": "59_Momogi Malkist Crackers.jpg",
+    "image_path": "storage/products/59_Momogi Malkist Crackers.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 143
+  },
+  {
+    "name": "Momogi Mini Stick Roasted Corn",
+    "category": "food",
+    "filename": "57_Momogi Mini Stick Roasted Corn.jpg",
+    "image_path": "storage/products/57_Momogi Mini Stick Roasted Corn.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 144
+  },
+  {
+    "name": "Momogi Nugget Snack Jagung Bakar Pedas",
+    "category": "food",
+    "filename": "65_Momogi Nugget Snack Jagung Bakar Pedas.jpg",
+    "image_path": "storage/products/65_Momogi Nugget Snack Jagung Bakar Pedas.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 145
+  },
+  {
+    "name": "Momogi TWIST Roasted Corn",
+    "category": "food",
+    "filename": "64_Momogi TWIST Roasted Corn.jpg",
+    "image_path": "storage/products/64_Momogi TWIST Roasted Corn.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 146
+  },
+  {
+    "name": "Monde",
+    "category": "food",
+    "filename": "8888166989559_Monde.jpg",
+    "image_path": "storage/products/8888166989559_Monde.jpg",
+    "gr_sugar_content": "9.0",
+    "net_weight": "200",
+    "label_index": 147
+  },
+  {
+    "name": "Monde snack gold baked not fried",
+    "category": "food",
+    "filename": "8888166989634_Monde_snack_gold_baked_not_fried.jpg",
+    "image_path": "storage/products/8888166989634_Monde_snack_gold_baked_not_fried.jpg",
+    "gr_sugar_content": "8.0",
+    "net_weight": "200",
+    "label_index": 148
+  },
+  {
+    "name": "Munch Max",
+    "category": "food",
+    "filename": "8901058005080_Munch_Max.jpg",
+    "image_path": "storage/products/8901058005080_Munch_Max.jpg",
+    "gr_sugar_content": "8.0",
+    "net_weight": "38",
+    "label_index": 149
+  },
+  {
+    "name": "Nabati",
+    "category": "food",
+    "filename": "8993175537346_Nabati.jpg",
+    "image_path": "storage/products/8993175537346_Nabati.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 150
+  },
+  {
+    "name": "Nabati Bites Cheese Cream Wafer",
+    "category": "food",
+    "filename": "8993175535250_Nabati_Bites_Cheese_Cream_Wafer.jpg",
+    "image_path": "storage/products/8993175535250_Nabati_Bites_Cheese_Cream_Wafer.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 151
+  },
+  {
+    "name": "Nabati Bites Rasa keju",
+    "category": "food",
+    "filename": "8993175538572_Nabati_Bites__Rasa_keju.jpg",
+    "image_path": "storage/products/8993175538572_Nabati_Bites__Rasa_keju.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 152
+  },
+  {
+    "name": "Nabati Richeese Black",
+    "category": "food",
+    "filename": "8993175547635_Nabati_Richeese_Black.jpg",
+    "image_path": "storage/products/8993175547635_Nabati_Richeese_Black.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 153
+  },
+  {
+    "name": "Nabati Wafer",
+    "category": "food",
+    "filename": "8993175537285_Nabati_Wafer.jpg",
+    "image_path": "storage/products/8993175537285_Nabati_Wafer.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 154
+  },
+  {
+    "name": "Nabati Wafer Cokelat",
+    "category": "food",
+    "filename": "8993175535885_Nabati_Wafer_Cokelat.jpg",
+    "image_path": "storage/products/8993175535885_Nabati_Wafer_Cokelat.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 155
+  },
+  {
+    "name": "Nabati Wafer Lemon",
+    "category": "food",
+    "filename": "8993175550178_Nabati_Wafer_Lemon.jpg",
+    "image_path": "storage/products/8993175550178_Nabati_Wafer_Lemon.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 156
+  },
+  {
+    "name": "Nabati Wafer Richeese",
+    "category": "food",
+    "filename": "40_Nabati Wafer Richeese.jpg",
+    "image_path": "storage/products/40_Nabati Wafer Richeese.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 157
+  },
+  {
+    "name": "Nabati Wafer chocolate",
+    "category": "food",
+    "filename": "95_Nabati Wafer chocolate.jpg",
+    "image_path": "storage/products/95_Nabati Wafer chocolate.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 158
+  },
+  {
+    "name": "Nabati White",
+    "category": "food",
+    "filename": "8993175539821_Nabati_White.jpg",
+    "image_path": "storage/products/8993175539821_Nabati_White.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 159
+  },
+  {
+    "name": "Nano Nano Rasa Rujak Nanas",
+    "category": "food",
+    "filename": "119_Nano Nano Rasa Rujak Nanas.jpg",
+    "image_path": "storage/products/119_Nano Nano Rasa Rujak Nanas.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 160
+  },
+  {
+    "name": "Neo Lotte Xylitol Fresh Mint Big",
+    "category": "food",
+    "filename": "8990333164055_Neo_Lotte_Xylitol_Fresh_Mint__Big_.jpg",
+    "image_path": "storage/products/8990333164055_Neo_Lotte_Xylitol_Fresh_Mint__Big_.jpg",
+    "gr_sugar_content": "0.0",
+    "net_weight": "35",
+    "label_index": 161
+  },
+  {
+    "name": "Nescafe Calssic",
+    "category": "food",
+    "filename": "8992696418370_Nescafe_Calssic.jpg",
+    "image_path": "storage/products/8992696418370_Nescafe_Calssic.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 162
+  },
+  {
+    "name": "Nescafe Caramel Macchiato",
+    "category": "drink",
+    "filename": "9556001288561_Nescafe_Caramel_Macchiato.jpg",
+    "image_path": "storage/products/9556001288561_Nescafe_Caramel_Macchiato.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 163
+  },
+  {
+    "name": "Nescafe Original",
+    "category": "food",
+    "filename": "8992696420557_Nescafe_Original.jpg",
+    "image_path": "storage/products/8992696420557_Nescafe_Original.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 164
+  },
+  {
+    "name": "Nescafe cappucino 220ml",
+    "category": "drink",
+    "filename": "9556001288547_Nescafe_cappucino_220ml.jpg",
+    "image_path": "storage/products/9556001288547_Nescafe_cappucino_220ml.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 165
+  },
+  {
+    "name": "Nestle Sereal Cup Honey Stars",
+    "category": "food",
+    "filename": "107_Nestle Sereal Cup Honey Stars.jpg",
+    "image_path": "storage/products/107_Nestle Sereal Cup Honey Stars.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 166
+  },
+  {
+    "name": "Nestle Sereal Cup Koko Crunch",
+    "category": "food",
+    "filename": "110_Nestle Sereal Cup Koko Crunch.jpg",
+    "image_path": "storage/products/110_Nestle Sereal Cup Koko Crunch.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 167
+  },
+  {
+    "name": "Nestle Sereal Cup Milo",
+    "category": "food",
+    "filename": "108_Nestle Sereal Cup Milo.jpg",
+    "image_path": "storage/products/108_Nestle Sereal Cup Milo.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 168
+  },
+  {
+    "name": "Nextar Chocolate Pie",
+    "category": "food",
+    "filename": "48_Nextar Chocolate Pie.jpg",
+    "image_path": "storage/products/48_Nextar Chocolate Pie.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 169
+  },
+  {
+    "name": "Nextar Nastar Pineapple",
+    "category": "food",
+    "filename": "102_Nextar Nastar Pineapple.jpg",
+    "image_path": "storage/products/102_Nextar Nastar Pineapple.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 170
+  },
+  {
+    "name": "Nextar Nastar Pineapple Jam 80g",
+    "category": "food",
+    "filename": "8993175538947_Nextar_Nastar_-_Pineapple_Jam_-_80g.jpg",
+    "image_path": "storage/products/8993175538947_Nextar_Nastar_-_Pineapple_Jam_-_80g.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 171
+  },
+  {
+    "name": "Nextar Nastar Strawberry Jam",
+    "category": "food",
+    "filename": "8993175548335_Nextar_Nastar_-_Strawberry_Jam.jpg",
+    "image_path": "storage/products/8993175548335_Nextar_Nastar_-_Strawberry_Jam.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 172
+  },
+  {
+    "name": "Nextar brownies 8x10g",
+    "category": "food",
+    "filename": "8993175540797_Nextar_brownies_8x10g.jpg",
+    "image_path": "storage/products/8993175540797_Nextar_brownies_8x10g.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 173
+  },
+  {
+    "name": "Nipis Madu",
+    "category": "drink",
+    "filename": "34_Nipis Madu.jpg",
+    "image_path": "storage/products/34_Nipis Madu.jpg",
+    "gr_sugar_content": "21.0",
+    "net_weight": "300",
+    "label_index": 174
+  },
+  {
+    "name": "Nutriboost Strawberry",
+    "category": "drink",
+    "filename": "20_Nutriboost Strawberry.jpg",
+    "image_path": "storage/products/20_Nutriboost Strawberry.jpg",
+    "gr_sugar_content": "18.0",
+    "net_weight": "300",
+    "label_index": 175
+  },
+  {
+    "name": "Nutty Chocolate Cookies",
+    "category": "drink",
+    "filename": "0749921002228_Nutty_Chocolate_Cookies.jpg",
+    "image_path": "storage/products/0749921002228_Nutty_Chocolate_Cookies.jpg",
+    "gr_sugar_content": "9.0",
+    "net_weight": "100",
+    "label_index": 176
+  },
+  {
+    "name": "Nyam nyam fantasy stick strawberry",
+    "category": "food",
+    "filename": "45_Nyam nyam fantasy stick strawberry.jpg",
+    "image_path": "storage/products/45_Nyam nyam fantasy stick strawberry.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 177
+  },
+  {
+    "name": "Nylon Sev",
+    "category": "food",
+    "filename": "8904071700864_Nylon_Sev.jpg",
+    "image_path": "storage/products/8904071700864_Nylon_Sev.jpg",
+    "gr_sugar_content": "1.0",
+    "net_weight": "60",
+    "label_index": 178
+  },
+  {
+    "name": "OREO Original",
+    "category": "food",
+    "filename": "8992760121014_OREO_Original.jpg",
+    "image_path": "storage/products/8992760121014_OREO_Original.jpg",
+    "gr_sugar_content": "8.5",
+    "net_weight": "133",
+    "label_index": 179
+  },
+  {
+    "name": "Oreo BlackPink",
+    "category": "food",
+    "filename": "7622201704902_Oreo_BlackPink.jpg",
+    "image_path": "storage/products/7622201704902_Oreo_BlackPink.jpg",
+    "gr_sugar_content": "8.5",
+    "net_weight": "133",
+    "label_index": 180
+  },
+  {
+    "name": "Oreo Blueberry Ice Cream",
+    "category": "food",
+    "filename": "7622300442507_Oreo_Blueberry_Ice_Cream.jpg",
+    "image_path": "storage/products/7622300442507_Oreo_Blueberry_Ice_Cream.jpg",
+    "gr_sugar_content": "8.0",
+    "net_weight": "133",
+    "label_index": 181
+  },
+  {
+    "name": "Oreo Original Vanilla",
+    "category": "food",
+    "filename": "8992760221028_Oreo_Original__Vanilla_.jpg",
+    "image_path": "storage/products/8992760221028_Oreo_Original__Vanilla_.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 182
+  },
+  {
+    "name": "Oreo Softcake",
+    "category": "food",
+    "filename": "103_Oreo Softcake.jpg",
+    "image_path": "storage/products/103_Oreo Softcake.jpg",
+    "gr_sugar_content": "8.5",
+    "net_weight": "133",
+    "label_index": 183
+  },
+  {
+    "name": "PLASTIC POT COFFEE",
+    "category": "drink",
+    "filename": "10431972_PLASTIC_POT_COFFEE.jpg",
+    "image_path": "storage/products/10431972_PLASTIC_POT_COFFEE.jpg",
+    "gr_sugar_content": "12.0",
+    "net_weight": "200",
+    "label_index": 184
+  },
+  {
+    "name": "Padimas cream cake pandan",
+    "category": "food",
+    "filename": "73_Padimas cream cake pandan.jpg",
+    "image_path": "storage/products/73_Padimas cream cake pandan.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 185
+  },
+  {
+    "name": "Padimas cream cake strawberry",
+    "category": "food",
+    "filename": "74_Padimas cream cake strawberry.jpg",
+    "image_path": "storage/products/74_Padimas cream cake strawberry.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 186
+  },
+  {
+    "name": "Pie Bis",
+    "category": "food",
+    "filename": "8888166343405_Pie_Bis.jpg",
+    "image_path": "storage/products/8888166343405_Pie_Bis.jpg",
+    "gr_sugar_content": "7.5",
+    "net_weight": "100",
+    "label_index": 187
+  },
+  {
+    "name": "Plantain Chips Yellow Banana Chips",
+    "category": "food",
+    "filename": "8904071704527_Plantain_Chips__Yellow_Banana_Chips_.jpg",
+    "image_path": "storage/products/8904071704527_Plantain_Chips__Yellow_Banana_Chips_.jpg",
+    "gr_sugar_content": "2.0",
+    "net_weight": "80",
+    "label_index": 188
+  },
+  {
+    "name": "Pocky",
+    "category": "food",
+    "filename": "8851019210223_Pocky.jpg",
+    "image_path": "storage/products/8851019210223_Pocky.jpg",
+    "gr_sugar_content": "10.0",
+    "net_weight": "47",
+    "label_index": 189
+  },
+  {
+    "name": "Pocky Chocolate Flavour",
+    "category": "food",
+    "filename": "43_Pocky Chocolate Flavour.jpg",
+    "image_path": "storage/products/43_Pocky Chocolate Flavour.jpg",
+    "gr_sugar_content": "10.0",
+    "net_weight": "47",
+    "label_index": 190
+  },
+  {
+    "name": "Pocky chocolate",
+    "category": "food",
+    "filename": "8990044000000_Pocky_chocolate.jpg",
+    "image_path": "storage/products/8990044000000_Pocky_chocolate.jpg",
+    "gr_sugar_content": "10.0",
+    "net_weight": "47",
+    "label_index": 191
+  },
+  {
+    "name": "Pocky strawberry",
+    "category": "food",
+    "filename": "8851019210124_Pocky_strawberry.jpg",
+    "image_path": "storage/products/8851019210124_Pocky_strawberry.jpg",
+    "gr_sugar_content": "9.0",
+    "net_weight": "47",
+    "label_index": 192
+  },
+  {
+    "name": "Pondan Brownies",
+    "category": "food",
+    "filename": "8992786400292_Pondan_Brownies.jpg",
+    "image_path": "storage/products/8992786400292_Pondan_Brownies.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 193
+  },
+  {
+    "name": "Pondan sponge cake",
+    "category": "food",
+    "filename": "8992786601163_Pondan_sponge_cake.jpg",
+    "image_path": "storage/products/8992786601163_Pondan_sponge_cake.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 194
+  },
+  {
+    "name": "Pop Corn Cheese",
+    "category": "food",
+    "filename": "8997021760018_Pop_Corn_Cheese.jpg",
+    "image_path": "storage/products/8997021760018_Pop_Corn_Cheese.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 195
+  },
+  {
+    "name": "Pota Bee Grilled Seaweed",
+    "category": "food",
+    "filename": "50_Pota Bee Grilled Seaweed.jpg",
+    "image_path": "storage/products/50_Pota Bee Grilled Seaweed.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 196
+  },
+  {
+    "name": "Potabee Selections Salted Egg",
+    "category": "food",
+    "filename": "8998866201728_Potabee_Selections_Salted_Egg.jpg",
+    "image_path": "storage/products/8998866201728_Potabee_Selections_Salted_Egg.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 197
+  },
+  {
+    "name": "Pringles Hot Spicy",
+    "category": "food",
+    "filename": "8886467100055_Pringles_Hot___Spicy.jpg",
+    "image_path": "storage/products/8886467100055_Pringles_Hot___Spicy.jpg",
+    "gr_sugar_content": "1.0",
+    "net_weight": "107",
+    "label_index": 198
+  },
+  {
+    "name": "Pringles Original 107gr",
+    "category": "food",
+    "filename": "8886467100017_Pringles_Original_107gr.jpg",
+    "image_path": "storage/products/8886467100017_Pringles_Original_107gr.jpg",
+    "gr_sugar_content": "1.0",
+    "net_weight": "107",
+    "label_index": 199
+  },
+  {
+    "name": "Pringles Sour Cream Onion",
+    "category": "food",
+    "filename": "8886467100024_Pringles_Sour_Cream___Onion.jpg",
+    "image_path": "storage/products/8886467100024_Pringles_Sour_Cream___Onion.jpg",
+    "gr_sugar_content": "1.5",
+    "net_weight": "107",
+    "label_index": 200
+  },
+  {
+    "name": "Rasa Rumput Laut Nori Seaweed Flavour",
+    "category": "food",
+    "filename": "0089686596465_Rasa_Rumput_Laut__Nori_Seaweed_Flavour_.jpg",
+    "image_path": "storage/products/0089686596465_Rasa_Rumput_Laut__Nori_Seaweed_Flavour_.jpg",
+    "gr_sugar_content": "1.0",
+    "net_weight": "68",
+    "label_index": 201
+  },
+  {
+    "name": "Richeese wfr nabati box 135g",
+    "category": "food",
+    "filename": "8993175549912_Richeese_wfr_nabati_box_135g.jpg",
+    "image_path": "storage/products/8993175549912_Richeese_wfr_nabati_box_135g.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 202
+  },
+  {
+    "name": "Richoco Nabati Wafer White",
+    "category": "food",
+    "filename": "111_Richoco Nabati Wafer White.jpg",
+    "image_path": "storage/products/111_Richoco Nabati Wafer White.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 203
+  },
+  {
+    "name": "Ritz Cheese",
+    "category": "food",
+    "filename": "4893049120046_Ritz_Cheese.jpg",
+    "image_path": "storage/products/4893049120046_Ritz_Cheese.jpg",
+    "gr_sugar_content": "2.0",
+    "net_weight": "104",
+    "label_index": 204
+  },
+  {
+    "name": "Robusta Gold",
+    "category": "food",
+    "filename": "8991002102156_Robusta_Gold.jpg",
+    "image_path": "storage/products/8991002102156_Robusta_Gold.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 205
+  },
+  {
+    "name": "Roma Biscuit Sandwich Chocolate Coklat",
+    "category": "food",
+    "filename": "8996001305041_Roma_Biscuit_Sandwich_Chocolate__Coklat_.jpg",
+    "image_path": "storage/products/8996001305041_Roma_Biscuit_Sandwich_Chocolate__Coklat_.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 206
+  },
+  {
+    "name": "Roma bisc kelapa 300G",
+    "category": "food",
+    "filename": "8996001301142_Roma_bisc_kelapa_300G.jpg",
+    "image_path": "storage/products/8996001301142_Roma_bisc_kelapa_300G.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 207
+  },
+  {
+    "name": "Roti Saku Rasa Bluberi",
+    "category": "food",
+    "filename": "8994462850063_Roti_Saku_Rasa_Bluberi.jpg",
+    "image_path": "storage/products/8994462850063_Roti_Saku_Rasa_Bluberi.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 208
+  },
+  {
+    "name": "Roti Tawar",
+    "category": "food",
+    "filename": "8992907953270_Roti_Tawar.jpg",
+    "image_path": "storage/products/8992907953270_Roti_Tawar.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 209
+  },
+  {
+    "name": "SIMBA CHOCO Chips CUP Chocolate Flavor",
+    "category": "food",
+    "filename": "41_SIMBA CHOCO Chips CUP Chocolate Flavor.jpg",
+    "image_path": "storage/products/41_SIMBA CHOCO Chips CUP Chocolate Flavor.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 210
+  },
+  {
+    "name": "SIMBA CHOCO Chips CUP Chocolate Flavor dengan Susu",
+    "category": "food",
+    "filename": "109_SIMBA CHOCO Chips CUP Chocolate Flavor dengan Susu.jpg",
+    "image_path": "storage/products/109_SIMBA CHOCO Chips CUP Chocolate Flavor dengan Susu.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 211
+  },
+  {
+    "name": "SIMBA CHOCO Chips CUP Strawberry Flavor",
+    "category": "food",
+    "filename": "42_SIMBA CHOCO Chips CUP Strawberry Flavor.jpg",
+    "image_path": "storage/products/42_SIMBA CHOCO Chips CUP Strawberry Flavor.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 212
+  },
+  {
+    "name": "SPN Snack",
+    "category": "food",
+    "filename": "8995139505019_SPN_Snack.jpg",
+    "image_path": "storage/products/8995139505019_SPN_Snack.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 213
+  },
+  {
+    "name": "Sajuak Air Mineral",
+    "category": "drink",
+    "filename": "118_Sajuak Air Mineral.jpg",
+    "image_path": "storage/products/118_Sajuak Air Mineral.jpg",
+    "gr_sugar_content": "0.0",
+    "net_weight": "330",
+    "label_index": 214
+  },
+  {
+    "name": "Sandwich Biscuit Coka Peanut Cream",
+    "category": "food",
+    "filename": "56_Sandwich Biscuit Coka Peanut Cream.jpg",
+    "image_path": "storage/products/56_Sandwich Biscuit Coka Peanut Cream.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 215
+  },
+  {
+    "name": "Sari Gandum Susu Cokelat",
+    "category": "drink",
+    "filename": "8996001304990_Sari_Gandum_Susu___Cokelat.jpg",
+    "image_path": "storage/products/8996001304990_Sari_Gandum_Susu___Cokelat.jpg",
+    "gr_sugar_content": "7.0",
+    "net_weight": "200",
+    "label_index": 216
+  },
+  {
+    "name": "Sari gandum 240g",
+    "category": "food",
+    "filename": "8996001302347_Sari_gandum_240g.jpg",
+    "image_path": "storage/products/8996001302347_Sari_gandum_240g.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 217
+  },
+  {
+    "name": "Sea Salt Popcorn",
+    "category": "food",
+    "filename": "2341082040255_Sea_Salt_Popcorn.jpg",
+    "image_path": "storage/products/2341082040255_Sea_Salt_Popcorn.jpg",
+    "gr_sugar_content": "0.5",
+    "net_weight": "50",
+    "label_index": 218
+  },
+  {
+    "name": "See Hong Puff",
+    "category": "food",
+    "filename": "8997025911058_See_Hong_Puff.jpg",
+    "image_path": "storage/products/8997025911058_See_Hong_Puff.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 219
+  },
+  {
+    "name": "Selamat Chocolate Sandwich Biscuit",
+    "category": "food",
+    "filename": "8991001770011_Selamat_Chocolate_Sandwich_Biscuit.jpg",
+    "image_path": "storage/products/8991001770011_Selamat_Chocolate_Sandwich_Biscuit.jpg",
+    "gr_sugar_content": "9.0",
+    "net_weight": "200",
+    "label_index": 220
+  },
+  {
+    "name": "Selamat Chocolate Sandwich Wafer",
+    "category": "food",
+    "filename": "83_Selamat Chocolate Sandwich Wafer.jpg",
+    "image_path": "storage/products/83_Selamat Chocolate Sandwich Wafer.jpg",
+    "gr_sugar_content": "9.0",
+    "net_weight": "200",
+    "label_index": 221
+  },
+  {
+    "name": "Slai O lai",
+    "category": "food",
+    "filename": "8996001304013_Slai_O_lai.jpg",
+    "image_path": "storage/products/8996001304013_Slai_O_lai.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 222
+  },
+  {
+    "name": "Slai O lai Blueberry",
+    "category": "food",
+    "filename": "8996001304044_Slai_O_lai_Blueberry.jpg",
+    "image_path": "storage/products/8996001304044_Slai_O_lai_Blueberry.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 223
+  },
+  {
+    "name": "Small Bhakarwadi",
+    "category": "food",
+    "filename": "8904071701090_Small_Bhakarwadi.jpg",
+    "image_path": "storage/products/8904071701090_Small_Bhakarwadi.jpg",
+    "gr_sugar_content": "2.0",
+    "net_weight": "80",
+    "label_index": 224
+  },
+  {
+    "name": "Soy Master Minuman Soya",
+    "category": "drink",
+    "filename": "93_Soy Master Minuman Soya.jpg",
+    "image_path": "storage/products/93_Soy Master Minuman Soya.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 225
+  },
+  {
+    "name": "Sponge Strawberry Flavor",
+    "category": "food",
+    "filename": "51_Sponge Strawberry Flavor.jpg",
+    "image_path": "storage/products/51_Sponge Strawberry Flavor.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 226
+  },
+  {
+    "name": "Sprite",
+    "category": "drink",
+    "filename": "24_Sprite.jpg",
+    "image_path": "storage/products/24_Sprite.jpg",
+    "gr_sugar_content": "12.0",
+    "net_weight": "250",
+    "label_index": 227
+  },
+  {
+    "name": "Superco Malkist dengan Krim Rasa Cokela",
+    "category": "drink",
+    "filename": "8888166603431_Superco__Malkist_dengan_Krim_Rasa_Cokela.jpg",
+    "image_path": "storage/products/8888166603431_Superco__Malkist_dengan_Krim_Rasa_Cokela.jpg",
+    "gr_sugar_content": "7.0",
+    "net_weight": "200",
+    "label_index": 228
+  },
+  {
+    "name": "Supero Crackers",
+    "category": "food",
+    "filename": "8888166338012_Supero_Crackers.jpg",
+    "image_path": "storage/products/8888166338012_Supero_Crackers.jpg",
+    "gr_sugar_content": "3.0",
+    "net_weight": "200",
+    "label_index": 229
+  },
+  {
+    "name": "Superstar Full Chocolate",
+    "category": "food",
+    "filename": "84_Superstar Full Chocolate.jpg",
+    "image_path": "storage/products/84_Superstar Full Chocolate.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 230
+  },
+  {
+    "name": "Susu Frisian Flag Nutribrain Chocolate",
+    "category": "drink",
+    "filename": "28_Susu Frisian Flag Nutribrain Chocolate.jpg",
+    "image_path": "storage/products/28_Susu Frisian Flag Nutribrain Chocolate.jpg",
+    "gr_sugar_content": "14.0",
+    "net_weight": "225",
+    "label_index": 231
+  },
+  {
+    "name": "Tango Wafer Cokelat",
+    "category": "food",
+    "filename": "8991102374309_Tango_Wafer_Cokelat.jpg",
+    "image_path": "storage/products/8991102374309_Tango_Wafer_Cokelat.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 232
+  },
+  {
+    "name": "Tango Wafer Vanilla Delight",
+    "category": "food",
+    "filename": "71_Tango Wafer Vanilla Delight.jpg",
+    "image_path": "storage/products/71_Tango Wafer Vanilla Delight.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 233
+  },
+  {
+    "name": "Teh Kotak Melati Less Sugar",
+    "category": "drink",
+    "filename": "21_Teh Kotak Melati Less Sugar.jpg",
+    "image_path": "storage/products/21_Teh Kotak Melati Less Sugar.jpg",
+    "gr_sugar_content": "8.0",
+    "net_weight": "200",
+    "label_index": 234
+  },
+  {
+    "name": "Teh Pucuk",
+    "category": "drink",
+    "filename": "26_Teh Pucuk.jpg",
+    "image_path": "storage/products/26_Teh Pucuk.jpg",
+    "gr_sugar_content": "13.5",
+    "net_weight": "350",
+    "label_index": 235
+  },
+  {
+    "name": "Top Cappuccino",
+    "category": "drink",
+    "filename": "8998866809689_Top_Cappuccino.jpg",
+    "image_path": "storage/products/8998866809689_Top_Cappuccino.jpg",
+    "gr_sugar_content": "14.0",
+    "net_weight": "200",
+    "label_index": 236
+  },
+  {
+    "name": "Top Coffee Gula Aren",
+    "category": "drink",
+    "filename": "8998866202626_Top_Coffee_Gula_Aren.jpg",
+    "image_path": "storage/products/8998866202626_Top_Coffee_Gula_Aren.jpg",
+    "gr_sugar_content": "14.0",
+    "net_weight": "200",
+    "label_index": 237
+  },
+  {
+    "name": "Tujuh Kurma Susu Steril Kurma",
+    "category": "drink",
+    "filename": "5_Tujuh Kurma Susu Steril Kurma.jpg",
+    "image_path": "storage/products/5_Tujuh Kurma Susu Steril Kurma.jpg",
+    "gr_sugar_content": "13.0",
+    "net_weight": "200",
+    "label_index": 238
+  },
+  {
+    "name": "Tummy Yogurt Bar",
+    "category": "drink",
+    "filename": "7499221208457_Tummy_Yogurt_Bar.jpg",
+    "image_path": "storage/products/7499221208457_Tummy_Yogurt_Bar.jpg",
+    "gr_sugar_content": "9.0",
+    "net_weight": "25",
+    "label_index": 239
+  },
+  {
+    "name": "Twister Minis",
+    "category": "food",
+    "filename": "8991001780225_Twister_Minis.jpg",
+    "image_path": "storage/products/8991001780225_Twister_Minis.jpg",
+    "gr_sugar_content": "5.0",
+    "net_weight": "100",
+    "label_index": 240
+  },
+  {
+    "name": "Ultra Milk Cokelat",
+    "category": "drink",
+    "filename": "115_Ultra Milk Cokelat.jpg",
+    "image_path": "storage/products/115_Ultra Milk Cokelat.jpg",
+    "gr_sugar_content": "12.0",
+    "net_weight": "200",
+    "label_index": 241
+  },
+  {
+    "name": "Ultra Milk Strawberry",
+    "category": "drink",
+    "filename": "35_Ultra Milk Strawberry.jpg",
+    "image_path": "storage/products/35_Ultra Milk Strawberry.jpg",
+    "gr_sugar_content": "14.0",
+    "net_weight": "200",
+    "label_index": 242
+  },
+  {
+    "name": "Unibis Bon Bon Chocolate Cream Biscuits",
+    "category": "food",
+    "filename": "96_Unibis Bon Bon Chocolate Cream Biscuits.jpg",
+    "image_path": "storage/products/96_Unibis Bon Bon Chocolate Cream Biscuits.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 243
+  },
+  {
+    "name": "Vegetable Crackers",
+    "category": "food",
+    "filename": "8888166335608_Vegetable_Crackers.jpg",
+    "image_path": "storage/products/8888166335608_Vegetable_Crackers.jpg",
+    "gr_sugar_content": "2.0",
+    "net_weight": "250",
+    "label_index": 244
+  },
+  {
+    "name": "Vitafruit",
+    "category": "food",
+    "filename": "8991002312135_Vitafruit.jpg",
+    "image_path": "storage/products/8991002312135_Vitafruit.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 245
+  },
+  {
+    "name": "Wafello Chocolate Gelato",
+    "category": "food",
+    "filename": "8996001350829_Wafello_Chocolate_Gelato.jpg",
+    "image_path": "storage/products/8996001350829_Wafello_Chocolate_Gelato.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 246
+  },
+  {
+    "name": "Wafer krim cokelat",
+    "category": "food",
+    "filename": "8994075730080_Wafer_krim_cokelat.jpg",
+    "image_path": "storage/products/8994075730080_Wafer_krim_cokelat.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 247
+  },
+  {
+    "name": "Waffle Original",
+    "category": "food",
+    "filename": "8992907000820_Waffle_Original.jpg",
+    "image_path": "storage/products/8992907000820_Waffle_Original.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 248
+  },
+  {
+    "name": "Walens Sus Kering Isi Krim Rasa Bluber",
+    "category": "food",
+    "filename": "8888166350458_Walens_-_Sus_Kering_Isi_Krim_Rasa_Bluber.jpg",
+    "image_path": "storage/products/8888166350458_Walens_-_Sus_Kering_Isi_Krim_Rasa_Bluber.jpg",
+    "gr_sugar_content": "7.0",
+    "net_weight": "150",
+    "label_index": 249
+  },
+  {
+    "name": "Walkers",
+    "category": "food",
+    "filename": "5011555041122_Walkers.jpg",
+    "image_path": "storage/products/5011555041122_Walkers.jpg",
+    "gr_sugar_content": "0.5",
+    "net_weight": "35",
+    "label_index": 250
+  },
+  {
+    "name": "White Bread",
+    "category": "food",
+    "filename": "00035014_White_Bread.jpg",
+    "image_path": "storage/products/00035014_White_Bread.jpg",
+    "gr_sugar_content": "3.0",
+    "net_weight": "400",
+    "label_index": 251
+  },
+  {
+    "name": "White Koffie",
+    "category": "food",
+    "filename": "8994171101296_White_Koffie.jpg",
+    "image_path": "storage/products/8994171101296_White_Koffie.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 252
+  },
+  {
+    "name": "YALE Snack Stick Bulat Coklat",
+    "category": "food",
+    "filename": "58_YALE Snack Stick Bulat Coklat.jpg",
+    "image_path": "storage/products/58_YALE Snack Stick Bulat Coklat.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 253
+  },
+  {
+    "name": "YOU C1000 Lemon",
+    "category": "drink",
+    "filename": "17_YOU C1000 Lemon.jpg",
+    "image_path": "storage/products/17_YOU C1000 Lemon.jpg",
+    "gr_sugar_content": "18.0",
+    "net_weight": "140",
+    "label_index": 254
+  },
+  {
+    "name": "YOUC1000 Orange",
+    "category": "drink",
+    "filename": "3_YOUC1000 Orange.jpg",
+    "image_path": "storage/products/3_YOUC1000 Orange.jpg",
+    "gr_sugar_content": "18.0",
+    "net_weight": "140",
+    "label_index": 255
+  },
+  {
+    "name": "Yakult",
+    "category": "drink",
+    "filename": "1_Yakult.jpg",
+    "image_path": "storage/products/1_Yakult.jpg",
+    "gr_sugar_content": "11.0",
+    "net_weight": "65",
+    "label_index": 256
+  },
+  {
+    "name": "Yale Yale Rice Crispy",
+    "category": "food",
+    "filename": "60_Yale Yale Rice Crispy.jpg",
+    "image_path": "storage/products/60_Yale Yale Rice Crispy.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 257
+  },
+  {
+    "name": "Yupi Bolicious Strawberry",
+    "category": "food",
+    "filename": "112_Yupi Bolicious Strawberry.jpg",
+    "image_path": "storage/products/112_Yupi Bolicious Strawberry.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 258
+  },
+  {
+    "name": "Yupi Bolicious Wild Blackberry",
+    "category": "food",
+    "filename": "114_Yupi Bolicious Wild Blackberry.jpg",
+    "image_path": "storage/products/114_Yupi Bolicious Wild Blackberry.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 259
+  },
+  {
+    "name": "Yupi Choco Glee",
+    "category": "food",
+    "filename": "38_Yupi Choco Glee.jpg",
+    "image_path": "storage/products/38_Yupi Choco Glee.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 260
+  },
+  {
+    "name": "Yupi Strawberry Kiss",
+    "category": "food",
+    "filename": "113_Yupi Strawberry Kiss.jpg",
+    "image_path": "storage/products/113_Yupi Strawberry Kiss.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 261
+  },
+  {
+    "name": "almond cookies",
+    "category": "food",
+    "filename": "8997227860376_almond_cookies.jpg",
+    "image_path": "storage/products/8997227860376_almond_cookies.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 262
+  },
+  {
+    "name": "beng beng extra chocolate caramel",
+    "category": "food",
+    "filename": "8996001354124_beng-beng_extra_chocolate_caramel.jpg",
+    "image_path": "storage/products/8996001354124_beng-beng_extra_chocolate_caramel.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 263
+  },
+  {
+    "name": "choki choki",
+    "category": "food",
+    "filename": "8996001370131_choki_choki.jpg",
+    "image_path": "storage/products/8996001370131_choki_choki.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 264
+  },
+  {
+    "name": "chupa chups",
+    "category": "food",
+    "filename": "8935001706908_chupa_chups.jpg",
+    "image_path": "storage/products/8935001706908_chupa_chups.jpg",
+    "gr_sugar_content": "7.0",
+    "net_weight": "12",
+    "label_index": 265
+  },
+  {
+    "name": "golda coffee latte",
+    "category": "drink",
+    "filename": "8998866201841_golda_coffee_latte.jpg",
+    "image_path": "storage/products/8998866201841_golda_coffee_latte.jpg",
+    "gr_sugar_content": "15.0",
+    "net_weight": "200",
+    "label_index": 266
+  },
+  {
+    "name": "kalpa",
+    "category": "food",
+    "filename": "8996001354001_kalpa.jpg",
+    "image_path": "storage/products/8996001354001_kalpa.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 267
+  },
+  {
+    "name": "kopiko w 52g",
+    "category": "drink",
+    "filename": "8998666001726_kopiko__w__52g.jpg",
+    "image_path": "storage/products/8998666001726_kopiko__w__52g.jpg",
+    "gr_sugar_content": "14.0",
+    "net_weight": "200",
+    "label_index": 268
+  },
+  {
+    "name": "maxicorn barbecue",
+    "category": "food",
+    "filename": "0089686729054_maxicorn_barbecue.jpg",
+    "image_path": "storage/products/0089686729054_maxicorn_barbecue.jpg",
+    "gr_sugar_content": "1.0",
+    "net_weight": "60",
+    "label_index": 269
+  },
+  {
+    "name": "mmm . mallows",
+    "category": "food",
+    "filename": "9338713001757_mmm_._mallows.jpg",
+    "image_path": "storage/products/9338713001757_mmm_._mallows.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 270
+  },
+  {
+    "name": "mrp kacang madu",
+    "category": "food",
+    "filename": "8992709818807_mrp_kacang_madu.jpg",
+    "image_path": "storage/products/8992709818807_mrp_kacang_madu.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 271
+  },
+  {
+    "name": "nissin Crispy Crackers bks 250gr",
+    "category": "food",
+    "filename": "8888166336568_nissin_Crispy_Crackers_bks_250gr.jpg",
+    "image_path": "storage/products/8888166336568_nissin_Crispy_Crackers_bks_250gr.jpg",
+    "gr_sugar_content": "2.0",
+    "net_weight": "250",
+    "label_index": 272
+  },
+  {
+    "name": "oatside chocolate",
+    "category": "drink",
+    "filename": "4_oatside-chocolate.jpg",
+    "image_path": "storage/products/4_oatside-chocolate.jpg",
+    "gr_sugar_content": "9.0",
+    "net_weight": "200",
+    "label_index": 273
+  },
+  {
+    "name": "roma kelapa cream coklat",
+    "category": "food",
+    "filename": "8996001314005_roma_kelapa_cream_coklat.jpg",
+    "image_path": "storage/products/8996001314005_roma_kelapa_cream_coklat.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 274
+  },
+  {
+    "name": "tango waffle",
+    "category": "food",
+    "filename": "8991102794619_tango_waffle.jpg",
+    "image_path": "storage/products/8991102794619_tango_waffle.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 275
+  },
+  {
+    "name": "wafer dengan krim cokelat",
+    "category": "food",
+    "filename": "8996001350522_wafer_dengan_krim_cokelat.jpg",
+    "image_path": "storage/products/8996001350522_wafer_dengan_krim_cokelat.jpg",
+    "gr_sugar_content": null,
+    "net_weight": null,
+    "label_index": 276
+  }
+]

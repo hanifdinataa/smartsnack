@@ -1,10 +1,3 @@
-============================================================
-  LAPORAN EVALUASI MODEL XGBOOST
-  Deteksi Dini Risiko Diabetes
-  Tugas Akhir - Hanif Dinata (2301083015)
-  Politeknik Negeri Padang
-============================================================
-
 Dataset       : nhanes_complete_dataset.csv
 Total data    : 8709 baris
 Split         : 80% Train / 20% Test

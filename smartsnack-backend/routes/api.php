@@ -43,7 +43,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // Logout user (token/sesi tidak dipakai lagi).
     Route::post('/logout', [AuthController::class, 'logout']);
 
-
+ 
     // =====================================================
     // PRODUK + SCAN/OCR + KLASIFIKASI
     // =====================================================
@@ -85,14 +85,18 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     // =====================================================
-    // MONITORING KESEHATAN (sensor + analisis risiko)
+    // MONITORING KESEHATAN (sensor + evaluasi status)
     // =====================================================
     Route::prefix('health-monitoring')->group(function () {
-        // Trigger cek detak jantung (umumnya ambil data dari perangkat via MQTT).
+        // Trigger cek detak jantung (MAX30102 via MQTT).
         Route::post('/check-heart-rate', [HealthMonitoringController::class, 'checkHeartRate']);
-        // Trigger cek suhu tubuh dari perangkat.
+        // Trigger cek suhu tubuh dari perangkat (MLX90614 via MQTT).
         Route::post('/check-body-temperature', [HealthMonitoringController::class, 'checkBodyTemperature']);
-        // Proses analisis risiko diabetes (backend akan pakai service/model XGBoost).
+        // Trigger cek berat badan (LoadCell HX711 via MQTT).
+        Route::post('/check-weight', [HealthMonitoringController::class, 'checkWeight']);
+        // Trigger cek tinggi badan (HC-SR04 ultrasonik via MQTT).
+        Route::post('/check-height', [HealthMonitoringController::class, 'checkHeight']);
+        // Proses evaluasi status kesehatan (rule-based, tanpa ML). Setelah ini box terbuka otomatis.
         Route::post('/analyze', [HealthMonitoringController::class, 'analyze']);
         // Ambil riwayat hasil monitoring kesehatan user.
         Route::get('/history', [HealthMonitoringController::class, 'history']);

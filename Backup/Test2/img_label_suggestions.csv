@@ -1,0 +1,843 @@
+filename,category,suggested_name,confidence,top2_name,top2_confidence,top3_name,top3_confidence
+IMG_20210402_111624.jpg,drink,Kopi Latte Choco Hazelnut,0.4679,Franzzi Yogurt Chocolate Flavor Cookie,0.4615,golda coffee latte,0.4546
+IMG_20210402_111631.jpg,drink,Top Coffee Gula Aren,0.5728,Cimory Fresh Milk Almond,0.5725,Instant Coffee,0.5693
+IMG_20210612_091909.jpg,drink,Nescafe Caramel Macchiato,0.6057,Coca Cola Zero Sugar,0.5535,Collagena Susu Steril,0.5481
+IMG_20210612_091919.jpg,drink,Ultra Milk Strawberry,0.5145,Frisian Flag Full Cream,0.5114,Ultra Milk Cokelat,0.5028
+IMG_20210806_111024.jpg,drink,Tummy Yogurt Bar,0.5127,Ultra Milk Strawberry,0.5123,Kelapa Cream Cokelat,0.4905
+IMG_20210806_111025.jpg,drink,Good Day Originale Cappucino,0.5244,Nutty Chocolate Cookies,0.5176,oatside chocolate,0.5166
+IMG_20210806_111031.jpg,drink,Frisian Flag Full Cream,0.5495,Ultra Milk Strawberry,0.5484,INACO I'm Coco Strawberry,0.5407
+IMG_20210806_111032.jpg,drink,Frisian Flag Full Cream,0.5731,Collagena Susu Steril,0.5612,ABC Jambu,0.5553
+IMG_20241007_125124.jpg,drink,Top Cappuccino,0.6214,Superco Malkist dengan Krim Rasa Cokela,0.606,kopiko w 52g,0.5833
+IMG_20241007_125125.jpg,drink,Top Cappuccino,0.662,Top Coffee Gula Aren,0.6467,Superco Malkist dengan Krim Rasa Cokela,0.5931
+IMG_20241007_125137.jpg,drink,Frisian Flag Nutribrain stroberi,0.6017,Ultra Milk Strawberry,0.5583,ABC Sari Kacang Ijo,0.549
+IMG_20241007_125138.jpg,drink,Frisian Flag Nutribrain stroberi,0.6236,Susu Frisian Flag Nutribrain Chocolate,0.6079,Top Coffee Gula Aren,0.6053
+IMG_20241230_174721.jpg,drink,Amo Spark Cola,0.4847,Franzzi Yogurt Chocolate Flavor Cookie,0.4794,Nutty Chocolate Cookies,0.461
+IMG_20241230_174729.jpg,drink,Collagena Susu Steril,0.4733,Frisian Flag Full Cream,0.4379,Ultra Milk Cokelat,0.4357
+IMG_20250219_150825.jpg,drink,Frisian Flag Full Cream,0.5414,Bear brand,0.5389,Cool Time Air Kelapa,0.5124
+IMG_20250219_150830.jpg,drink,Frisian Flag Full Cream,0.5573,Nescafe Caramel Macchiato,0.5466,Collagena Susu Steril,0.5273
+IMG_20250223_171325.jpg,drink,Amo Spark Cola,0.5175,Fanta,0.4933,Kopi Luwak Dukung Indonesia Mendunia,0.4896
+IMG_20250223_171331.jpg,drink,Colatta,0.5241,Ultra Milk Strawberry,0.5148,Kopi Latte Choco Hazelnut,0.5003
+IMG_20250224_124915.jpg,drink,Good day funtastic mocachino,0.5075,Bear brand,0.4974,Collagena Susu Steril,0.4937
+IMG_20250224_124922.jpg,drink,Teh Kotak Melati Less Sugar,0.549,Frisian Flag Full Cream,0.5423,Chi Forest Sparkling Water White Peach,0.5259
+IMG_20250224_124947.jpg,drink,Nescafe Caramel Macchiato,0.5006,Almond Chocolate,0.4657,golda coffee latte,0.4514
+IMG_20250305_164143.jpg,drink,Tummy Yogurt Bar,0.5427,Coffeemix 3 in 1,0.5304,Nutty Chocolate Cookies,0.5151
+IMG_20250305_164151.jpg,drink,Kopi Latte Choco Hazelnut,0.5994,Buavita Mango Juice,0.5746,Top Cappuccino,0.5554
+IMG_20250305_164154.jpg,drink,ABC Sari Kacang Ijo,0.5002,Ultra Milk Cokelat,0.4978,Ultra Milk Strawberry,0.4944
+IMG_20250305_164225.jpg,drink,Ultra Milk Strawberry,0.5842,Frisian Flag Energo+ Mixed Berries,0.5613,INACO I'm Coco Strawberry,0.5549
+IMG_20250307_173111.jpg,drink,Almond Chocolate,0.5217,Good Day Funtastic Mocacinno,0.5055,Nutriboost Strawberry,0.5036
+IMG_20250307_173116.jpg,drink,Collagena Susu Steril,0.5634,Milku Made With Belgian Cow Susu Uht Cokelat,0.5207,Cimory Yogurt Drink Strawberry,0.5176
+IMG_20250307_173121.jpg,drink,Almond Chocolate,0.5566,Golda Coffee cappuchino,0.5537,Milku Made With Belgian Cow Susu Uht Cokelat,0.5327
+IMG_20250311_171136.jpg,drink,Nutty Chocolate Cookies,0.5706,Kelapa Cream Cokelat,0.5424,kopiko w 52g,0.5244
+IMG_20250311_171201.jpg,drink,Instant Coffee,0.5687,Coffeemix 3 in 1,0.53,Kopi Latte Choco Hazelnut,0.5201
+IMG_20250311_171228.jpg,drink,Top Coffee Gula Aren,0.6563,Kopi Latte Choco Hazelnut,0.6235,Nescafe cappucino 220ml,0.6124
+IMG_20250311_171805.jpg,drink,Kopiko lucky day thai coffee drink,0.4806,Floridina Orange,0.4643,Delizio Caffino Milky Espresso,0.455
+IMG_20250311_183942.jpg,drink,Ultra Milk Strawberry,0.5234,Ultra Milk Cokelat,0.5164,Frisian Flag Full Cream,0.5152
+IMG_20250312_171735.jpg,drink,INACO I'm Coco Strawberry,0.5405,Frisian Flag Full Cream,0.5324,Coca Cola Zero Sugar,0.5242
+IMG_20250312_171740.jpg,drink,Collagena Susu Steril,0.4687,Frisian Flag Full Cream,0.4423,Ultra Milk Strawberry,0.4326
+IMG_20250312_171748.jpg,drink,Top Cappuccino,0.5236,Frisian Flag Full Cream,0.5216,Top Coffee Gula Aren,0.5109
+IMG_20250312_171810.jpg,drink,Golda Coffee cappuchino,0.6015,ABC Kopi Susu,0.5986,Abc Kopi Susu,0.5603
+IMG_20250312_171814.jpg,drink,Frisian Flag Full Cream,0.5617,Golda Coffee cappuchino,0.5406,Instant Coffee,0.5128
+IMG_20250313_163341.jpg,drink,Ground Coffee,0.5869,Top Cappuccino,0.5492,Coca Cola Zero Sugar,0.5476
+IMG_20250313_163406.jpg,drink,Ground Coffee,0.5372,ABC Sari Kacang Ijo,0.5351,Instant Coffee,0.5304
+IMG_20250316_174138.jpg,drink,Floridina Orange,0.6025,Inaco Im Coco Lychee,0.5994,Golda Coffee Cappucino,0.5787
+IMG_20250316_174238.jpg,drink,Floridina Orange,0.514,Ichitan Thai Milk Green Tea,0.5038,Inaco Im Coco Lychee,0.4927
+IMG_20250404_172912.jpg,drink,Frisian Flag Full Cream,0.6356,Susu Frisian Flag Nutribrain Chocolate,0.6311,Top Coffee Gula Aren,0.5992
+IMG_20250404_172926.jpg,drink,Susu Frisian Flag Nutribrain Chocolate,0.6186,Buavita Mango Juice,0.5841,Frisian Flag Energo+ Mixed Berries,0.5826
+IMG_20250404_172938.jpg,drink,Buavita Mango Juice,0.5988,Frisian Flag Full Cream,0.5907,ABC Minuman Soya,0.5705
+IMG_20250404_173002.jpg,drink,Colatta,0.4903,Frisian Flag Nutribrain Strawberry,0.4784,Ultra Milk Cokelat,0.4705
+IMG_20250405_203522.jpg,drink,Cimory Fresh Milk Almond,0.6373,Top Cappuccino,0.6209,Top Coffee Gula Aren,0.6135
+IMG_20250405_203530.jpg,drink,Top Coffee Gula Aren,0.626,Susu Frisian Flag Nutribrain Chocolate,0.6114,Frisian Flag Nutribrain stroberi,0.6014
+IMG_20250405_203551.jpg,drink,Top Coffee Gula Aren,0.7063,Top Cappuccino,0.6696,Kopi Latte Choco Hazelnut,0.6371
+IMG_20250405_203603.jpg,drink,Kopi Latte Choco Hazelnut,0.5792,Ultra Milk Strawberry,0.5789,Buavita Mango Juice,0.5641
+IMG_20250408_170724.jpg,drink,Superco Malkist dengan Krim Rasa Cokela,0.5882,Top Cappuccino,0.5737,Top Coffee Gula Aren,0.5636
+IMG_20250408_170732.jpg,drink,Ultra Milk Strawberry,0.5865,Frisian Flag Full Cream,0.5692,Teh Kotak Melati Less Sugar,0.5571
+IMG_20250408_171343.jpg,drink,kopiko w 52g,0.5723,Top Cappuccino,0.5587,Nutty Chocolate Cookies,0.5286
+IMG_20250408_171356.jpg,drink,Ultra Milk Strawberry,0.5171,Susu Frisian Flag Nutribrain Chocolate,0.51,Ultra Milk Cokelat,0.4778
+IMG_20250408_171400.jpg,drink,Instant Coffee,0.5283,Top Coffee Gula Aren,0.5267,Susu Frisian Flag Nutribrain Chocolate,0.5194
+IMG_20250416_111344.jpg,drink,Kopi Latte Choco Hazelnut,0.5718,Top Coffee Gula Aren,0.5693,Frisian Flag Nutribrain stroberi,0.5512
+IMG_20250416_111414.jpg,drink,Top Coffee Gula Aren,0.5913,Haribo Happy Cola,0.5899,Marie susu milk biscuit,0.5755
+IMG_20250419_143412.jpg,drink,Top Coffee Gula Aren,0.5099,Tummy Yogurt Bar,0.489,INACO I'm Coco Strawberry,0.4841
+IMG_20250419_143418.jpg,drink,Ultra Milk Cokelat,0.4738,Buavita Mango Juice,0.467,INACO I'm Coco Strawberry,0.467
+IMG_20250419_143421.jpg,drink,Collagena Susu Steril,0.6014,Nescafe Caramel Macchiato,0.5641,Ultra Milk Cokelat,0.5601
+IMG_20250419_145042.jpg,drink,Frisian Flag Full Cream,0.5816,Top Cappuccino,0.575,Golda Coffee cappuchino,0.5548
+IMG_20250419_145047.jpg,drink,Kopi Latte Choco Hazelnut,0.5147,Frisian Flag Full Cream,0.4763,Franzzi Yogurt Chocolate Flavor Cookie,0.475
+IMG_20250419_191630.jpg,drink,Top Cappuccino,0.5083,Golda Coffee cappuchino,0.4948,Cool Time Air Kelapa,0.4802
+IMG_20250419_191635.jpg,drink,Frisian Flag Full Cream,0.5119,Ultra Milk Cokelat,0.5036,Tummy Yogurt Bar,0.4965
+IMG_20250419_191707.jpg,drink,Instant Coffee,0.4442,Amo Spark Cola,0.4374,Coffeemix 3 in 1,0.4363
+IMG_20250419_191728.jpg,drink,Instant Coffee,0.5014,Frisian Flag Full Cream,0.4846,Top Coffee Gula Aren,0.4629
+IMG_20250428_171008.jpg,drink,Top Coffee Gula Aren,0.6446,Superco Malkist dengan Krim Rasa Cokela,0.6052,Top Cappuccino,0.5988
+IMG_20250428_171012.jpg,drink,Ultra Milk Cokelat,0.4672,Ultra Milk Strawberry,0.4554,Frisian Flag Full Cream,0.4522
+IMG_20250428_171037.jpg,drink,Superco Malkist dengan Krim Rasa Cokela,0.583,Top Cappuccino,0.5623,Cimory Fresh Milk Almond,0.5445
+IMG_20250428_171052.jpg,drink,Frisian Flag Full Cream,0.5984,Collagena Susu Steril,0.5776,Top Cappuccino,0.5687
+IMG_20250517_121942.jpg,drink,Kelapa Cream Cokelat,0.5592,Espresso Kopi Susu,0.554,Top Cappuccino,0.5511
+IMG_20250517_122016.jpg,drink,Top Coffee Gula Aren,0.6377,Haribo Happy Cola,0.5818,Instant Coffee,0.561
+IMG_20250517_122024.jpg,drink,Kelapa Cream Cokelat,0.6003,Top Coffee Gula Aren,0.586,Espresso Kopi Susu,0.5749
+IMG_20250517_122031.jpg,drink,Instant Coffee,0.5889,Colatta,0.5549,Kelapa Cream Cokelat,0.5521
+IMG_20250517_122104.jpg,drink,Susu Frisian Flag Nutribrain Chocolate,0.6139,Top Coffee Gula Aren,0.6004,Ultra Milk Strawberry,0.5878
+IMG_20250517_122109.jpg,drink,Nutty Chocolate Cookies,0.5907,Coca Cola Zero Sugar,0.5484,Kopi Luwak Dukung Indonesia Mendunia,0.5474
+IMG_20250517_122141.jpg,drink,Ultra Milk Strawberry,0.5954,Frisian Flag Full Cream,0.5652,Kopi Latte Choco Hazelnut,0.5389
+IMG_20250517_122146.jpg,drink,Ultra Milk Cokelat,0.5855,Kopi Latte Choco Hazelnut,0.5741,Ultra Milk Strawberry,0.5607
+IMG_20250517_122204.jpg,drink,kopiko w 52g,0.5798,Kopi Latte Choco Hazelnut,0.5691,Kelapa Cream Cokelat,0.5581
+IMG_20250517_122210.jpg,drink,Coca Cola Zero Sugar,0.5244,Kelapa Cream Cokelat,0.5193,Coffeemix 3 in 1,0.508
+IMG_20250517_122243.jpg,drink,Coffeemix 3 in 1,0.5712,Kopi Latte Choco Hazelnut,0.5496,Susu Frisian Flag Nutribrain Chocolate,0.5361
+IMG_20250517_122307.jpg,drink,Kopi Latte Choco Hazelnut,0.6053,Kelapa Cream Cokelat,0.5897,Coffeemix 3 in 1,0.5701
+IMG_20250520_113422.jpg,drink,Kelapa Cream Cokelat,0.5433,Coffeemix 3 in 1,0.5088,Kopi Latte Choco Hazelnut,0.5034
+IMG_20250520_113425.jpg,drink,Ultra Milk Strawberry,0.5132,Colatta,0.5115,ABC Sari Kacang Ijo,0.4906
+IMG_20250520_113434.jpg,drink,ABC Sari Kacang Ijo,0.5164,Colatta,0.5141,Ultra Milk Strawberry,0.5007
+IMG_20250520_113658.jpg,drink,Superco Malkist dengan Krim Rasa Cokela,0.6246,Susu Frisian Flag Nutribrain Chocolate,0.6006,Top Coffee Gula Aren,0.5837
+IMG_20250520_113703.jpg,drink,Top Coffee Gula Aren,0.532,Kopi Latte Choco Hazelnut,0.5296,Ultra Milk Strawberry,0.5246
+IMG_20250520_113707.jpg,drink,Superco Malkist dengan Krim Rasa Cokela,0.5437,Kelapa Cream Cokelat,0.5122,Instant Coffee,0.4867
+IMG_20250520_113709.jpg,drink,Top Coffee Gula Aren,0.5832,Susu Frisian Flag Nutribrain Chocolate,0.5611,Ultra Milk Strawberry,0.5594
+IMG_20250522_173416.jpg,drink,Bear brand,0.6767,Frisian Flag Full Cream,0.6327,Cool Time Air Kelapa,0.5772
+IMG_20250522_173420.jpg,drink,Bear brand,0.6234,Frisian Flag Full Cream,0.6145,Cool Time Air Kelapa,0.586
+IMG_20250522_173437.jpg,drink,Cool Time Air Kelapa,0.5206,Frisian Flag Full Cream,0.491,Nescafe cappucino 220ml,0.4905
+IMG_20250522_173440.jpg,drink,Cool Time Air Kelapa,0.5349,Frisian Flag Full Cream,0.5287,Collagena Susu Steril,0.5153
+IMG_20250522_173444.jpg,drink,Frisian Flag Full Cream,0.5637,Cool Time Air Kelapa,0.5447,Teh Kotak Melati Less Sugar,0.5297
+IMG_20250522_173448.jpg,drink,Collagena Susu Steril,0.5323,Frisian Flag Full Cream,0.4884,Almond Chocolate,0.4849
+IMG_20250522_173506.jpg,drink,Top Cappuccino,0.5482,Buavita Mango Juice,0.5286,kopiko w 52g,0.5191
+IMG_20250522_173509.jpg,drink,Ultra Milk Strawberry,0.5227,ABC Sari Kacang Ijo,0.4852,Instant Coffee,0.4665
+IMG_20250522_173511.jpg,drink,Franzzi Yogurt Chocolate Flavor Cookie,0.554,Instant Coffee,0.5387,Kopi Latte Choco Hazelnut,0.5204
+IMG_20250522_173514.jpg,drink,Ultra Milk Strawberry,0.5307,Ground Coffee,0.523,Franzzi Yogurt Chocolate Flavor Cookie,0.4927
+IMG_20250522_174541.jpg,drink,Frisian Flag Full Cream,0.5238,Nescafe Caramel Macchiato,0.5159,Cool Time Air Kelapa,0.5118
+IMG_20250522_174552.jpg,drink,Frisian Flag Full Cream,0.5224,Collagena Susu Steril,0.4879,Nescafe Caramel Macchiato,0.4733
+IMG_20250522_174630.jpg,drink,Kelapa Cream Cokelat,0.5316,Top Coffee Gula Aren,0.5186,Top Cappuccino,0.5169
+IMG_20250522_174636.jpg,drink,Frisian Flag Full Cream,0.5274,Top Coffee Gula Aren,0.4925,Espresso Kopi Susu,0.4909
+IMG_20250522_174647.jpg,drink,Frisian Flag Full Cream,0.6281,Top Coffee Gula Aren,0.5834,Buavita Mango Juice,0.5709
+IMG_20250522_180611.jpg,drink,oatside chocolate,0.5132,Kopiko lucky day thai coffee drink,0.493,Teh Kotak Melati Less Sugar,0.4839
+IMG_20250522_180618.jpg,drink,Kopiko lucky day thai coffee drink,0.5124,ABC Kopi Susu,0.5049,Teh Kotak Melati Less Sugar,0.5043
+IMG_20250522_180633.jpg,drink,Luwak kopi gula,0.453,Instant Coffee,0.4424,Coca Cola Zero Sugar,0.4407
+IMG_20250522_180639.jpg,drink,Kopiko lucky day thai coffee drink,0.5075,Frisian Flag Nutribrain Strawberry,0.5012,Ultra Milk Strawberry,0.4971
+IMG_20250523_004623.jpg,drink,Frisian Flag Full Cream,0.5008,Top Cappuccino,0.4778,oatside chocolate,0.4716
+IMG_20250523_004643.jpg,drink,Frisian Flag Full Cream,0.5416,Kopi Latte Choco Hazelnut,0.5325,Top Cappuccino,0.5305
+IMG_20250523_004648.jpg,drink,Kelapa Cream Cokelat,0.5867,Top Cappuccino,0.5798,Frisian Flag Full Cream,0.558
+IMG_20250525_113002.jpg,drink,Sajuak Air Mineral,0.5314,Almond Chocolate,0.4683,Amo Spark Cola,0.4596
+IMG_20250525_113016.jpg,drink,Sajuak Air Mineral,0.557,Franzzi Yogurt Chocolate Flavor Cookie,0.5238,ABC Minuman Soya,0.5215
+IMG_20250525_113041.jpg,drink,Sajuak Air Mineral,0.5323,Golda Coffee cappuchino,0.5171,Amo Spark Cola,0.513
+IMG_20250525_113053.jpg,drink,Sajuak Air Mineral,0.6118,Amo Spark Cola,0.5454,Cool Time Air Kelapa,0.5216
+IMG_20250525_113125.jpg,drink,Top Cappuccino,0.495,Frisian Flag Full Cream,0.4906,Franzzi Yogurt Chocolate Flavor Cookie,0.4803
+IMG_20250525_113132.jpg,drink,Top Cappuccino,0.4969,Instant Coffee,0.4732,Kelapa Cream Cokelat,0.4647
+IMG_20250525_113137.jpg,drink,Top Cappuccino,0.5775,Kelapa Cream Cokelat,0.5571,Frisian Flag Full Cream,0.5423
+IMG_20250525_113142.jpg,drink,ABC Kopi Susu,0.5293,Almond Chocolate,0.5292,Good Day Funtastic Mocacinno,0.5237
+IMG_20250525_113203.jpg,drink,Kelapa Cream Cokelat,0.5464,Top Cappuccino,0.5381,Frisian Flag Full Cream,0.5111
+IMG_20250525_113209.jpg,drink,Frisian Flag Full Cream,0.5346,Kelapa Cream Cokelat,0.5157,Top Cappuccino,0.5092
+IMG_20250525_113235.jpg,drink,Amo Spark Cola,0.5485,Sajuak Air Mineral,0.5416,Nescafe cappucino 220ml,0.5358
+IMG_20250525_113307.jpg,drink,Nescafe cappucino 220ml,0.5579,Kelapa Cream Cokelat,0.5515,Coffeemix 3 in 1,0.5465
+IMG_20250525_113317.jpg,drink,Nescafe cappucino 220ml,0.5511,Top Coffee Gula Aren,0.5242,Coffeemix 3 in 1,0.5239
+IMG_20250525_113336.jpg,drink,Instant Coffee,0.5222,Nescafe cappucino 220ml,0.5153,Top Coffee Gula Aren,0.5023
+IMG_20250525_113453.jpg,drink,Almond Chocolate,0.5368,Tummy Yogurt Bar,0.5265,Teh Kotak Melati Less Sugar,0.5235
+IMG_20250525_113505.jpg,drink,Frisian Flag Full Cream,0.5213,Top Coffee Gula Aren,0.5184,Chi Forest Sparkling Water White Peach,0.5134
+IMG_20250525_113605.jpg,drink,Almond Chocolate,0.5701,Cool Time Air Kelapa,0.5455,Teh Kotak Melati Less Sugar,0.5374
+IMG_20250525_113620.jpg,drink,Frisian Flag Full Cream,0.5618,Ultra Milk Cokelat,0.5469,Almond Chocolate,0.5391
+IMG_20250525_113718.jpg,drink,Golda Coffee cappuchino,0.4958,Frisian Flag Full Cream,0.4907,Kelapa Cream Cokelat,0.4834
+IMG_20250525_113740.jpg,drink,Kelapa Cream Cokelat,0.5261,Tummy Yogurt Bar,0.5156,Frisian Flag Full Cream,0.5045
+IMG_20250525_113816.jpg,drink,Golda Coffee cappuchino,0.5347,Frisian Flag Full Cream,0.5314,Top Coffee Gula Aren,0.5233
+IMG_20250525_113845.jpg,drink,Ultra Milk Strawberry,0.5557,Colatta,0.5458,Kelapa Cream Cokelat,0.5351
+IMG_20250525_113852.jpg,drink,Ultra Milk Strawberry,0.4931,Frisian Flag Energo+ Mixed Berries,0.4833,ABC Sari Kacang Ijo,0.4808
+IMG_20250525_113858.jpg,drink,Instant Coffee,0.4577,Coca Cola Zero Sugar,0.4524,ABC Sari Kacang Ijo,0.4511
+IMG_20250525_113902.jpg,drink,Ultra Milk Strawberry,0.6053,Susu Frisian Flag Nutribrain Chocolate,0.576,Frisian Flag Nutribrain stroberi,0.5706
+IMG_20250525_113912.jpg,drink,Ultra Milk Strawberry,0.5148,Instant Coffee,0.4979,Kopi Latte Choco Hazelnut,0.4971
+IMG_20250525_113919.jpg,drink,Coffeemix 3 in 1,0.5101,Ultra Milk Strawberry,0.4981,Kopi Latte Choco Hazelnut,0.4937
+IMG_20250525_113926.jpg,drink,Ultra Milk Strawberry,0.6074,Frisian Flag Full Cream,0.5501,Kopi Latte Choco Hazelnut,0.5446
+IMG_20250525_113954.jpg,drink,Frisian Flag Nutribrain Strawberry,0.4644,ABC Sari Kacang Ijo,0.4547,Ultra Milk Cokelat,0.4515
+IMG_20250525_113958.jpg,drink,Kelapa Cream Cokelat,0.4728,Instant Coffee,0.4654,Coffeemix 3 in 1,0.447
+IMG_20250525_114002.jpg,drink,Ultra Milk Strawberry,0.64,Frisian Flag Full Cream,0.6249,Susu Frisian Flag Nutribrain Chocolate,0.6213
+IMG_20250525_114032.jpg,drink,Frisian Flag Nutribrain Strawberry,0.5252,Ultra Milk Strawberry,0.5043,Ground Coffee,0.4943
+IMG_20250525_114039.jpg,drink,Coffeemix 3 in 1,0.5244,Kelapa Cream Cokelat,0.4852,Frisian Flag Nutribrain Strawberry,0.4839
+IMG_20250525_114129.jpg,drink,kopiko w 52g,0.5475,Nutty Chocolate Cookies,0.5276,Kelapa Cream Cokelat,0.5263
+IMG_20250525_114134.jpg,drink,Ultra Milk Strawberry,0.4607,ABC Sari Kacang Ijo,0.4318,Frisian Flag Nutribrain Strawberry,0.4237
+IMG_20250525_114139.jpg,drink,Instant Coffee,0.5354,Kopi Latte Choco Hazelnut,0.4845,Kelapa Cream Cokelat,0.4808
+IMG_20250525_114145.jpg,drink,Ultra Milk Strawberry,0.623,Susu Frisian Flag Nutribrain Chocolate,0.61,Frisian Flag Energo+ Mixed Berries,0.6055
+IMG_20250525_114209.jpg,drink,Instant Coffee,0.5066,Kopi Latte Choco Hazelnut,0.4646,Frisian Flag Nutribrain Strawberry,0.4626
+IMG_20250525_114215.jpg,drink,Kelapa Cream Cokelat,0.5174,Ultra Milk Strawberry,0.5147,Top Coffee Gula Aren,0.5012
+IMG_20250525_181016.jpg,drink,Golda Coffee cappuchino,0.5496,Abc Kopi Susu,0.5217,Good Day Originale Cappucino,0.5091
+IMG_20250525_181026.jpg,drink,Top Coffee Gula Aren,0.5392,Top Cappuccino,0.5318,Superco Malkist dengan Krim Rasa Cokela,0.5101
+IMG_20250525_181031.jpg,drink,Espresso Kopi Susu,0.543,Kelapa Cream Cokelat,0.537,Top Coffee Gula Aren,0.5321
+IMG_20250525_181040.jpg,drink,Instant Coffee,0.4557,oatside chocolate,0.4437,Top Cappuccino,0.435
+IMG_20250525_181102.jpg,drink,Floridina Orange,0.4956,Chi Forest Sparkling Water White Peach,0.4953,Cool Time Air Kelapa,0.4838
+IMG_20250525_181113.jpg,drink,Top Coffee Gula Aren,0.6084,Superco Malkist dengan Krim Rasa Cokela,0.5676,Nutty Chocolate Cookies,0.5614
+IMG_20250525_181135.jpg,drink,Frisian Flag Full Cream,0.5479,Ultra Milk Strawberry,0.5366,Ultra Milk Cokelat,0.5241
+IMG_20250525_181201.jpg,drink,Top Coffee Gula Aren,0.5684,Frisian Flag Full Cream,0.5616,Espresso Kopi Susu,0.5533
+IMG_20250525_181208.jpg,drink,Frisian Flag Full Cream,0.5653,Buavita Mango Juice,0.5138,Collagena Susu Steril,0.506
+IMG_20250525_181211.jpg,drink,Frisian Flag Full Cream,0.6356,Top Coffee Gula Aren,0.5675,Kelapa Cream Cokelat,0.5435
+IMG_20250525_181215.jpg,drink,Frisian Flag Full Cream,0.5746,Cool Time Air Kelapa,0.5114,Collagena Susu Steril,0.5107
+IMG_20250528_110854.jpg,drink,Teh Kotak Melati Less Sugar,0.5282,Golda Coffee cappuchino,0.5184,Tujuh Kurma Susu Steril Kurma,0.5044
+IMG_20250528_110856.jpg,drink,Golda Coffee cappuchino,0.5156,Golda Coffee Cappucino,0.4864,Bear brand,0.4776
+IMG_20250528_110909.jpg,drink,Tummy Yogurt Bar,0.5402,Frisian Flag Full Cream,0.5339,Instant Coffee,0.5325
+IMG_20250528_110918.jpg,drink,Tummy Yogurt Bar,0.5254,Luwak kopi gula,0.5008,Frisian Flag Full Cream,0.4737
+IMG_20250528_110922.jpg,drink,kopiko w 52g,0.3896,Nescafe Caramel Macchiato,0.3721,Coca Cola Zero Sugar,0.3635
+IMG_20250528_110948.jpg,drink,Kelapa Cream Cokelat,0.5898,ABC Jambu,0.5677,Top Coffee Gula Aren,0.5538
+IMG_20250528_110954.jpg,drink,Top Coffee Gula Aren,0.4971,Tummy Yogurt Bar,0.4807,Nescafe cappucino 220ml,0.4737
+IMG_20250528_111011.jpg,drink,Nescafe cappucino 220ml,0.5856,Top Coffee Gula Aren,0.5732,Top Cappuccino,0.566
+IMG_20250528_111017.jpg,drink,Instant Coffee,0.5486,Top Coffee Gula Aren,0.5358,Frisian Flag Full Cream,0.5202
+IMG_20250528_111112.jpg,drink,Frisian Flag Full Cream,0.4948,Instant Coffee,0.484,Good day funtastic mocachino,0.4778
+IMG_20250528_112101.jpg,drink,Bear brand,0.7013,Frisian Flag Energo+ Mixed Berries,0.5675,Top Cappuccino,0.5604
+IMG_20250528_112105.jpg,drink,Bear brand,0.6653,Frisian Flag Full Cream,0.6606,Frisian Flag Energo+ Mixed Berries,0.6136
+IMG_20250528_112111.jpg,drink,Frisian Flag Full Cream,0.5699,Ultra Milk Cokelat,0.5068,Collagena Susu Steril,0.493
+IMG_20250528_112141.jpg,drink,Ultra Milk Cokelat,0.6043,Frisian Flag Full Cream,0.5678,Collagena Susu Steril,0.5384
+IMG_20250528_112146.jpg,drink,Frisian Flag Full Cream,0.6286,Collagena Susu Steril,0.5834,Ultra Milk Cokelat,0.5711
+IMG_20250528_112835.jpg,drink,Top Cappuccino,0.5878,Top Coffee Gula Aren,0.5842,Frisian Flag Full Cream,0.5361
+IMG_20250528_112840.jpg,drink,Top Cappuccino,0.4967,Fruit Tea Apple,0.489,Good Day Originale Cappucino,0.4867
+IMG_20250528_112845.jpg,drink,Frisian Flag Full Cream,0.5607,Ultra Milk Strawberry,0.5332,Frisian Flag Nutribrain stroberi,0.5229
+IMG_20250528_112906.jpg,drink,Top Cappuccino,0.6001,Nutty Chocolate Cookies,0.5978,Top Coffee Gula Aren,0.5931
+IMG_20250528_112915.jpg,drink,Top Coffee Gula Aren,0.6036,ABC Jambu,0.6027,Frisian Flag Full Cream,0.5973
+IMG_20250528_112925.jpg,drink,Cool Time Air Kelapa,0.6208,Ichitan Thai Milk Green Tea,0.5895,Ultra Milk Strawberry,0.582
+IMG_20250528_112945.jpg,drink,Top Cappuccino,0.5697,Top Coffee Gula Aren,0.5601,Espresso Kopi Susu,0.5279
+IMG_20250528_112948.jpg,drink,Top Coffee Gula Aren,0.5881,Top Cappuccino,0.5589,Kopi Latte Choco Hazelnut,0.5567
+IMG_20250528_112955.jpg,drink,Kopi Latte Choco Hazelnut,0.5156,Frisian Flag Full Cream,0.5116,Ultra Milk Strawberry,0.5087
+IMG_20250528_120413.jpg,drink,Frisian Flag Full Cream,0.6027,Kelapa Cream Cokelat,0.5842,Top Coffee Gula Aren,0.5686
+IMG_20250528_120417.jpg,drink,Ultra Milk Cokelat,0.5479,Ultra Milk Strawberry,0.5429,INACO I'm Coco Strawberry,0.5418
+IMG_20250528_120421.jpg,drink,Kelapa Cream Cokelat,0.5866,Frisian Flag Full Cream,0.5572,Top Cappuccino,0.5349
+IMG_20250528_120423.jpg,drink,Frisian Flag Full Cream,0.5971,Ultra Milk Strawberry,0.582,Collagena Susu Steril,0.5654
+IMG_20250528_120436.jpg,drink,Kelapa Cream Cokelat,0.6056,Luwak kopi gula,0.5644,Kopi Luwak Dukung Indonesia Mendunia,0.5629
+IMG_20250528_120441.jpg,drink,Frisian Flag Full Cream,0.5696,Kelapa Cream Cokelat,0.5667,Luwak kopi gula,0.5524
+IMG_20250528_120444.jpg,drink,Golda Coffee cappuchino,0.4736,Ultra Milk Strawberry,0.4696,Collagena Susu Steril,0.4654
+IMG_20250528_120448.jpg,drink,Frisian Flag Full Cream,0.5477,Instant Coffee,0.5409,Franzzi Yogurt Chocolate Flavor Cookie,0.5381
+IMG_20250528_120518.jpg,drink,Kelapa Cream Cokelat,0.5762,Top Coffee Gula Aren,0.5581,Frisian Flag Full Cream,0.5514
+IMG_20250528_120531.jpg,drink,Kelapa Cream Cokelat,0.5774,Top Cappuccino,0.5438,Top Coffee Gula Aren,0.5313
+IMG_20250528_120535.jpg,drink,Coca Cola Zero Sugar,0.4844,Cool Time Air Kelapa,0.4777,INACO I'm Coco Strawberry,0.4741
+IMG_20250528_120539.jpg,drink,Frisian Flag Full Cream,0.6091,Ultra Milk Strawberry,0.5601,Frisian Flag Energo+ Mixed Berries,0.5471
+IMG_20250528_120638.jpg,drink,Tummy Yogurt Bar,0.5472,INACO I'm Coco Strawberry,0.5167,Top Cappuccino,0.5163
+IMG_20250528_120643.jpg,drink,Tummy Yogurt Bar,0.5165,Coffeemix 3 in 1,0.4936,Golda Coffee cappuchino,0.4901
+IMG_20250528_120654.jpg,drink,Tummy Yogurt Bar,0.5215,Collagena Susu Steril,0.4927,Frisian Flag Full Cream,0.4794
+IMG_20250528_120711.jpg,drink,Frisian Flag Full Cream,0.5671,Collagena Susu Steril,0.5655,Golda Coffee cappuchino,0.5254
+IMG_20250528_120726.jpg,drink,Instant Coffee,0.5027,Coffeemix 3 in 1,0.5009,Luwak kopi gula,0.4921
+IMG_20250528_120738.jpg,drink,Top Cappuccino,0.492,Instant Coffee,0.483,Nutty Chocolate Cookies,0.4755
+IMG_20250528_120744.jpg,drink,Frisian Flag Full Cream,0.4456,Instant Coffee,0.4426,Collagena Susu Steril,0.4426
+IMG_20250528_120747.jpg,drink,Instant Coffee,0.5136,Frisian Flag Full Cream,0.5054,Golda Coffee cappuchino,0.4874
+IMG_20250528_120801.jpg,drink,Good day funtastic mocachino,0.3395,Abc Kopi Susu,0.3246,Coca Cola Zero Sugar,0.32
+IMG_20250528_121023.jpg,drink,Golda Coffee cappuchino,0.6292,golda coffee latte,0.6085,ABC Choco Malt,0.5906
+IMG_20250528_121029.jpg,drink,Golda Coffee cappuchino,0.6256,ABC Choco Malt,0.563,golda coffee latte,0.5359
+IMG_20250528_121042.jpg,drink,Golda Coffee cappuchino,0.6346,Almond Chocolate,0.572,golda coffee latte,0.541
+IMG_20250528_121053.jpg,drink,Golda Coffee cappuchino,0.5296,ABC Choco Malt,0.5262,golda coffee latte,0.5064
+IMG_20250528_121111.jpg,drink,golda coffee latte,0.3426,Golda Coffee Dolce Latte,0.3331,Abc Kopi Susu,0.3273
+IMG_20250528_121310.jpg,drink,oatside chocolate,0.5403,Frisian Flag Full Cream,0.524,Collagena Susu Steril,0.5183
+IMG_20250528_121316.jpg,drink,Espresso Kopi Susu,0.5532,Frisian Flag Nutribrain stroberi,0.5251,Tummy Yogurt Bar,0.5106
+IMG_20250528_121328.jpg,drink,ABC Sari Kacang Ijo,0.3921,Ultra Milk Strawberry,0.3678,Franzzi Yogurt Chocolate Flavor Cookie,0.3575
+IMG_20250528_121333.jpg,drink,Tummy Yogurt Bar,0.5304,Ultra Milk Strawberry,0.4798,Frisian Flag Nutribrain stroberi,0.4672
+IMG_20250528_121351.jpg,drink,Top Cappuccino,0.4049,Luwak kopi gula,0.3993,Tummy Yogurt Bar,0.3961
+IMG_20250528_121359.jpg,drink,Frisian Flag Nutribrain Strawberry,0.4573,Ultra Milk Strawberry,0.4489,PLASTIC POT COFFEE,0.4208
+IMG_20250528_121453.jpg,drink,Bear brand,0.5138,Top Coffee Gula Aren,0.4972,Teh Kotak Melati Less Sugar,0.4849
+IMG_20250528_121500.jpg,drink,Bear brand,0.5511,Collagena Susu Steril,0.5328,Nescafe cappucino 220ml,0.524
+IMG_20250528_121505.jpg,drink,Frisian Flag Full Cream,0.5531,Ultra Milk Cokelat,0.5014,Nescafe Caramel Macchiato,0.5008
+IMG_20250528_121512.jpg,drink,Frisian Flag Full Cream,0.5468,Buavita Mango Juice,0.5263,Ultra Milk Cokelat,0.4987
+IMG_20250529_115713.jpg,drink,INACO I'm Coco Strawberry,0.5497,Susu Frisian Flag Nutribrain Chocolate,0.546,Top Cappuccino,0.5432
+IMG_20250529_115719.jpg,drink,Ultra Milk Strawberry,0.5572,Frisian Flag Energo+ Mixed Berries,0.554,Susu Frisian Flag Nutribrain Chocolate,0.5501
+IMG_20250529_115727.jpg,drink,Ultra Milk Cokelat,0.5025,Frisian Flag Full Cream,0.4999,ABC Sari Kacang Ijo,0.4843
+IMG_20250529_115731.jpg,drink,Susu Frisian Flag Nutribrain Chocolate,0.5767,Ultra Milk Cokelat,0.5627,Frisian Flag Nutribrain stroberi,0.5603
+IMG_20250529_115748.jpg,drink,Top Coffee Gula Aren,0.4608,Kopi Latte Choco Hazelnut,0.4573,Instant Coffee,0.4559
+IMG_20250529_115756.jpg,drink,Frisian Flag Full Cream,0.4763,Instant Coffee,0.4751,oatside chocolate,0.4739
+IMG_20250529_115843.jpg,drink,Bear brand,0.5863,Frisian Flag Full Cream,0.5803,Teh Kotak Melati Less Sugar,0.5742
+IMG_20250529_115846.jpg,drink,Bear brand,0.5836,Frisian Flag Full Cream,0.5465,Teh Kotak Melati Less Sugar,0.542
+IMG_20250529_115849.jpg,drink,Frisian Flag Full Cream,0.5545,Top Coffee Gula Aren,0.5362,Frisian Flag Nutribrain stroberi,0.5173
+IMG_20250529_115853.jpg,drink,Frisian Flag Full Cream,0.5384,Ultra Milk Cokelat,0.5095,INACO I'm Coco Strawberry,0.4774
+IMG_20250529_115915.jpg,drink,Top Coffee Gula Aren,0.6589,Frisian Flag Full Cream,0.6078,Ultra Milk Cokelat,0.5886
+IMG_20250529_115918.jpg,drink,Superco Malkist dengan Krim Rasa Cokela,0.5883,Top Coffee Gula Aren,0.5861,Nutty Chocolate Cookies,0.5555
+IMG_20250529_115922.jpg,drink,Top Coffee Gula Aren,0.5603,Frisian Flag Full Cream,0.5201,Ultra Milk Cokelat,0.5167
+IMG_20250529_115926.jpg,drink,Collagena Susu Steril,0.4931,Frisian Flag Full Cream,0.4906,Ultra Milk Strawberry,0.4901
+IMG_20250529_115946.jpg,drink,Top Cappuccino,0.6145,Top Coffee Gula Aren,0.5982,Frisian Flag Full Cream,0.5943
+IMG_20250529_115948.jpg,drink,Top Coffee Gula Aren,0.6271,Superco Malkist dengan Krim Rasa Cokela,0.6165,Top Cappuccino,0.5737
+IMG_20250529_115952.jpg,drink,Frisian Flag Full Cream,0.5875,Kopi Latte Choco Hazelnut,0.5805,Top Coffee Gula Aren,0.5757
+IMG_20250529_115955.jpg,drink,Ultra Milk Strawberry,0.6034,Frisian Flag Full Cream,0.5947,Collagena Susu Steril,0.5859
+IMG_20250529_120016.jpg,drink,Susu Frisian Flag Nutribrain Chocolate,0.6192,Frisian Flag Energo+ Mixed Berries,0.6051,Ultra Milk Strawberry,0.5882
+IMG_20250529_120019.jpg,drink,Ultra Milk Strawberry,0.5732,Kopi Latte Choco Hazelnut,0.5437,Nescafe cappucino 220ml,0.5326
+IMG_20250529_120022.jpg,drink,Kelapa Cream Cokelat,0.5319,ABC Sari Kacang Ijo,0.5072,ABC Minuman Soya,0.5049
+IMG_20250529_120025.jpg,drink,Susu Frisian Flag Nutribrain Chocolate,0.5781,Colatta,0.5725,Superco Malkist dengan Krim Rasa Cokela,0.5613
+IMG_20250529_120046.jpg,drink,Colatta,0.4048,Kopi Latte Choco Hazelnut,0.4007,Instant Coffee,0.4003
+IMG_20250529_120052.jpg,drink,Ultra Milk Strawberry,0.5159,Frisian Flag Nutribrain stroberi,0.4811,Frisian Flag Nutribrain Strawberry,0.4805
+IMG_20250529_120137.jpg,drink,Golda Coffee cappuchino,0.5556,Top Coffee Gula Aren,0.5355,Teh Kotak Melati Less Sugar,0.535
+IMG_20250529_120140.jpg,drink,Top Cappuccino,0.5356,Top Coffee Gula Aren,0.5146,Golda Coffee cappuchino,0.5067
+IMG_20250529_120142.jpg,drink,Bear brand,0.5552,Golda Coffee cappuchino,0.5407,Kopiko lucky day thai coffee drink,0.5284
+IMG_20250529_120147.jpg,drink,Frisian Flag Full Cream,0.5662,Top Coffee Gula Aren,0.5409,Frisian Flag Energo+ Mixed Berries,0.5376
+IMG_20250529_120150.jpg,drink,Nescafe Caramel Macchiato,0.5545,Frisian Flag Full Cream,0.5382,Frisian Flag Energo+ Mixed Berries,0.5341
+IMG_20250529_120158.jpg,drink,Instant Coffee,0.3528,Almond Chocolate,0.3444,Amo Spark Cola,0.3438
+IMG_20250529_120343.jpg,drink,Kopi Latte Choco Hazelnut,0.5716,Espresso Kopi Susu,0.5665,Coca Cola Zero Sugar,0.5605
+IMG_20250529_120348.jpg,drink,Kopi Latte Choco Hazelnut,0.5276,Colatta,0.5274,Instant Coffee,0.5262
+IMG_20250530_123829.jpg,drink,Fruit Tea Apple,0.514,Floridina Orange,0.5131,Almond Chocolate,0.5063
+IMG_20250530_123838.jpg,drink,Top Cappuccino,0.5549,Nescafe cappucino 220ml,0.5502,golda coffee latte,0.5423
+IMG_20250530_123844.jpg,drink,Golda Coffee cappuchino,0.5078,Fruit Tea Apple,0.5077,Almond Chocolate,0.5005
+IMG_20250530_123847.jpg,drink,oatside chocolate,0.5356,Top Cappuccino,0.5241,Amo Spark Cola,0.521
+IMG_20250530_123856.jpg,drink,Coffeemix 3 in 1,0.5409,Golda Coffee cappuchino,0.515,Cool Time Air Kelapa,0.5143
+IMG_20250530_123913.jpg,drink,Kopi Latte Choco Hazelnut,0.6208,Kelapa Cream Cokelat,0.6152,Buavita Mango Juice,0.6068
+IMG_20250530_123916.jpg,drink,Frisian Flag Energo+ Mixed Berries,0.6092,Instant Coffee,0.6011,Kelapa Cream Cokelat,0.5872
+IMG_20250530_123927.jpg,drink,Instant Coffee,0.5575,Kelapa Cream Cokelat,0.5325,Superco Malkist dengan Krim Rasa Cokela,0.5235
+IMG_20250530_123936.jpg,drink,Frisian Flag Nutribrain stroberi,0.532,Frisian Flag Full Cream,0.5242,Kopi Latte Choco Hazelnut,0.5196
+IMG_20250530_123951.jpg,drink,Frisian Flag Nutribrain Strawberry,0.512,Coffeemix 3 in 1,0.4688,Kopi Latte Choco Hazelnut,0.4624
+IMG_20250530_124000.jpg,drink,Frisian Flag Nutribrain Strawberry,0.4738,Kelapa Cream Cokelat,0.4619,Coffeemix 3 in 1,0.461
+IMG_20250530_125957.jpg,drink,Frisian Flag Full Cream,0.6241,Buavita Mango Juice,0.6061,Top Coffee Gula Aren,0.5951
+IMG_20250530_130004.jpg,drink,Frisian Flag Energo+ Mixed Berries,0.5561,Colatta,0.5277,Susu Frisian Flag Nutribrain Chocolate,0.5241
+IMG_20250530_130008.jpg,drink,Susu Frisian Flag Nutribrain Chocolate,0.5693,Coffeemix 3 in 1,0.562,Colatta,0.555
+IMG_20250530_130012.jpg,drink,Instant Coffee,0.5594,Frisian Flag Energo+ Mixed Berries,0.5293,ABC Sari Kacang Ijo,0.5237
+IMG_20250530_130021.jpg,drink,Coca Cola Zero Sugar,0.4919,Frisian Flag Full Cream,0.4857,golda coffee latte,0.4849
+IMG_20250601_121634.jpg,drink,Frisian Flag Full Cream,0.5771,Top Coffee Gula Aren,0.5529,Coca Cola Zero Sugar,0.5373
+IMG_20250601_121637.jpg,drink,Frisian Flag Full Cream,0.5836,Collagena Susu Steril,0.579,Cool Time Air Kelapa,0.5531
+IMG_20250601_121640.jpg,drink,Frisian Flag Full Cream,0.5151,Top Coffee Gula Aren,0.4873,Cool Time Air Kelapa,0.4864
+IMG_20250601_121644.jpg,drink,Frisian Flag Full Cream,0.5803,Ultra Milk Cokelat,0.556,Top Coffee Gula Aren,0.5313
+IMG_20250601_121700.jpg,drink,Frisian Flag Full Cream,0.5854,Top Coffee Gula Aren,0.552,Teh Kotak Melati Less Sugar,0.5432
+IMG_20250601_121703.jpg,drink,Teh Kotak Melati Less Sugar,0.583,Frisian Flag Full Cream,0.5821,Top Coffee Gula Aren,0.5782
+IMG_20250601_121708.jpg,drink,Top Coffee Gula Aren,0.5487,Top Cappuccino,0.5221,Frisian Flag Full Cream,0.5114
+IMG_20250601_121712.jpg,drink,Ultra Milk Cokelat,0.5695,Frisian Flag Full Cream,0.5467,Top Coffee Gula Aren,0.5426
+IMG_20250601_121805.jpg,drink,Buavita Mango Juice,0.661,Top Cappuccino,0.6414,Susu Frisian Flag Nutribrain Chocolate,0.6262
+IMG_20250601_121808.jpg,drink,Frisian Flag Nutribrain stroberi,0.5342,ABC Sari Kacang Ijo,0.5253,Kopi Latte Choco Hazelnut,0.5231
+IMG_20250601_121811.jpg,drink,Top Coffee Gula Aren,0.664,Frisian Flag Full Cream,0.6357,Kopi Latte Choco Hazelnut,0.6261
+IMG_20250601_121817.jpg,drink,Top Coffee Gula Aren,0.6298,Susu Frisian Flag Nutribrain Chocolate,0.6198,Kelapa Cream Cokelat,0.6176
+IMG_20250601_121830.jpg,drink,Kopi Latte Choco Hazelnut,0.4621,Frisian Flag Nutribrain Strawberry,0.461,Ultra Milk Strawberry,0.4239
+IMG_20250601_121833.jpg,drink,Frisian Flag Nutribrain Strawberry,0.4813,Ultra Milk Strawberry,0.4468,Coffeemix 3 in 1,0.4344
+IMG_20250602_115500.jpg,drink,Good day funtastic mocachino,0.5536,Good Day Originale Cappucino,0.5376,Golda Coffee cappuchino,0.504
+IMG_20250602_115506.jpg,drink,Good day funtastic mocachino,0.5755,Good Day Originale Cappucino,0.5313,Golda Coffee cappuchino,0.516
+IMG_20250602_115514.jpg,drink,Frisian Flag Full Cream,0.5718,Tummy Yogurt Bar,0.5355,Top Cappuccino,0.5097
+IMG_20250602_115518.jpg,drink,Good day funtastic mocachino,0.5302,Good Day Originale Cappucino,0.524,Golda Coffee cappuchino,0.5085
+IMG_20250602_115542.jpg,drink,Good Day Originale Cappucino,0.5553,Good day funtastic mocachino,0.553,Good Day Funtastic Mocacinno,0.5463
+IMG_20250602_115545.jpg,drink,Frisian Flag Full Cream,0.5417,Golda Coffee cappuchino,0.5414,Kelapa Cream Cokelat,0.5328
+IMG_20250602_115549.jpg,drink,golda coffee latte,0.5207,Golda Coffee cappuchino,0.5194,Frisian Flag Full Cream,0.507
+IMG_20250602_115556.jpg,drink,Good day funtastic mocachino,0.5415,Good Day Originale Cappucino,0.5409,Good Day Funtastic Mocacinno,0.5165
+IMG_20250603_103853.jpg,drink,Golda Coffee cappuchino,0.5953,Chi Forest Sparkling Water White Peach,0.5125,Kopiko lucky day thai coffee drink,0.5119
+IMG_20250603_103857.jpg,drink,Golda Coffee cappuchino,0.6501,Frisian Flag Full Cream,0.6098,Chi Forest Sparkling Water White Peach,0.5802
+IMG_20250603_103900.jpg,drink,Golda Coffee cappuchino,0.5066,Frisian Flag Full Cream,0.5026,Tummy Yogurt Bar,0.4967
+IMG_20250603_103903.jpg,drink,Golda Coffee cappuchino,0.614,Frisian Flag Full Cream,0.5576,Almond Chocolate,0.5523
+IMG_20250603_103927.jpg,drink,Golda Coffee cappuchino,0.5405,Abc Kopi Susu,0.5095,golda coffee latte,0.5063
+IMG_20250603_103932.jpg,drink,Golda Coffee cappuchino,0.5683,Amo Spark Cola,0.4986,Abc Kopi Susu,0.4984
+IMG_20250603_103934.jpg,drink,Ultra Milk Cokelat,0.568,Frisian Flag Full Cream,0.5527,Ultra Milk Strawberry,0.54
+IMG_20250603_103945.jpg,drink,Golda Coffee cappuchino,0.6157,Almond Chocolate,0.6069,Abc Kopi Susu,0.58
+IMG_20250603_104001.jpg,drink,Golda Coffee cappuchino,0.5865,Almond Chocolate,0.5742,Abc Kopi Susu,0.5378
+IMG_20250603_104004.jpg,drink,Golda Coffee cappuchino,0.5836,Almond Chocolate,0.5531,Milku Made With Belgian Cow Susu Uht Cokelat,0.5327
+IMG_20250603_104008.jpg,drink,Frisian Flag Full Cream,0.4759,PLASTIC POT COFFEE,0.4728,Tummy Yogurt Bar,0.4704
+IMG_20250603_104011.jpg,drink,Golda Coffee cappuchino,0.5878,Collagena Susu Steril,0.5827,Frisian Flag Full Cream,0.578
+IMG_20250603_104028.jpg,drink,Nutty Chocolate Cookies,0.5095,Superco Malkist dengan Krim Rasa Cokela,0.4891,Coca Cola Zero Sugar,0.4836
+IMG_20250603_104032.jpg,drink,Instant Coffee,0.492,Ultra Milk Strawberry,0.4679,ABC Sari Kacang Ijo,0.4593
+IMG_20250603_104035.jpg,drink,Franzzi Yogurt Chocolate Flavor Cookie,0.4584,Ultra Milk Cokelat,0.4383,Nipis Madu,0.4358
+IMG_20250603_104038.jpg,drink,Instant Coffee,0.4922,Ultra Milk Strawberry,0.4881,Frisian Flag Nutribrain stroberi,0.4767
+IMG_20250603_210041.jpg,drink,Tummy Yogurt Bar,0.4629,Good day funtastic mocachino,0.4439,Delizio Caffino Milky Espresso,0.4341
+IMG_20250603_210055.jpg,drink,Golda Coffee cappuchino,0.5688,Frisian Flag Full Cream,0.5104,Inaco Im Coco Lychee,0.4932
+IMG_20250603_210101.jpg,drink,Frisian Flag Full Cream,0.539,Golda Coffee cappuchino,0.527,Cool Time Air Kelapa,0.4894
+IMG_20250603_210113.jpg,drink,Floridina Orange,0.4737,Chi Forest Sparkling Water White Peach,0.472,Tummy Yogurt Bar,0.4588
+IMG_20250603_210136.jpg,drink,Frisian Flag Full Cream,0.4941,Golda Coffee cappuchino,0.494,Coffeemix 3 in 1,0.49
+IMG_20250603_210320.jpg,drink,Nutty Chocolate Cookies,0.4088,Frisian Flag Full Cream,0.3925,Fanta,0.3925
+IMG_20250604_110406.jpg,drink,Frisian Flag Full Cream,0.5971,Teh Kotak Melati Less Sugar,0.5641,Buavita Mango Juice,0.5623
+IMG_20250604_110408.jpg,drink,Frisian Flag Full Cream,0.5454,Cool Time Air Kelapa,0.5424,Bear brand,0.5414
+IMG_20250604_110410.jpg,drink,Frisian Flag Full Cream,0.5187,Superco Malkist dengan Krim Rasa Cokela,0.5024,Top Cappuccino,0.4954
+IMG_20250604_110413.jpg,drink,Nescafe Caramel Macchiato,0.4936,Collagena Susu Steril,0.4619,Frisian Flag Full Cream,0.4465
+IMG_20250604_110416.jpg,drink,Collagena Susu Steril,0.5392,Nescafe Caramel Macchiato,0.5282,Bear brand,0.5146
+IMG_20250604_110435.jpg,drink,ABC Kopi Susu,0.38,Almond Chocolate,0.3769,Good day funtastic mocachino,0.3618
+IMG_20250604_110457.jpg,drink,Cool Time Air Kelapa,0.5025,Teh Kotak Melati Less Sugar,0.4922,Frisian Flag Full Cream,0.4867
+IMG_20250604_110500.jpg,drink,Frisian Flag Full Cream,0.5311,Top Cappuccino,0.5017,Instant Coffee,0.5001
+IMG_20250604_110504.jpg,drink,Tummy Yogurt Bar,0.5366,Frisian Flag Full Cream,0.5366,Ultra Milk Cokelat,0.4966
+IMG_20250604_110512.jpg,drink,Frisian Flag Full Cream,0.5276,Cool Time Air Kelapa,0.52,Teh Kotak Melati Less Sugar,0.5166
+IMG_20250604_110519.jpg,drink,Amo Spark Cola,0.3721,Good day funtastic mocachino,0.3697,ABC Kopi Susu,0.3611
+IMG_20250605_112033.jpg,drink,Kelapa Cream Cokelat,0.5835,Top Coffee Gula Aren,0.5761,Top Cappuccino,0.5717
+IMG_20250605_112037.jpg,drink,Franzzi Yogurt Chocolate Flavor Cookie,0.5048,ABC Sari Kacang Ijo,0.4926,Ultra Milk Strawberry,0.4788
+IMG_20250605_112040.jpg,drink,Buavita Mango Juice,0.6006,Frisian Flag Full Cream,0.6002,INACO I'm Coco Strawberry,0.5981
+IMG_20250605_112042.jpg,drink,Instant Coffee,0.6124,Frisian Flag Energo+ Mixed Berries,0.5808,Susu Frisian Flag Nutribrain Chocolate,0.5676
+IMG_20250605_112052.jpg,drink,Frisian Flag Nutribrain Strawberry,0.4834,Kopi Latte Choco Hazelnut,0.415,Ground Coffee,0.4132
+IMG_20250605_112056.jpg,drink,Frisian Flag Nutribrain Strawberry,0.4904,Coffeemix 3 in 1,0.4854,Kopi Latte Choco Hazelnut,0.4617
+IMG_20250605_112124.jpg,drink,Frisian Flag Energo+ Mixed Berries,0.5013,Top Cappuccino,0.4953,Franzzi Yogurt Chocolate Flavor Cookie,0.492
+IMG_20250605_112128.jpg,drink,ABC Sari Kacang Ijo,0.4631,Ultra Milk Strawberry,0.4587,Frisian Flag Nutribrain Strawberry,0.4519
+IMG_20250605_112132.jpg,drink,Franzzi Yogurt Chocolate Flavor Cookie,0.5535,Instant Coffee,0.526,Kelapa Cream Cokelat,0.5047
+IMG_20250605_112135.jpg,drink,ABC Sari Kacang Ijo,0.5507,Ultra Milk Strawberry,0.5504,Ground Coffee,0.5161
+IMG_20250605_112146.jpg,drink,Buavita Mango Juice,0.6104,ABC Minuman Soya,0.5802,ABC Mangga,0.5744
+IMG_20250605_112149.jpg,drink,Frisian Flag Nutribrain Strawberry,0.4464,Kelapa Cream Cokelat,0.4153,Sari Gandum Susu Cokelat,0.4052
+IMG_20250605_112212.jpg,drink,Teh Kotak Melati Less Sugar,0.5412,Bear brand,0.529,Top Coffee Gula Aren,0.5165
+IMG_20250605_112214.jpg,drink,Instant Coffee,0.5065,Teh Kotak Melati Less Sugar,0.4999,Frisian Flag Full Cream,0.4988
+IMG_20250605_112218.jpg,drink,Coffeemix 3 in 1,0.4718,Kopi Latte Choco Hazelnut,0.4606,Frisian Flag Nutribrain stroberi,0.4604
+IMG_20250605_112222.jpg,drink,Nescafe Caramel Macchiato,0.5182,Nescafe cappucino 220ml,0.5114,Frisian Flag Full Cream,0.5095
+IMG_20250605_112226.jpg,drink,Nescafe Caramel Macchiato,0.516,Susu Frisian Flag Nutribrain Chocolate,0.5121,Frisian Flag Full Cream,0.5031
+IMG_20250605_112235.jpg,drink,Top Coffee Gula Aren,0.5911,Bear brand,0.5677,Teh Kotak Melati Less Sugar,0.5564
+IMG_20250605_112239.jpg,drink,Frisian Flag Full Cream,0.5481,Top Coffee Gula Aren,0.5463,Susu Frisian Flag Nutribrain Chocolate,0.5219
+IMG_20250605_112245.jpg,drink,Ultra Milk Strawberry,0.5345,Frisian Flag Nutribrain stroberi,0.5335,Collagena Susu Steril,0.4984
+IMG_20250605_112248.jpg,drink,Frisian Flag Full Cream,0.5065,Ultra Milk Strawberry,0.4938,Coffeemix 3 in 1,0.4859
+IMG_20250605_112251.jpg,drink,Coca Cola Zero Sugar,0.5342,Cimory Fresh Milk Almond,0.5096,Susu Frisian Flag Nutribrain Chocolate,0.5082
+IMG_20250609_104814.jpg,drink,Top Coffee Gula Aren,0.6504,Top Cappuccino,0.5958,Luwak kopi gula,0.5653
+IMG_20250609_104836.jpg,drink,Coffeemix 3 in 1,0.5836,Instant Coffee,0.5821,Kopi Latte Choco Hazelnut,0.5819
+IMG_20250609_104856.jpg,drink,Kopi Luwak Dukung Indonesia Mendunia,0.5589,Ground Coffee,0.5461,Top Cappuccino,0.5449
+IMG_20250609_104919.jpg,drink,Instant Coffee,0.552,Colatta,0.5296,Kopi Luwak Dukung Indonesia Mendunia,0.5264
+IMG_20250614_165318.jpg,drink,Frisian Flag Full Cream,0.6052,Top Cappuccino,0.6031,Frisian Flag Energo+ Mixed Berries,0.5833
+IMG_20250614_165326.jpg,drink,Instant Coffee,0.4418,Franzzi Yogurt Chocolate Flavor Cookie,0.4302,ABC Sari Kacang Ijo,0.4232
+IMG_20250614_165348.jpg,drink,Instant Coffee,0.4475,ABC Sari Kacang Ijo,0.4067,Ultra Milk Strawberry,0.4005
+IMG_20250614_165408.jpg,drink,Kopi Luwak Dukung Indonesia Mendunia,0.5637,Kelapa Cream Cokelat,0.5463,Instant Coffee,0.537
+IMG_20250614_165422.jpg,drink,Kelapa Cream Cokelat,0.5428,kopiko w 52g,0.4906,Espresso Kopi Susu,0.4792
+IMG_20250614_165427.jpg,drink,Luwak kopi gula,0.4769,Kelapa Cream Cokelat,0.476,Top Coffee Gula Aren,0.4757
+IMG_20250614_165444.jpg,drink,Frisian Flag Energo+ Mixed Berries,0.6149,Nutty Chocolate Cookies,0.5859,Top Cappuccino,0.5799
+IMG_20250614_165453.jpg,drink,Frisian Flag Energo+ Mixed Berries,0.5674,Luwak kopi gula,0.5362,ABC Sari Kacang Ijo,0.5331
+IMG_20250614_165459.jpg,drink,Top Coffee Gula Aren,0.5211,Instant Coffee,0.5194,Ground Coffee,0.5178
+IMG_20250614_170512.jpg,drink,Ultra Milk Cokelat,0.6648,Frisian Flag Energo+ Mixed Berries,0.6301,Kopi Latte Choco Hazelnut,0.6267
+IMG_20250614_170521.jpg,drink,Frisian Flag Energo+ Mixed Berries,0.5919,Ultra Milk Cokelat,0.5828,Kopi Latte Choco Hazelnut,0.5778
+IMG_20250614_170528.jpg,drink,Ground Coffee,0.5646,Ultra Milk Strawberry,0.5143,Colatta,0.4864
+IMG_20250614_170532.jpg,drink,Ground Coffee,0.4754,ABC Mangga,0.4011,INACO I'm Coco Strawberry,0.3965
+IMG_20250614_170653.jpg,drink,Tummy Yogurt Bar,0.5324,Golda Coffee cappuchino,0.5155,Amo Spark Cola,0.5025
+IMG_20250614_170659.jpg,drink,Frisian Flag Full Cream,0.5696,Ultra Milk Cokelat,0.5551,Nescafe cappucino 220ml,0.5411
+IMG_20250614_170705.jpg,drink,Golda Coffee cappuchino,0.5114,Almond Chocolate,0.4904,Amo Spark Cola,0.4855
+IMG_20250614_170716.jpg,drink,Tummy Yogurt Bar,0.5846,Amo Spark Cola,0.5503,Cool Time Air Kelapa,0.5251
+IMG_20250614_170729.jpg,drink,Golda Coffee cappuchino,0.5674,Almond Chocolate,0.561,Abc Kopi Susu,0.5096
+IMG_20250614_170738.jpg,drink,Golda Coffee cappuchino,0.568,Cool Time Air Kelapa,0.5415,Almond Chocolate,0.512
+IMG_20250614_170744.jpg,drink,Frisian Flag Full Cream,0.5416,Ultra Milk Cokelat,0.5352,Tummy Yogurt Bar,0.5069
+IMG_20250614_171359.jpg,drink,Top Coffee Gula Aren,0.6469,Frisian Flag Full Cream,0.5944,Teh Kotak Melati Less Sugar,0.5696
+IMG_20250614_171402.jpg,drink,Frisian Flag Full Cream,0.5677,Bear brand,0.5474,Cool Time Air Kelapa,0.5435
+IMG_20250614_171405.jpg,drink,Top Coffee Gula Aren,0.5584,Espresso Kopi Susu,0.5382,Frisian Flag Full Cream,0.5245
+IMG_20250614_171411.jpg,drink,Top Coffee Gula Aren,0.5775,Frisian Flag Full Cream,0.5597,Ultra Milk Cokelat,0.5423
+IMG_20250622_172349.jpg,drink,INACO I'm Coco Strawberry,0.5883,Ultra Milk Strawberry,0.5388,Nutty Chocolate Cookies,0.5266
+IMG_20250622_172353.jpg,drink,Coca Cola Zero Sugar,0.5846,Buavita Mango Juice,0.5447,Ultra Milk Strawberry,0.5281
+IMG_20250622_172357.jpg,drink,ABC Minuman Soya,0.4652,ABC Sari Kacang Ijo,0.4628,Frisian Flag Nutribrain stroberi,0.4313
+IMG_20250622_172401.jpg,drink,Coca Cola Zero Sugar,0.5602,Ultra Milk Strawberry,0.5557,Frisian Flag Nutribrain Strawberry,0.5067
+IMG_20250622_172414.jpg,drink,Kopi Latte Choco Hazelnut,0.5142,Ground Coffee,0.4967,Nutty Chocolate Cookies,0.4842
+IMG_20250622_172420.jpg,drink,Amo Spark Cola,0.468,PLASTIC POT COFFEE,0.4631,Ultra Milk Strawberry,0.4403
+IMG_20250622_172436.jpg,drink,Ground Coffee,0.6104,Kopi Latte Choco Hazelnut,0.5216,Ultra Milk Strawberry,0.5157
+IMG_20250622_172443.jpg,drink,Amo Spark Cola,0.4413,Instant Coffee,0.4136,Coca Cola Zero Sugar,0.4023
+IMG_20250622_172451.jpg,drink,Coca Cola Zero Sugar,0.5257,Colatta,0.5084,Ultra Milk Strawberry,0.5067
+IMG_20250622_172510.jpg,drink,Instant Coffee,0.5188,ABC Sari Kacang Ijo,0.513,Ultra Milk Strawberry,0.5083
+IMG_20250622_172512.jpg,drink,ABC Sari Kacang Ijo,0.4301,ABC Minuman Soya,0.4138,Franzzi Yogurt Chocolate Flavor Cookie,0.4086
+IMG_20250622_172515.jpg,drink,Ultra Milk Strawberry,0.4753,Ground Coffee,0.4742,ABC Sari Kacang Ijo,0.4635
+IMG_20250622_172528.jpg,drink,Colatta,0.5668,Susu Frisian Flag Nutribrain Chocolate,0.5175,Kelapa Cream Cokelat,0.49
+IMG_20250622_172531.jpg,drink,Ultra Milk Strawberry,0.4612,Colatta,0.4363,Susu Frisian Flag Nutribrain Chocolate,0.4332
+IMG_20250622_172534.jpg,drink,Kelapa Cream Cokelat,0.4648,Instant Coffee,0.4575,Tummy Yogurt Bar,0.4546
+IMG_20250622_172537.jpg,drink,Instant Coffee,0.5366,Franzzi Yogurt Chocolate Flavor Cookie,0.5265,Luwak kopi gula,0.5184
+IMG_20250622_172549.jpg,drink,PLASTIC POT COFFEE,0.4377,Amo Spark Cola,0.435,Tummy Yogurt Bar,0.4339
+IMG_20250622_172555.jpg,drink,Ultra Milk Strawberry,0.5413,Nutty Chocolate Cookies,0.5058,Kopi Latte Choco Hazelnut,0.5008
+IMG_20250622_172618.jpg,drink,Kelapa Cream Cokelat,0.5587,Top Cappuccino,0.5575,Top Coffee Gula Aren,0.5508
+IMG_20250622_172628.jpg,drink,Top Coffee Gula Aren,0.5215,Nescafe cappucino 220ml,0.4843,Frisian Flag Full Cream,0.4824
+IMG_20250622_173610.jpg,drink,Coffeemix 3 in 1,0.3355,Nescafe Caramel Macchiato,0.3309,ABC Choco Malt,0.3255
+IMG_20250622_173619.jpg,drink,Tummy Yogurt Bar,0.5367,Teh Kotak Melati Less Sugar,0.4752,Espresso Kopi Susu,0.4705
+IMG_20250622_173625.jpg,drink,Ultra Milk Cokelat,0.5532,Collagena Susu Steril,0.5366,Frisian Flag Full Cream,0.5263
+IMG_20250622_173631.jpg,drink,Top Coffee Gula Aren,0.6421,Teh Kotak Melati Less Sugar,0.5846,Frisian Flag Full Cream,0.5754
+IMG_20250622_173634.jpg,drink,Espresso Kopi Susu,0.4973,oatside chocolate,0.4882,Top Coffee Gula Aren,0.4799
+IMG_20250622_174835.jpg,drink,Top Coffee Gula Aren,0.59,Top Cappuccino,0.5739,Collagena Susu Steril,0.5583
+IMG_20250622_174838.jpg,drink,Nescafe cappucino 220ml,0.4865,Ultra Milk Cokelat,0.4757,Tummy Yogurt Bar,0.4696
+IMG_20250622_174842.jpg,drink,Frisian Flag Full Cream,0.5895,Collagena Susu Steril,0.5467,Kopi Latte Choco Hazelnut,0.5386
+IMG_20250622_174855.jpg,drink,Good day funtastic mocachino,0.3121,Coca Cola Zero Sugar,0.3084,kopiko w 52g,0.3016
+IMG_20250622_174907.jpg,drink,Nutty Chocolate Cookies,0.5738,Cool Time Air Kelapa,0.5737,Frisian Flag Full Cream,0.5696
+IMG_20250622_174916.jpg,drink,Frisian Flag Full Cream,0.5359,Collagena Susu Steril,0.5322,Ultra Milk Cokelat,0.5134
+IMG_20250622_174921.jpg,drink,Top Coffee Gula Aren,0.5418,Frisian Flag Full Cream,0.5391,Kopi Latte Choco Hazelnut,0.5351
+IMG_20250622_174931.jpg,drink,ABC Kopi Susu,0.3089,kopiko w 52g,0.2991,Amo Spark Cola,0.2963
+IMG_20250622_175006.jpg,drink,Golda Coffee cappuchino,0.6057,Good Day Originale Cappucino,0.5363,Chi Forest Sparkling Water White Peach,0.5343
+IMG_20250622_175009.jpg,drink,Golda Coffee cappuchino,0.5826,Frisian Flag Full Cream,0.5354,Delizio Caffino Milky Espresso,0.5313
+IMG_20250622_175011.jpg,drink,Frisian Flag Full Cream,0.5743,Golda Coffee cappuchino,0.5475,Frisian Flag Energo+ Mixed Berries,0.526
+IMG_20250622_175014.jpg,drink,Frisian Flag Full Cream,0.6107,Golda Coffee cappuchino,0.6026,Cool Time Air Kelapa,0.5795
+IMG_20250622_175017.jpg,drink,Frisian Flag Full Cream,0.54,Tummy Yogurt Bar,0.534,Ultra Milk Cokelat,0.5063
+IMG_20250622_180914.jpg,drink,Coffeemix 3 in 1,0.4777,Frisian Flag Full Cream,0.4741,Cool Time Air Kelapa,0.4726
+IMG_20250622_180934.jpg,drink,Coffeemix 3 in 1,0.4649,Instant Coffee,0.4511,oatside chocolate,0.4452
+IMG_20250622_180939.jpg,drink,Kopi Latte Choco Hazelnut,0.5905,Collagena Susu Steril,0.5622,Frisian Flag Full Cream,0.5614
+IMG_20250622_180942.jpg,drink,oatside chocolate,0.4685,Amo Spark Cola,0.4523,Frisian Flag Full Cream,0.4134
+IMG_20250622_180951.jpg,drink,Coffeemix 3 in 1,0.3969,Amo Spark Cola,0.3966,PLASTIC POT COFFEE,0.3821
+IMG_20250622_180954.jpg,drink,Luwak kopi gula,0.4177,Frisian Flag Full Cream,0.4164,ABC Kopi Gula Susu,0.4102
+IMG_20250622_181027.jpg,drink,Top Coffee Gula Aren,0.5905,Top Cappuccino,0.5845,Tummy Yogurt Bar,0.5507
+IMG_20250622_181029.jpg,drink,Top Coffee Gula Aren,0.5747,Top Cappuccino,0.5535,Cimory Fresh Milk Almond,0.5476
+IMG_20250622_181032.jpg,drink,Tummy Yogurt Bar,0.4973,Collagena Susu Steril,0.4907,Ultra Milk Cokelat,0.4896
+IMG_20250622_181037.jpg,drink,Kopi Latte Choco Hazelnut,0.5947,Coffeemix 3 in 1,0.5525,Top Coffee Gula Aren,0.5379
+IMG_20250622_181046.jpg,drink,Instant Coffee,0.3334,Coca Cola Zero Sugar,0.32,Frisian Flag Nutribrain Strawberry,0.3148
+IMG_20250625_124610.jpg,drink,Almond Chocolate,0.5374,Cool Time Air Kelapa,0.4976,Amo Spark Cola,0.4862
+IMG_20250625_124616.jpg,drink,Almond Chocolate,0.528,Amo Spark Cola,0.5181,Golda Coffee cappuchino,0.5055
+IMG_20250625_124621.jpg,drink,Coffeemix 3 in 1,0.541,Sajuak Air Mineral,0.5095,Amo Spark Cola,0.503
+IMG_20250625_124633.jpg,drink,Coffeemix 3 in 1,0.5276,Cool Time Air Kelapa,0.5099,Golda Coffee cappuchino,0.4971
+IMG_20250625_124645.jpg,drink,Coffeemix 3 in 1,0.5256,Kopi Latte Choco Hazelnut,0.5184,Amo Spark Cola,0.4943
+IMG_20250625_124652.jpg,drink,Coffeemix 3 in 1,0.5126,Instant Coffee,0.5005,Top Coffee Gula Aren,0.4881
+IMG_20250625_124655.jpg,drink,Coffeemix 3 in 1,0.5272,Amo Spark Cola,0.5085,Instant Coffee,0.4803
+IMG_20240101_192703.jpg,food,Pocky Chocolate Flavour,0.5457,Selamat Chocolate Sandwich Wafer,0.5364,Nabati Wafer Cokelat,0.5089
+IMG_20240101_192730.jpg,food,Chocolate Chip Cookie,0.5214,Luwak White Koffie Original,0.5144,Kalpa Wafer Cokelat Kelapa,0.5025
+IMG_20240101_192743.jpg,food,Malkist,0.5095,Banoffee,0.477,Walkers,0.3874
+IMG_20241023_075922.jpg,food,Nextar Nastar Strawberry Jam,0.5961,Wafello Chocolate Gelato,0.5717,Rasa Rumput Laut Nori Seaweed Flavour,0.5575
+IMG_20241023_075933.jpg,food,Nextar Nastar Strawberry Jam,0.5445,Robusta Gold,0.5253,Pondan sponge cake,0.5111
+IMG_20241127_094215.jpg,food,Carman s Super Berry Muesli Bars Cranbe,0.6034,Choco Pie,0.5671,Apollo Checker Wafer Chocolate Strawberry,0.5629
+IMG_20241127_094233.jpg,food,Banoffee,0.5794,Nextar Nastar Pineapple Jam 80g,0.525,Nextar Nastar Strawberry Jam,0.5216
+IMG_20250219_225550.jpg,food,maxicorn barbecue,0.594,See Hong Puff,0.5928,Carman s Super Berry Muesli Bars Cranbe,0.588
+IMG_20250219_225613.jpg,food,Banoffee,0.6072,Nextar Nastar Pineapple Jam 80g,0.5067,Carman s Super Berry Muesli Bars Cranbe,0.4871
+IMG_20250219_225723.jpg,food,Grand Classic Chocolate Cream Wafer,0.6346,Boncabe Kulit Pangsit Lev 10,0.6205,See Hong Puff,0.6049
+IMG_20250219_225745.jpg,food,Gilus Mix Sweet Ginger,0.524,Nabati Wafer Cokelat,0.5172,Chitato Sapi Bumbu Bakar 68gr,0.5105
+IMG_20250303_230122.jpg,food,Nabati White,0.5953,Malkist,0.5721,Roti Tawar,0.5691
+IMG_20250303_230207.jpg,food,Pondan sponge cake,0.5739,Malkist,0.5635,Waffle Original,0.5551
+IMG_20250311_171353.jpg,food,Selamat Chocolate Sandwich Biscuit,0.6923,Carman s Super Berry Muesli Bars Cranbe,0.6019,Kapal Api Special Mix,0.5905
+IMG_20250311_171402.jpg,food,Selamat Chocolate Sandwich Biscuit,0.5671,Carman s Super Berry Muesli Bars Cranbe,0.5663,Kapal Api Special Mix,0.5659
+IMG_20250311_171411.jpg,food,Selamat Chocolate Sandwich Biscuit,0.5851,Kukis Kelapa coconut cookies,0.5456,Arabica Gold,0.5439
+IMG_20250312_164353.jpg,food,Grand Classic Chocolate Cream Wafer,0.6378,See Hong Puff,0.6308,Boncabe Kulit Pangsit Lev 10,0.6257
+IMG_20250312_164416.jpg,food,Nabati Wafer Cokelat,0.5232,Roma Biscuit Sandwich Chocolate Coklat,0.5193,Munch Max,0.5141
+IMG_20250312_164509.jpg,food,Selamat Chocolate Sandwich Biscuit,0.5341,Nabati Wafer Cokelat,0.526,Oreo Softcake,0.5217
+IMG_20250324_170734.jpg,food,mrp kacang madu,0.6362,Walens Sus Kering Isi Krim Rasa Bluber,0.6313,Alfamart popcorn karamel,0.625
+IMG_20250324_170755.jpg,food,Monde snack gold baked not fried,0.5974,Pondan sponge cake,0.5839,Malkist,0.5756
+IMG_20250324_170817.jpg,food,Franzzi Cheese Chocolate Flavor Cookie,0.5932,almond cookies,0.5925,Monde snack gold baked not fried,0.5758
+IMG_20250327_205435.jpg,food,Gilus Mix Sweet Ginger,0.6099,Nano Nano Rasa Rujak Nanas,0.6039,Richeese wfr nabati box 135g,0.6037
+IMG_20250327_205523.jpg,food,Cho cho Strawberry Flavor,0.6055,Pondan sponge cake,0.5932,Dilan Bon Bon Milk Chocolate,0.5815
+IMG_20250327_205601.jpg,food,Kukis Kelapa coconut cookies,0.6808,Twister Minis,0.6691,Fitbar,0.6434
+IMG_20250327_205743.jpg,food,Arabica Gold,0.5913,Malkist,0.5849,Waffle Original,0.573
+IMG_20250327_205818.jpg,food,Gilus Mix Sweet Ginger,0.6481,Waffle Original,0.6236,Cheese Cake Duo,0.6124
+IMG_20250328_211541.jpg,food,choki choki,0.5738,Apollo Checker Wafer Chocolate Strawberry,0.5467,Mi goreng Fried Noodles Flavour,0.5419
+IMG_20250328_211556.jpg,food,Lemonia Lemon Flavored Biscuit,0.5025,Malkist,0.4915,OREO Original,0.4792
+IMG_20250328_211725.jpg,food,Lemonia Lemon Flavored Biscuit,0.5458,Malkist,0.5154,wafer dengan krim cokelat,0.5046
+IMG_20250330_183014.jpg,food,Roma Biscuit Sandwich Chocolate Coklat,0.6526,Malkist,0.6471,Chitato Keju Supreme 68gr,0.6344
+IMG_20250330_183044.jpg,food,Cho cho Strawberry Flavor,0.5429,Banoffee,0.5361,Luwak White Koffie Original,0.5178
+IMG_20250330_202025.jpg,food,See Hong Puff,0.676,Momogi Malkist Crackers,0.6573,CHIMI KERIPIK UBI,0.64
+IMG_20250330_202030.jpg,food,Tango Wafer Cokelat,0.5847,Garlic Bread Almond,0.58,See Hong Puff,0.5729
+IMG_20250330_202036.jpg,food,Malkist,0.5481,See Hong Puff,0.5415,Yupi Bolicious Strawberry,0.5323
+IMG_20250330_202041.jpg,food,Malkist,0.5372,Kapal Api Special Mix,0.492,Lemonilo Brownies Crispy Strawberry Cheese,0.4866
+IMG_20250330_202054.jpg,food,Cho Cho Chocolate Egg Telur Surprise Toy,0.6087,Slai O lai,0.561,Khong Guan biscuits 1600g,0.5317
+IMG_20250330_202123.jpg,food,See Hong Puff,0.68,CHIMI KERIPIK UBI,0.6591,Lemonia,0.6454
+IMG_20250330_202127.jpg,food,See Hong Puff,0.6374,Garlic Bread Almond,0.6007,maxicorn barbecue,0.5918
+IMG_20250330_202133.jpg,food,See Hong Puff,0.5967,Gilus Mix Sweet Ginger,0.5659,Lemonia,0.5575
+IMG_20250330_202148.jpg,food,Pota Bee Grilled Seaweed,0.5317,CHIMI KERIPIK UBI,0.5245,Garlic Bread Almond,0.5231
+IMG_20250330_202158.jpg,food,Cho Cho Chocolate Egg Telur Surprise Toy,0.5671,Slai O lai,0.5308,Nabati Wafer Cokelat,0.5143
+IMG_20250403_111913.jpg,food,Brownies Crispy,0.6613,Nylon Sev,0.6575,Alfamart popcorn karamel,0.6511
+IMG_20250403_112010.jpg,food,Banoffee,0.651,Franzzi Cheese Chocolate Flavor Cookie,0.5515,Malkist,0.5366
+IMG_20250403_112124.jpg,food,Malkist,0.6287,Monde snack gold baked not fried,0.5879,Pop Corn Cheese,0.5737
+IMG_20250407_113614.jpg,food,Momogi Malkist Crackers,0.6923,chupa chups,0.6572,Malkist,0.6532
+IMG_20250407_113639.jpg,food,Munch Max,0.6303,Cho cho Strawberry Flavor,0.6143,Nextar Nastar Pineapple Jam 80g,0.5932
+IMG_20250408_103534.jpg,food,See Hong Puff,0.7121,Lemonia,0.6693,mrp kacang madu,0.6579
+IMG_20250408_103540.jpg,food,Munch Max,0.6518,Monde snack gold baked not fried,0.6162,Nextar Nastar Pineapple Jam 80g,0.6102
+IMG_20250408_103645.jpg,food,Pondan sponge cake,0.6545,almond cookies,0.6391,Monde snack gold baked not fried,0.6049
+IMG_20250408_103800.jpg,food,Pringles Hot Spicy,0.5557,Garlic Bread Almond,0.5532,Tango Wafer Cokelat,0.5342
+IMG_20250408_103804.jpg,food,Waffle Original,0.5816,Franzzi Cheese Chocolate Flavor Cookie,0.5689,Robusta Gold,0.5593
+IMG_20250408_103809.jpg,food,Malkist,0.5451,Migi Migi Wafer krim vanilla cokelat,0.5271,Waffle Original,0.5137
+IMG_20250408_103819.jpg,food,Cho Cho Chocolate Egg Telur Surprise Toy,0.5096,Selamat Chocolate Sandwich Biscuit,0.4966,AOKA Roti Bun Isian Vanilla panggang,0.4684
+IMG_20250408_103919.jpg,food,Brownies Crispy,0.6398,GARUDA ROSTA KACANG PANGGANG 95G,0.6301,Boncabe Kulit Pangsit Lev 10,0.6278
+IMG_20250408_103938.jpg,food,Pondan sponge cake,0.6189,Cho cho Strawberry Flavor,0.5633,Banoffee,0.5554
+IMG_20250408_103959.jpg,food,Arabica Gold,0.5723,Malkist,0.5596,Pondan sponge cake,0.5212
+IMG_20250408_104139.jpg,food,Cho cho Strawberry Flavor,0.6371,Luwak White Koffie Original,0.6371,chupa chups,0.629
+IMG_20250408_104157.jpg,food,Cho cho Strawberry Flavor,0.6043,Munch Max,0.5931,Nano Nano Rasa Rujak Nanas,0.584
+IMG_20250408_171212.jpg,food,CHIMI KERIPIK UBI,0.7001,Momogi Malkist Crackers,0.6832,Kukis Kelapa coconut cookies,0.6709
+IMG_20250408_171222.jpg,food,Nextar Nastar Pineapple Jam 80g,0.6302,Walens Sus Kering Isi Krim Rasa Bluber,0.6134,Selamat Chocolate Sandwich Biscuit,0.5913
+IMG_20250408_171300.jpg,food,Nextar Nastar Pineapple Jam 80g,0.5665,Chitato Sapi Bumbu Bakar 68gr,0.5477,Walens Sus Kering Isi Krim Rasa Bluber,0.5455
+IMG_20250408_171654.jpg,food,Roma Biscuit Sandwich Chocolate Coklat,0.5819,Nabati Wafer Cokelat,0.5581,Wafello Chocolate Gelato,0.5565
+IMG_20250408_171702.jpg,food,roma kelapa cream coklat,0.4754,Selamat Chocolate Sandwich Biscuit,0.4631,wafer dengan krim cokelat,0.4593
+IMG_20250415_093404.jpg,food,Franzzi Cheese Chocolate Flavor Cookie,0.5982,Carman s Super Berry Muesli Bars Cranbe,0.5793,Mi goreng Fried Noodles Flavour,0.5635
+IMG_20250415_093438.jpg,food,Carman s Super Berry Muesli Bars Cranbe,0.6299,Franzzi Cheese Chocolate Flavor Cookie,0.6075,Nextar Nastar Strawberry Jam,0.5966
+IMG_20250415_093446.jpg,food,Selamat Chocolate Sandwich Biscuit,0.5194,Arabica Gold,0.5123,Nextar Nastar Pineapple Jam 80g,0.5034
+IMG_20250416_111516.jpg,food,Grand Classic Chocolate Cream Wafer,0.5961,Twister Minis,0.5719,Nabati Richeese Black,0.5523
+IMG_20250416_111519.jpg,food,Selamat Chocolate Sandwich Biscuit,0.6219,Arabica Gold,0.6011,Grand Classic Chocolate Cream Wafer,0.586
+IMG_20250416_111523.jpg,food,Selamat Chocolate Sandwich Biscuit,0.6058,Franzzi Cheese Chocolate Flavor Cookie,0.5932,Walens Sus Kering Isi Krim Rasa Bluber,0.5737
+IMG_20250416_111526.jpg,food,DELIZIO CAFFINO,0.4458,Wafello Chocolate Gelato,0.4294,Selamat Chocolate Sandwich Biscuit,0.4225
+IMG_20250416_111529.jpg,food,Yupi Bolicious Wild Blackberry,0.4492,Franzzi Cheese Chocolate Flavor Cookie,0.4472,Malkist,0.4447
+IMG_20250416_111542.jpg,food,Nabati Richeese Black,0.5328,Selamat Chocolate Sandwich Biscuit,0.5296,Better Sandwich Biscuit,0.5261
+IMG_20250419_105516.jpg,food,Nylon Sev,0.6007,Brownies Crispy,0.57,Pop Corn Cheese,0.5554
+IMG_20250419_105543.jpg,food,Carman s Super Berry Muesli Bars Cranbe,0.4952,Walkers,0.4859,Munch Max,0.4735
+IMG_20250419_105619.jpg,food,Carman s Super Berry Muesli Bars Cranbe,0.5381,Oreo BlackPink,0.5356,Robusta Gold,0.5336
+IMG_20250419_142743.jpg,food,Boncabe Kulit Pangsit Lev 10,0.709,CHIMI KERIPIK UBI,0.6749,Momogi Malkist Crackers,0.6516
+IMG_20250419_142758.jpg,food,Nextar Nastar Pineapple Jam 80g,0.5781,Walens Sus Kering Isi Krim Rasa Bluber,0.5778,Gilus Mix Sweet Ginger,0.5624
+IMG_20250419_142814.jpg,food,Potabee Selections Salted Egg,0.5159,Malkist,0.5007,Lemonia Lemon Flavored Biscuit,0.496
+IMG_20250419_142834.jpg,food,Malkist,0.5996,Banoffee,0.5395,Arabica Gold,0.5307
+IMG_20250419_143314.jpg,food,Momogi Malkist Crackers,0.6501,CHIMI KERIPIK UBI,0.6425,Walens Sus Kering Isi Krim Rasa Bluber,0.6389
+IMG_20250419_143324.jpg,food,Roti Saku Rasa Bluberi,0.5409,Robusta Gold,0.537,Brownies Crispy,0.5252
+IMG_20250419_143634.jpg,food,Gilus Mix Sweet Ginger,0.5675,Yupi Bolicious Strawberry,0.5655,Pringles Sour Cream Onion,0.5467
+IMG_20250419_143644.jpg,food,wafer dengan krim cokelat,0.5293,Oreo Softcake,0.5144,Gilus Mix Sweet Ginger,0.5143
+IMG_20250419_143715.jpg,food,wafer dengan krim cokelat,0.542,OREO Original,0.5003,Gilus Mix Sweet Ginger,0.4977
+IMG_20250419_191800.jpg,food,Roma Biscuit Sandwich Chocolate Coklat,0.6574,Kukis Kelapa coconut cookies,0.5934,Better Sandwich Biscuit,0.5914
+IMG_20250419_191813.jpg,food,Carman s Super Berry Muesli Bars Cranbe,0.5956,Franzzi Cheese Chocolate Flavor Cookie,0.5735,Lemonilo Brownies Crispy Strawberry Cheese,0.5666
+IMG_20250419_191830.jpg,food,Carman s Super Berry Muesli Bars Cranbe,0.5493,Pocky Chocolate Flavour,0.5443,Nextar Nastar Strawberry Jam,0.538
+IMG_20250419_191853.jpg,food,Roma bisc kelapa 300G,0.6319,Rasa Rumput Laut Nori Seaweed Flavour,0.6111,Brownies Crispy,0.6076
+IMG_20250419_191901.jpg,food,Munch Max,0.5391,Nextar Nastar Pineapple Jam 80g,0.5369,Malkist,0.5276
+IMG_20250419_192021.jpg,food,Kukis Kelapa coconut cookies,0.5819,Momogi Malkist Crackers,0.5817,Roma Biscuit Sandwich Chocolate Coklat,0.5698
+IMG_20250419_192054.jpg,food,Better Sandwich Biscuit,0.5539,DELIZIO CAFFINO,0.5343,Munch Max,0.5219
+IMG_20250421_105328.jpg,food,See Hong Puff,0.6742,Grand Classic Chocolate Cream Wafer,0.6611,Kukis Kelapa coconut cookies,0.623
+IMG_20250421_105354.jpg,food,Gilus Mix Sweet Ginger,0.6164,Yupi Bolicious Strawberry,0.5727,almond cookies,0.5712
+IMG_20250421_105428.jpg,food,Grand Classic Chocolate Cream Wafer,0.5962,CHIMI KERIPIK UBI,0.5867,Selamat Chocolate Sandwich Biscuit,0.5752
+IMG_20250421_105435.jpg,food,Kapal Api Special Mix,0.5208,Biskuat Biskuit Original Regular,0.5119,Roma Biscuit Sandwich Chocolate Coklat,0.5031
+IMG_20250428_171122.jpg,food,Walkers,0.5654,Carman s Super Berry Muesli Bars Cranbe,0.5479,Nabati White,0.5381
+IMG_20250428_171135.jpg,food,Better Sandwich Biscuit,0.5516,Walkers,0.5515,Pota Bee Grilled Seaweed,0.5478
+IMG_20250428_171157.jpg,food,Carman s Super Berry Muesli Bars Cranbe,0.5946,Migi migi wafer krim keju,0.5666,Momogi Nugget Snack Jagung Bakar Pedas,0.5537
+IMG_20250428_171204.jpg,food,Momogi Nugget Snack Jagung Bakar Pedas,0.5758,Walens Sus Kering Isi Krim Rasa Bluber,0.5723,Nextar Nastar Strawberry Jam,0.5607
+IMG_20250428_171241.jpg,food,Banoffee,0.5081,Nextar Nastar Pineapple Jam 80g,0.4985,Mangosteen,0.4899
+IMG_20250428_171258.jpg,food,Oreo BlackPink,0.5601,Migi migi wafer krim keju,0.5535,Walens Sus Kering Isi Krim Rasa Bluber,0.5379
+IMG_20250428_171444.jpg,food,See Hong Puff,0.7354,Lemonia,0.6563,Grand Classic Chocolate Cream Wafer,0.6246
+IMG_20250428_171459.jpg,food,See Hong Puff,0.7468,maxicorn barbecue,0.6534,Lemonia,0.6476
+IMG_20250428_171503.jpg,food,See Hong Puff,0.6115,Chitato Sapi Bumbu Bakar 68gr,0.5851,Pota Bee Grilled Seaweed,0.5829
+IMG_20250428_171507.jpg,food,almond cookies,0.5963,Kukis Kelapa coconut cookies,0.5853,See Hong Puff,0.5557
+IMG_20250507_173059.jpg,food,See Hong Puff,0.5482,Nestle Sereal Cup Honey Stars,0.5461,Kukis Kelapa coconut cookies,0.5377
+IMG_20250507_173103.jpg,food,Momogi Malkist Crackers,0.5837,See Hong Puff,0.5705,Kukis Kelapa coconut cookies,0.5648
+IMG_20250507_173109.jpg,food,Malkist,0.5686,Arabica Gold,0.5565,Oreo Softcake,0.5437
+IMG_20250507_173135.jpg,food,Arabica Gold,0.5705,Roti Tawar,0.5671,Yupi Bolicious Strawberry,0.5469
+IMG_20250517_121702.jpg,food,Boncabe Kulit Pangsit Lev 10,0.6533,CHIMI KERIPIK UBI,0.6063,Chitato Sapi Bumbu Bakar 68gr,0.6046
+IMG_20250517_121817.jpg,food,Chitato Keju Supreme 68gr,0.5228,Boncabe Kulit Pangsit Lev 10,0.5226,Chitato Sapi Bumbu Bakar 68gr,0.5131
+IMG_20250517_121831.jpg,food,Nano Nano Rasa Rujak Nanas,0.6831,Nylon Sev,0.6271,Monde snack gold baked not fried,0.6115
+IMG_20250517_121834.jpg,food,Nabati Richeese Black,0.5745,Malkist,0.562,Monde snack gold baked not fried,0.557
+IMG_20250520_114209.jpg,food,Momogi Malkist Crackers,0.6144,Carman s Super Berry Muesli Bars Cranbe,0.6092,CHIMI KERIPIK UBI,0.6084
+IMG_20250520_114217.jpg,food,Arabica Gold,0.6288,Wafello Chocolate Gelato,0.6149,Malkist,0.6086
+IMG_20250520_114233.jpg,food,Franzzi Cheese Chocolate Flavor Cookie,0.5073,Oreo Softcake,0.5002,nissin Crispy Crackers bks 250gr,0.4989
+IMG_20250521_164335.jpg,food,CHIMI KERIPIK UBI,0.6308,Malkist,0.6269,Kukis Kelapa coconut cookies,0.6267
+IMG_20250521_164345.jpg,food,Boncabe Kulit Pangsit Lev 10,0.5531,Luwak White Koffie Original,0.5522,Momogi Malkist Crackers,0.5476
+IMG_20250521_164359.jpg,food,Better Sandwich Biscuit,0.5476,Banoffee,0.4995,DELIZIO CAFFINO,0.4952
+IMG_20250522_172335.jpg,food,Kukis Kelapa coconut cookies,0.6646,Momogi Malkist Crackers,0.6526,Boncabe Kulit Pangsit Lev 10,0.6485
+IMG_20250522_172427.jpg,food,Nabati White,0.6383,Potabee Selections Salted Egg,0.6208,Malkist,0.6137
+IMG_20250522_172456.jpg,food,Malkist,0.6328,Chitato Sapi Bumbu Bakar 68gr,0.6163,Roma Biscuit Sandwich Chocolate Coklat,0.604
+IMG_20250522_172525.jpg,food,Carman s Super Berry Muesli Bars Cranbe,0.6327,Rasa Rumput Laut Nori Seaweed Flavour,0.6302,Nabati Richeese Black,0.5847
+IMG_20250522_172532.jpg,food,Rasa Rumput Laut Nori Seaweed Flavour,0.625,Carman s Super Berry Muesli Bars Cranbe,0.6187,Luwak White Koffie Original,0.5682
+IMG_20250522_172541.jpg,food,Malkist,0.5455,Banoffee,0.5307,Arabica Gold,0.4529
+IMG_20250522_172547.jpg,food,Migi Migi Wafer krim vanilla cokelat,0.4554,Chocolatos chocolate flavor,0.4498,Chocolatos Vanilla Flavour,0.4447
+IMG_20250522_172849.jpg,food,GARUDA ROSTA KACANG PANGGANG 95G,0.6551,Boncabe Kulit Pangsit Lev 10,0.6456,Momogi Mini Stick Roasted Corn,0.6207
+IMG_20250522_172913.jpg,food,Selamat Chocolate Sandwich Wafer,0.5485,Potabee Selections Salted Egg,0.5481,AOKA Roti Bun Isian cokelat panggang,0.5472
+IMG_20250522_172915.jpg,food,Malkist,0.53,Roma Biscuit Sandwich Chocolate Coklat,0.4929,wafer dengan krim cokelat,0.4919
+IMG_20250522_172932.jpg,food,Carman s Super Berry Muesli Bars Cranbe,0.5804,Kukis Kelapa coconut cookies,0.5713,Roma bisc kelapa 300G,0.5689
+IMG_20250522_172956.jpg,food,Biskuat Biskuit Original Regular,0.5933,roma kelapa cream coklat,0.5778,Supero Crackers,0.5574
+IMG_20250522_173627.jpg,food,Chitato Keju Supreme 68gr,0.6821,Luwak White Koffie Original,0.6541,Cho cho Strawberry Flavor,0.6339
+IMG_20250522_173633.jpg,food,Cho cho Strawberry Flavor,0.5955,Pondan sponge cake,0.5524,Boncabe Kulit Pangsit Lev 10,0.5459
+IMG_20250524_230502.jpg,food,maxicorn barbecue,0.6417,Momogi Malkist Crackers,0.6369,Nylon Sev,0.6253
+IMG_20250524_230537.jpg,food,Malkist,0.5778,Nano Nano Rasa Rujak Nanas,0.5667,Pop Corn Cheese,0.5645
+IMG_20250524_230713.jpg,food,Malkist,0.619,Pondan sponge cake,0.606,Gilus Mix Sweet Ginger,0.5957
+IMG_20250524_230809.jpg,food,Banoffee,0.5971,Malkist,0.5693,Monde snack gold baked not fried,0.5596
+IMG_20250524_230949.jpg,food,maxicorn barbecue,0.6521,Alfamart popcorn karamel,0.6485,Momogi Nugget Snack Jagung Bakar Pedas,0.648
+IMG_20250524_231024.jpg,food,maxicorn barbecue,0.6487,Walens Sus Kering Isi Krim Rasa Bluber,0.624,Mi goreng Fried Noodles Flavour,0.6199
+IMG_20250524_231039.jpg,food,Potabee Selections Salted Egg,0.5299,Malkist,0.5106,Luwak White Koffie Original,0.5083
+IMG_20250524_231058.jpg,food,Banoffee,0.6176,almond cookies,0.6048,Walens Sus Kering Isi Krim Rasa Bluber,0.5867
+IMG_20250525_114456.jpg,food,Boncabe Kulit Pangsit Lev 10,0.6162,beng beng extra chocolate caramel,0.6032,Better Sandwich Biscuit,0.6019
+IMG_20250525_114519.jpg,food,Better Sandwich Biscuit,0.5743,Plantain Chips Yellow Banana Chips,0.5716,Nylon Sev,0.571
+IMG_20250525_114540.jpg,food,Gilus Mix Sweet Ginger,0.5956,Arabica Gold,0.5877,Pota Bee Grilled Seaweed,0.5744
+IMG_20250525_114632.jpg,food,Malkist,0.5128,Oreo BlackPink,0.5128,Choco Pie,0.4944
+IMG_20250525_114639.jpg,food,Pota Bee Grilled Seaweed,0.5565,Malkist,0.5423,Potabee Selections Salted Egg,0.542
+IMG_20250525_114701.jpg,food,Malkist,0.5262,Banoffee,0.5047,Carman s Super Berry Muesli Bars Cranbe,0.397
+IMG_20250525_114711.jpg,food,Banoffee,0.4999,Nabati Wafer,0.4422,OREO Original,0.4419
+IMG_20250525_114830.jpg,food,Carman s Super Berry Muesli Bars Cranbe,0.6553,Selamat Chocolate Sandwich Biscuit,0.6315,Nextar Nastar Strawberry Jam,0.6115
+IMG_20250525_114855.jpg,food,Nabati White,0.5446,choki choki,0.5347,CHIMI KERIPIK UBI,0.5226
+IMG_20250525_114904.jpg,food,Nextar Nastar Strawberry Jam,0.5403,wafer dengan krim cokelat,0.5317,Selamat Chocolate Sandwich Biscuit,0.5256
+IMG_20250525_124518.jpg,food,wafer dengan krim cokelat,0.5474,OREO Original,0.5459,Arabica Gold,0.5273
+IMG_20250525_174443.jpg,food,maxicorn barbecue,0.6795,CHIMI KERIPIK UBI,0.6747,Nano Nano Rasa Rujak Nanas,0.6708
+IMG_20250525_174452.jpg,food,Banoffee,0.5695,Malkist,0.5279,Malkist,0.5264
+IMG_20250525_174458.jpg,food,Banoffee,0.5753,Arabica Gold,0.5512,Walens Sus Kering Isi Krim Rasa Bluber,0.5435
+IMG_20250525_174519.jpg,food,Banoffee,0.5751,Malkist,0.5123,Nextar Nastar Pineapple Jam 80g,0.5
+IMG_20250525_174750.jpg,food,Brownies Crispy,0.6588,Roma Biscuit Sandwich Chocolate Coklat,0.6458,Boncabe Kulit Pangsit Lev 10,0.6421
+IMG_20250525_174804.jpg,food,Potabee Selections Salted Egg,0.5911,Migi Migi Wafer krim vanilla cokelat,0.5619,Gilus Mix Sweet Ginger,0.5616
+IMG_20250525_174857.jpg,food,Momogi Malkist Crackers,0.6808,CHIMI KERIPIK UBI,0.6788,Boncabe Kulit Pangsit Lev 10,0.6545
+IMG_20250525_174945.jpg,food,Brownies Crispy,0.614,Munch Max,0.604,Monde snack gold baked not fried,0.5959
+IMG_20250525_175029.jpg,food,Boncabe Kulit Pangsit Lev 10,0.6744,CHIMI KERIPIK UBI,0.6625,Kukis Kelapa coconut cookies,0.6414
+IMG_20250525_175044.jpg,food,Boncabe Kulit Pangsit Lev 10,0.5546,Roma Biscuit Sandwich Chocolate Coklat,0.5539,Selamat Chocolate Sandwich Biscuit,0.5478
+IMG_20250525_175108.jpg,food,Oreo Softcake,0.506,Boncabe Kulit Pangsit Lev 10,0.5024,Franzzi Cheese Chocolate Flavor Cookie,0.5019
+IMG_20250525_175215.jpg,food,choki choki,0.5818,Cho cho Strawberry Flavor,0.5537,Boncabe Kulit Pangsit Lev 10,0.5454
+IMG_20250525_175226.jpg,food,Munch Max,0.6134,Migi Migi Wafer krim vanilla cokelat,0.5954,choki choki,0.5924
+IMG_20250525_175255.jpg,food,Carman s Super Berry Muesli Bars Cranbe,0.6468,Nylon Sev,0.6387,Malkist,0.6374
+IMG_20250525_175301.jpg,food,Momogi Malkist Crackers,0.6253,Malkist,0.6147,CHIMI KERIPIK UBI,0.614
+IMG_20250525_175309.jpg,food,Lemonia Lemon Flavored Biscuit,0.5262,Biskuit Stik Rasa Sayuran dan Keju,0.5237,Malkist,0.4961
+IMG_20250525_175321.jpg,food,Slai O lai,0.6081,Boncabe Kulit Pangsit Lev 10,0.6029,choki choki,0.5506
+IMG_20250525_175324.jpg,food,Beng beng,0.5366,MoMogi,0.5268,Roma Biscuit Sandwich Chocolate Coklat,0.5249
+IMG_20250525_175339.jpg,food,Wafello Chocolate Gelato,0.5911,Aice Chocolate crispy,0.5688,Nextar Nastar Pineapple Jam 80g,0.5572
+IMG_20250525_175418.jpg,food,Cho cho Strawberry Flavor,0.5105,Nabati White,0.501,Oreo Softcake,0.5
+IMG_20250525_175444.jpg,food,Oreo Softcake,0.4849,Better Sandwich Biscuit,0.4743,Nabati Wafer Cokelat,0.4707
+IMG_20250525_175545.jpg,food,Grand Classic Chocolate Cream Wafer,0.6213,Better Sandwich Biscuit,0.617,Roma Biscuit Sandwich Chocolate Coklat,0.5944
+IMG_20250525_175549.jpg,food,Better Sandwich Biscuit,0.6165,beng beng extra chocolate caramel,0.6029,Grand Classic Chocolate Cream Wafer,0.601
+IMG_20250525_175558.jpg,food,Nabati White,0.5629,Biskuat Biskuit Original Regular,0.5563,Munch Max,0.5459
+IMG_20250525_175602.jpg,food,Nabati White,0.5934,Twister Minis,0.5809,Chitato Keju Supreme 68gr,0.5794
+IMG_20250525_175625.jpg,food,Roma Biscuit Sandwich Chocolate Coklat,0.6013,Chocolate Chip Cookie,0.5942,Malkist,0.5905
+IMG_20250525_175630.jpg,food,Happydent cool white 24g,0.5139,Oreo Softcake,0.4973,Neo Lotte Xylitol Fresh Mint Big,0.497
+IMG_20250525_175639.jpg,food,Robusta Gold,0.5344,Nabati White,0.5319,Malkist,0.5281
+IMG_20250525_175701.jpg,food,Better Sandwich Biscuit,0.5754,Oreo BlackPink,0.5727,Malkist,0.5394
+IMG_20250525_175709.jpg,food,Banoffee,0.6094,Malkist,0.591,Arabica Gold,0.5245
+IMG_20250525_175712.jpg,food,Nabati White,0.5771,Pondan sponge cake,0.562,Oreo BlackPink,0.5619
+IMG_20250525_175746.jpg,food,Boncabe Kulit Pangsit Lev 10,0.6418,Chitato Keju Supreme 68gr,0.6225,Brownies Crispy,0.5931
+IMG_20250525_175753.jpg,food,Nescafe Calssic,0.5211,Munch Max,0.5113,Malkist,0.511
+IMG_20250527_202008.jpg,food,Beng beng,0.7041,Chitato Keju Supreme 68gr,0.6082,Munch Max,0.5895
+IMG_20250527_202144.jpg,food,Nabati Wafer Cokelat,0.6416,Better Sandwich Biscuit,0.6375,Selamat Chocolate Sandwich Wafer,0.627
+IMG_20250527_202228.jpg,food,Munch Max,0.6705,Biskuit Stik Rasa Sayuran dan Keju,0.6075,Better Sandwich Biscuit,0.5893
+IMG_20250527_202408.jpg,food,Munch Max,0.5485,Nabati White,0.5314,Beng beng,0.5312
+IMG_20250527_202442.jpg,food,Selamat Chocolate Sandwich Biscuit,0.6017,wafer dengan krim cokelat,0.5986,Nabati White,0.5958
+IMG_20250528_112319.jpg,food,Nabati Richeese Black,0.5895,Nabati White,0.5788,Chitato Sapi Bumbu Bakar 68gr,0.5757
+IMG_20250528_112350.jpg,food,Roma Biscuit Sandwich Chocolate Coklat,0.6436,Malkist,0.6106,Chocopie,0.5984
+IMG_20250528_112411.jpg,food,Roma Biscuit Sandwich Chocolate Coklat,0.6123,Selamat Chocolate Sandwich Biscuit,0.6109,Better Sandwich Biscuit,0.5794
+IMG_20250528_112433.jpg,food,Roma Biscuit Sandwich Chocolate Coklat,0.5666,roma kelapa cream coklat,0.5635,Selamat Chocolate Sandwich Biscuit,0.5572
+IMG_20250528_112553.jpg,food,Boncabe Kulit Pangsit Lev 10,0.5635,Oreo Original Vanilla,0.5634,Grand Classic Chocolate Cream Wafer,0.5576
+IMG_20250528_112619.jpg,food,Boncabe Kulit Pangsit Lev 10,0.5189,Oreo Original Vanilla,0.5121,Oreo Softcake,0.5114
+IMG_20250528_112647.jpg,food,Robusta Gold,0.5424,Potabee Selections Salted Egg,0.5229,Dark Chocolate Cookies,0.5162
+IMG_20250528_112712.jpg,food,Oreo Softcake,0.5421,Franzzi Cheese Chocolate Flavor Cookie,0.5415,Wafello Chocolate Gelato,0.5149
+IMG_20250528_112720.jpg,food,Oreo Softcake,0.5718,Franzzi Cheese Chocolate Flavor Cookie,0.5473,Biskuat Biskuit Original Regular,0.5407
+IMG_20250528_112729.jpg,food,Franzzi Cheese Chocolate Flavor Cookie,0.6143,Biskuat Biskuit Original Regular,0.5862,Yale Yale Rice Crispy,0.5816
+IMG_20250528_163716.jpg,food,Selamat Chocolate Sandwich Biscuit,0.5873,Khong Guan biscuits 1600g,0.5784,MoMogi,0.5694
+IMG_20250528_163729.jpg,food,Arabica Gold,0.5134,Monde,0.5103,Gilus Mix Sweet Ginger,0.5044
+IMG_20250528_163736.jpg,food,Khong Guan biscuits 1600g,0.6153,maxicorn barbecue,0.5965,See Hong Puff,0.5918
+IMG_20250528_163818.jpg,food,Gilus Mix Sweet Ginger,0.5114,Yupi Bolicious Wild Blackberry,0.501,Robusta Gold,0.49
+IMG_20250528_163828.jpg,food,Kukis Kelapa coconut cookies,0.5733,maxicorn barbecue,0.5697,Waffle Original,0.5577
+IMG_20250528_163832.jpg,food,Nabati Wafer,0.5289,Tango Wafer Cokelat,0.5248,Lemonia,0.521
+IMG_20250528_163854.jpg,food,Cho Cho Chocolate Egg Telur Surprise Toy,0.6396,Grand Classic Chocolate Cream Wafer,0.6,Rasa Rumput Laut Nori Seaweed Flavour,0.5959
+IMG_20250528_164012.jpg,food,DELIZIO CAFFINO,0.5077,OREO Original,0.5038,Arabica Gold,0.4989
+IMG_20250528_164317.jpg,food,Kukis Kelapa coconut cookies,0.666,Chitato Keju Supreme 68gr,0.6434,chupa chups,0.6372
+IMG_20250528_164327.jpg,food,Monde snack gold baked not fried,0.5906,Fitbar multigrain fruits delight,0.5811,Waffle Original,0.575
+IMG_20250528_164340.jpg,food,White Bread,0.6221,Malkist,0.5728,Monde snack gold baked not fried,0.5606
+IMG_20250528_164420.jpg,food,Kukis Kelapa coconut cookies,0.6606,Momogi Malkist Crackers,0.6277,Malkist,0.6263
+IMG_20250528_164433.jpg,food,Malkist,0.5765,Monde snack gold baked not fried,0.5752,Pop Corn Cheese,0.5697
+IMG_20250528_164439.jpg,food,Munch Max,0.5787,Malkist,0.5694,Pop Corn Cheese,0.5572
+IMG_20250528_164525.jpg,food,Boncabe Kulit Pangsit Lev 10,0.6421,CHIMI KERIPIK UBI,0.6057,choki choki,0.6014
+IMG_20250528_164537.jpg,food,Carman s Super Berry Muesli Bars Cranbe,0.454,Aice Chocolate crispy,0.4457,nissin Crispy Crackers bks 250gr,0.4399
+IMG_20250528_164606.jpg,food,Biskuat Biskuit Original Regular,0.6075,beng beng extra chocolate caramel,0.5766,Aice Chocolate crispy,0.5747
+IMG_20250528_171442.jpg,food,Kukis Kelapa coconut cookies,0.6424,Selamat Chocolate Sandwich Biscuit,0.6257,Twister Minis,0.6191
+IMG_20250528_171447.jpg,food,See Hong Puff,0.7234,Grand Classic Chocolate Cream Wafer,0.6782,Kukis Kelapa coconut cookies,0.6547
+IMG_20250528_171452.jpg,food,Grand Classic Chocolate Cream Wafer,0.6901,Kukis Kelapa coconut cookies,0.6754,Twister Minis,0.6578
+IMG_20250528_171557.jpg,food,Kukis Kelapa coconut cookies,0.5579,Nabati Richeese Black,0.5369,Pota Bee Grilled Seaweed,0.536
+IMG_20250528_171612.jpg,food,Gilus Mix Sweet Ginger,0.6403,Chitato Sapi Bumbu Bakar 68gr,0.6242,See Hong Puff,0.6145
+IMG_20250528_171708.jpg,food,OREO Original,0.3522,Chocolatos Vanilla Flavour,0.3404,DELIZIO CAFFINO,0.3366
+IMG_20250528_171722.jpg,food,Grand Classic Chocolate Cream Wafer,0.6309,See Hong Puff,0.604,Cho Cho Chocolate Egg Telur Surprise Toy,0.5912
+IMG_20250528_171726.jpg,food,See Hong Puff,0.6133,Lemonia,0.6128,maxicorn barbecue,0.6021
+IMG_20250528_171742.jpg,food,Malkist,0.5642,Grand Classic Chocolate Cream Wafer,0.5453,Better Sandwich Biscuit,0.5422
+IMG_20250528_171818.jpg,food,Chocolate Chip Cookie,0.3365,Kapal Api Special Mix,0.3364,OREO Original,0.3319
+IMG_20250528_171908.jpg,food,GARUDA ROSTA KACANG PANGGANG 95G,0.6495,Momogi Malkist Crackers,0.6472,Malkist,0.6318
+IMG_20250528_171927.jpg,food,Arabica Gold,0.6296,Robusta Gold,0.6003,Gilus Mix Sweet Ginger,0.5811
+IMG_20250528_171934.jpg,food,Malkist,0.5674,Arabica Gold,0.5553,Robusta Gold,0.5509
+IMG_20250528_172039.jpg,food,Rasa Rumput Laut Nori Seaweed Flavour,0.5765,Pota Bee Grilled Seaweed,0.5573,Kukis Kelapa coconut cookies,0.5493
+IMG_20250528_172052.jpg,food,Kukis Kelapa coconut cookies,0.5153,AOKA Roti Bun Isian cokelat panggang,0.5129,Momogi Malkist Crackers,0.5078
+IMG_20250528_172106.jpg,food,wafer dengan krim cokelat,0.5137,Munch Max,0.5088,Better Sandwich Biscuit,0.4978
+IMG_20250528_172122.jpg,food,Oreo BlackPink,0.619,Fitbar multigrain fruits delight,0.592,Oreo Softcake,0.574
+IMG_20250529_115018.jpg,food,See Hong Puff,0.7356,Boncabe Kulit Pangsit Lev 10,0.6694,Brownies Crispy,0.6529
+IMG_20250529_115023.jpg,food,See Hong Puff,0.6418,Garlic Bread Almond,0.6259,Boncabe Kulit Pangsit Lev 10,0.5954
+IMG_20250529_115026.jpg,food,See Hong Puff,0.5504,Lemonia,0.5337,Neo Lotte Xylitol Fresh Mint Big,0.5335
+IMG_20250529_115030.jpg,food,See Hong Puff,0.5374,Garlic Bread Almond,0.531,Yupi Bolicious Strawberry,0.4945
+IMG_20250529_115051.jpg,food,Kukis Kelapa coconut cookies,0.5473,Walens Sus Kering Isi Krim Rasa Bluber,0.5312,Cho Cho Chocolate Egg Telur Surprise Toy,0.5204
+IMG_20250529_115329.jpg,food,Boncabe Kulit Pangsit Lev 10,0.7011,beng beng extra chocolate caramel,0.6107,Alfamart popcorn karamel,0.5976
+IMG_20250529_115350.jpg,food,Cho cho Strawberry Flavor,0.584,Monde snack gold baked not fried,0.5654,Munch Max,0.5395
+IMG_20250529_115409.jpg,food,Momogi Malkist Crackers,0.6232,Cho cho Strawberry Flavor,0.593,Fitbar multigrain fruits delight,0.5818
+IMG_20250529_115532.jpg,food,Boncabe Kulit Pangsit Lev 10,0.6592,CHIMI KERIPIK UBI,0.5569,beng beng extra chocolate caramel,0.556
+IMG_20250529_115541.jpg,food,Kukis Kelapa coconut cookies,0.5462,Fitbar multigrain fruits delight,0.5462,Potabee Selections Salted Egg,0.544
+IMG_20250529_115553.jpg,food,Kukis Kelapa coconut cookies,0.609,Potabee Selections Salted Egg,0.5988,Chitato Sapi Bumbu Bakar 68gr,0.5983
+IMG_20250529_120229.jpg,food,Pota Bee Grilled Seaweed,0.6299,Rasa Rumput Laut Nori Seaweed Flavour,0.6047,Plantain Chips Yellow Banana Chips,0.5966
+IMG_20250529_120254.jpg,food,Pondan sponge cake,0.5989,Malkist,0.5907,Lemonilo Brownies Crispy Strawberry Cheese,0.5623
+IMG_20250529_120304.jpg,food,Pondan sponge cake,0.6148,Malkist,0.5889,Roma bisc kelapa 300G,0.5841
+IMG_20250530_101624.jpg,food,Momogi Malkist Crackers,0.6997,Boncabe Kulit Pangsit Lev 10,0.6804,CHIMI KERIPIK UBI,0.6654
+IMG_20250530_101738.jpg,food,Malkist,0.5735,CHIMI KERIPIK UBI,0.5589,Brownies Crispy,0.5562
+IMG_20250530_102022.jpg,food,Walens Sus Kering Isi Krim Rasa Bluber,0.575,Pop Corn Cheese,0.5572,Kukis Kelapa coconut cookies,0.5468
+IMG_20250530_102149.jpg,food,Franzzi Cheese Chocolate Flavor Cookie,0.5607,Selamat Chocolate Sandwich Biscuit,0.524,Potabee Selections Salted Egg,0.517
+IMG_20250530_123407.jpg,food,Chitato Keju Supreme 68gr,0.6646,Boncabe Kulit Pangsit Lev 10,0.6567,Twister Minis,0.6386
+IMG_20250530_123431.jpg,food,Boncabe Kulit Pangsit Lev 10,0.6388,Chitato Keju Supreme 68gr,0.6197,Nabati White,0.602
+IMG_20250530_123443.jpg,food,Boncabe Kulit Pangsit Lev 10,0.5521,Luwak White Koffie Original,0.5385,Malkist,0.5288
+IMG_20250530_123510.jpg,food,Chitato Keju Supreme 68gr,0.6184,Potabee Selections Salted Egg,0.6074,Malkist,0.6049
+IMG_20250530_123616.jpg,food,Foxs gummy emot HappySad,0.5746,Chiki Twist Jagung Bakar,0.5623,Momogi TWIST Roasted Corn,0.5597
+IMG_20250530_123637.jpg,food,Gilus Mix Sweet Ginger,0.5909,Nano Nano Rasa Rujak Nanas,0.5798,Richeese wfr nabati box 135g,0.5754
+IMG_20250530_123653.jpg,food,Banoffee,0.5683,Malkist,0.541,Arabica Gold,0.5348
+IMG_20250530_123702.jpg,food,Cho cho Strawberry Flavor,0.6517,Twister Minis,0.6314,Cheese Cake Duo,0.6278
+IMG_20250530_123713.jpg,food,Better Sandwich Biscuit,0.5678,M Ms Chocolate Bar Cookies,0.562,Roti Tawar,0.5513
+IMG_20250530_123733.jpg,food,Choco Pie,0.7179,Roma Biscuit Sandwich Chocolate Coklat,0.573,Franzzi Cheese Chocolate Flavor Cookie,0.5449
+IMG_20250530_123738.jpg,food,Nabati Wafer Cokelat,0.6054,Nabati White,0.5663,Selamat Chocolate Sandwich Wafer,0.5658
+IMG_20250530_123750.jpg,food,Banoffee,0.5384,Choco Pie,0.5342,Franzzi Cheese Chocolate Flavor Cookie,0.4968
+IMG_20250530_123804.jpg,food,Plantain Chips Yellow Banana Chips,0.4771,Walkers,0.4747,Malkist,0.4482
+IMG_20250530_124024.jpg,food,Kukis Kelapa coconut cookies,0.5913,Momogi Nugget Snack Jagung Bakar Pedas,0.5808,Walens Sus Kering Isi Krim Rasa Bluber,0.5739
+IMG_20250530_124032.jpg,food,Kukis Kelapa coconut cookies,0.5521,Chocolate Chip Cookie,0.5517,Genji Soft Pie biscuits,0.5454
+IMG_20250530_124046.jpg,food,nissin Crispy Crackers bks 250gr,0.5359,Malkist,0.512,Banoffee,0.5004
+IMG_20250530_124053.jpg,food,nissin Crispy Crackers bks 250gr,0.5947,Nabati White,0.5694,Arabica Gold,0.5664
+IMG_20250530_124059.jpg,food,Robusta Gold,0.5315,Franzzi Cheese Chocolate Flavor Cookie,0.5299,Arabica Gold,0.5088
+IMG_20250530_124123.jpg,food,GARUDA ROSTA KACANG PANGGANG 95G,0.5748,Momogi Nugget Snack Jagung Bakar Pedas,0.5571,maxicorn barbecue,0.5303
+IMG_20250530_124132.jpg,food,Banoffee,0.5794,Monde snack gold baked not fried,0.5441,Cho cho Strawberry Flavor,0.541
+IMG_20250530_124141.jpg,food,Nextar Nastar Pineapple Jam 80g,0.543,Monde snack gold baked not fried,0.5391,Carman s Super Berry Muesli Bars Cranbe,0.5232
+IMG_20250530_124148.jpg,food,choki choki,0.4997,Nabati White,0.4856,OREO Original,0.4852
+IMG_20250530_124504.jpg,food,Alfamart popcorn karamel,0.6328,Brownies Crispy,0.6251,Pop Corn Cheese,0.6191
+IMG_20250530_124529.jpg,food,Malkist,0.5929,Pop Corn Cheese,0.5756,Monde snack gold baked not fried,0.575
+IMG_20250530_124542.jpg,food,Monde snack gold baked not fried,0.6327,Walens Sus Kering Isi Krim Rasa Bluber,0.6205,Malkist,0.5948
+IMG_20250601_122130.jpg,food,chupa chups,0.631,Momogi Mini Stick Roasted Corn,0.609,GARUDA ROSTA KACANG PANGGANG 95G,0.6046
+IMG_20250601_122149.jpg,food,Pondan sponge cake,0.5846,Munch Max,0.5801,Banoffee,0.561
+IMG_20250601_122152.jpg,food,Monde snack gold baked not fried,0.5936,Pondan sponge cake,0.577,Malkist,0.5691
+IMG_20250601_122217.jpg,food,Momogi Malkist Crackers,0.618,Boncabe Kulit Pangsit Lev 10,0.6164,choki choki,0.5989
+IMG_20250601_122235.jpg,food,Nabati White,0.5819,Boncabe Kulit Pangsit Lev 10,0.5592,Yale Yale Rice Crispy,0.5486
+IMG_20250601_122301.jpg,food,Wafello Chocolate Gelato,0.5636,Twister Minis,0.5596,Chitato Sapi Bumbu Bakar 68gr,0.5547
+IMG_20250601_122345.jpg,food,chupa chups,0.6052,GARUDA ROSTA KACANG PANGGANG 95G,0.5957,CHIMI KERIPIK UBI,0.5949
+IMG_20250601_122351.jpg,food,Chocolate Chip Cookie,0.5549,Robusta Gold,0.5369,Plantain Chips Yellow Banana Chips,0.5365
+IMG_20250601_122355.jpg,food,Franzzi Cheese Chocolate Flavor Cookie,0.5294,Chocolate Chip Cookie,0.5243,Genji Soft Pie biscuits,0.5087
+IMG_20250601_122400.jpg,food,Banoffee,0.6087,Robusta Gold,0.5682,DENEX WAFER ROLL STRAWBERRY,0.5577
+IMG_20250602_115355.jpg,food,Boncabe Kulit Pangsit Lev 10,0.6139,choki choki,0.5147,Chitato Keju Supreme 68gr,0.5133
+IMG_20250602_115400.jpg,food,choki choki,0.5465,Boncabe Kulit Pangsit Lev 10,0.5358,Beng beng,0.5139
+IMG_20250602_115405.jpg,food,Malkist,0.5368,Franzzi Cheese Chocolate Flavor Cookie,0.5353,Banoffee,0.5222
+IMG_20250603_104112.jpg,food,Roma bisc kelapa 300G,0.6349,Walens Sus Kering Isi Krim Rasa Bluber,0.6161,Momogi Nugget Snack Jagung Bakar Pedas,0.5982
+IMG_20250603_104119.jpg,food,Better Sandwich Biscuit,0.5516,Roma Biscuit Sandwich Chocolate Coklat,0.5438,roma kelapa cream coklat,0.5324
+IMG_20250603_104128.jpg,food,Malkist,0.5905,Malkist,0.5638,Pondan sponge cake,0.5525
+IMG_20250603_104144.jpg,food,Roma Biscuit Sandwich Chocolate Coklat,0.5652,Lemonia,0.549,Malkist,0.5464
+IMG_20250603_104201.jpg,food,Selamat Chocolate Sandwich Biscuit,0.6053,Nextar Nastar Strawberry Jam,0.5643,Pota Bee Grilled Seaweed,0.5554
+IMG_20250603_104210.jpg,food,Nextar Nastar Strawberry Jam,0.6112,Selamat Chocolate Sandwich Biscuit,0.5513,Nextar brownies 8x10g,0.5243
+IMG_20250603_104217.jpg,food,Nextar Nastar Strawberry Jam,0.5111,Selamat Chocolate Sandwich Biscuit,0.5008,Nabati White,0.5003
+IMG_20250603_104245.jpg,food,Selamat Chocolate Sandwich Biscuit,0.5954,Nextar Nastar Strawberry Jam,0.5823,Carman s Super Berry Muesli Bars Cranbe,0.5632
+IMG_20250603_104253.jpg,food,DENEX WAFER ROLL STRAWBERRY,0.511,Selamat Chocolate Sandwich Biscuit,0.4966,Nextar Nastar Pineapple Jam 80g,0.4819
+IMG_20250603_114455.jpg,food,Boncabe Kulit Pangsit Lev 10,0.6043,Momogi Malkist Crackers,0.5756,choki choki,0.5305
+IMG_20250603_114507.jpg,food,Nextar Nastar Pineapple Jam 80g,0.5345,mmm . mallows,0.5103,Aice Chocolate crispy,0.5082
+IMG_20250603_114534.jpg,food,Biskuat Biskuit Original Regular,0.5435,Walens Sus Kering Isi Krim Rasa Bluber,0.5416,Malkist,0.5387
+IMG_20250604_105332.jpg,food,Chiki Twist Jagung Bakar,0.5838,MoMogi,0.5646,Cho cho Strawberry Flavor,0.5536
+IMG_20250604_105338.jpg,food,AOKA Roti Bun Isian cokelat panggang,0.5232,Wafello Chocolate Gelato,0.5016,AOKA Roti Bun Isian Vanilla panggang,0.4992
+IMG_20250604_105407.jpg,food,Nano Nano Rasa Rujak Nanas,0.63,Monde snack gold baked not fried,0.6117,Arabica Gold,0.6111
+IMG_20250604_105510.jpg,food,Roma Biscuit Sandwich Chocolate Coklat,0.5723,Oreo Softcake,0.5693,Chitato Sapi Bumbu Bakar 68gr,0.5563
+IMG_20250604_105515.jpg,food,Wafello Chocolate Gelato,0.6051,Oreo Softcake,0.5911,Boncabe Kulit Pangsit Lev 10,0.5798
+IMG_20250604_105520.jpg,food,Malkist,0.5412,Banoffee,0.5096,Pondan sponge cake,0.4995
+IMG_20250604_105546.jpg,food,Nabati Wafer Cokelat,0.5201,OREO Original,0.5138,Wafello Chocolate Gelato,0.5127
+IMG_20250605_111345.jpg,food,Carman s Super Berry Muesli Bars Cranbe,0.6149,Franzzi Cheese Chocolate Flavor Cookie,0.5948,Selamat Chocolate Sandwich Biscuit,0.5913
+IMG_20250605_111349.jpg,food,Nextar Nastar Strawberry Jam,0.5822,Banoffee,0.5658,Nextar Nastar Pineapple Jam 80g,0.5579
+IMG_20250605_111356.jpg,food,Nabati White,0.5749,Lemonia Lemon Flavored Biscuit,0.5563,Potabee Selections Salted Egg,0.55
+IMG_20250605_111400.jpg,food,Kalpa Wafer Cokelat Kelapa,0.557,Selamat Chocolate Sandwich Wafer,0.5536,Biskuat Biskuit Original Regular,0.5525
+IMG_20250605_111417.jpg,food,Carman s Super Berry Muesli Bars Cranbe,0.6357,Franzzi Cheese Chocolate Flavor Cookie,0.6234,Cookies Dark Chocolate,0.5985
+IMG_20250605_111429.jpg,food,Banoffee,0.5962,Nextar Nastar Strawberry Jam,0.5555,Carman s Super Berry Muesli Bars Cranbe,0.5424
+IMG_20250605_111442.jpg,food,Lemonilo Brownies Crispy Strawberry Cheese,0.5888,Gilus Mix Sweet Ginger,0.5733,Pota Bee Grilled Seaweed,0.5646
+IMG_20250605_111447.jpg,food,Sandwich Biscuit Coka Peanut Cream,0.5771,Selamat Chocolate Sandwich Wafer,0.5665,Lemonia Lemon Flavored Biscuit,0.5614
+IMG_20250605_111548.jpg,food,Malkist,0.6689,Momogi Malkist Crackers,0.6622,Boncabe Kulit Pangsit Lev 10,0.6542
+IMG_20250605_111619.jpg,food,Malkist,0.6814,Monde snack gold baked not fried,0.6502,Rasa Rumput Laut Nori Seaweed Flavour,0.6437
+IMG_20250605_111633.jpg,food,Cho cho Strawberry Flavor,0.594,Monde snack gold baked not fried,0.5829,Pondan sponge cake,0.5818
+IMG_20250605_111706.jpg,food,Pondan sponge cake,0.669,Malkist,0.6275,Monde snack gold baked not fried,0.6062
+IMG_20250605_111749.jpg,food,Momogi Malkist Crackers,0.7244,mrp kacang madu,0.7131,Boncabe Kulit Pangsit Lev 10,0.6892
+IMG_20250605_111812.jpg,food,Chitato Keju Supreme 68gr,0.657,Twister Minis,0.6383,Monde snack gold baked not fried,0.6378
+IMG_20250605_111828.jpg,food,Munch Max,0.6174,Malkist,0.5944,Monde snack gold baked not fried,0.5877
+IMG_20250605_111907.jpg,food,Nylon Sev,0.577,Monde snack gold baked not fried,0.5623,Supero Crackers,0.5566
+IMG_20250613_170735.jpg,food,Rasa Rumput Laut Nori Seaweed Flavour,0.5785,Nextar Nastar Strawberry Jam,0.553,Wafello Chocolate Gelato,0.5493
+IMG_20250613_170742.jpg,food,Munch Max,0.5455,Carman s Super Berry Muesli Bars Cranbe,0.5414,Nextar Nastar Strawberry Jam,0.5381
+IMG_20250613_170752.jpg,food,Nextar Nastar Pineapple Jam 80g,0.5016,Malkist,0.4999,Gilus Mix Sweet Ginger,0.4844
+IMG_20250613_170800.jpg,food,Nabati Wafer chocolate,0.5092,Lemonia Lemon Flavored Biscuit,0.509,Nabati Wafer,0.4947
+IMG_20250613_170828.jpg,food,Pocky chocolate,0.8432,Pocky,0.6505,Pocky Chocolate Flavour,0.6498
+IMG_20250613_170833.jpg,food,Cho cho Strawberry Flavor,0.6503,Luwak White Koffie Original,0.5629,Carman s Super Berry Muesli Bars Cranbe,0.5618
+IMG_20250613_170843.jpg,food,Malkist,0.5401,Arabica Gold,0.4822,OREO Original,0.4725
+IMG_20250613_170851.jpg,food,Nabati Wafer chocolate,0.5343,Good Time Double Choc,0.5294,Selamat Chocolate Sandwich Wafer,0.5178
+IMG_20250613_172122.jpg,food,Luwak White Koffie Original,0.5528,Momogi Nugget Snack Jagung Bakar Pedas,0.545,Momogi Mini Stick Roasted Corn,0.5199
+IMG_20250613_172151.jpg,food,Momogi Mini Stick Roasted Corn,0.5841,Momogi Nugget Snack Jagung Bakar Pedas,0.5725,Potabee Selections Salted Egg,0.5407
+IMG_20250613_172216.jpg,food,Monde snack gold baked not fried,0.5976,Malkist,0.5732,Waffle Original,0.5696
+IMG_20250613_172221.jpg,food,Waffle Original,0.6304,Malkist,0.5977,Roti Tawar,0.5923
+IMG_20250613_172249.jpg,food,Momogi Malkist Crackers,0.6447,Cheese Cake Duo,0.632,Chitato Keju Supreme 68gr,0.6307
+IMG_20250613_172257.jpg,food,Kukis Kelapa coconut cookies,0.6538,Momogi Malkist Crackers,0.6326,Walens Sus Kering Isi Krim Rasa Bluber,0.6266
+IMG_20250613_172327.jpg,food,Arabica Gold,0.6609,Banoffee,0.56,Malkist,0.5441
+IMG_20250613_172339.jpg,food,Oreo Softcake,0.5732,Waffle Original,0.5703,Malkist,0.5701
+IMG_20250613_172409.jpg,food,Waffle Original,0.6139,Malkist,0.6079,Chitato Keju Supreme 68gr,0.594
+IMG_20250613_172441.jpg,food,Waffle Original,0.5786,Malkist,0.571,Monde snack gold baked not fried,0.5562
+IMG_20250613_172445.jpg,food,Pop Corn Cheese,0.5371,Malkist,0.5366,Malkist,0.5347
+IMG_20250613_172507.jpg,food,Malkist,0.6018,Waffle Original,0.5758,Pondan sponge cake,0.5571
+IMG_20250613_172510.jpg,food,Waffle Original,0.6291,Malkist,0.5954,Monde snack gold baked not fried,0.5949
+IMG_20250613_172537.jpg,food,Pondan sponge cake,0.5956,Malkist,0.5223,Waffle Original,0.5215
+IMG_20250613_172604.jpg,food,Cho cho Strawberry Flavor,0.6666,Nano Nano Rasa Rujak Nanas,0.6318,Dilan Bon Bon Milk Chocolate,0.6273
+IMG_20250613_172646.jpg,food,Banoffee,0.571,Malkist,0.5644,Monde snack gold baked not fried,0.5405
+IMG_20250613_172714.jpg,food,Grand Classic Chocolate Cream Wafer,0.5713,Kukis Kelapa coconut cookies,0.5669,Biskuat Biskuit Original Regular,0.5495
+IMG_20250613_172749.jpg,food,Boncabe Kulit Pangsit Lev 10,0.541,Wafello Chocolate Gelato,0.534,Roma Biscuit Sandwich Chocolate Coklat,0.5282
+IMG_20250613_172810.jpg,food,roma kelapa cream coklat,0.5627,Munch Max,0.5363,Roma Biscuit Sandwich Chocolate Coklat,0.5217
+IMG_20250613_172837.jpg,food,Nano Nano Rasa Rujak Nanas,0.5905,Yupi Strawberry Kiss,0.5828,Cho cho Strawberry Flavor,0.5825
+IMG_20250613_172844.jpg,food,Nextar Nastar Strawberry Jam,0.5647,Carman s Super Berry Muesli Bars Cranbe,0.5606,Migi Migi Wafer krim vanilla cokelat,0.5219
+IMG_20250622_172742.jpg,food,Malkist,0.6001,White Bread,0.594,Monde snack gold baked not fried,0.5862
+IMG_20250622_172754.jpg,food,Munch Max,0.6391,Malkist,0.5481,Fitbar multigrain fruits delight,0.5353
+IMG_20250622_172808.jpg,food,Malkist,0.6191,Rasa Rumput Laut Nori Seaweed Flavour,0.6112,GARUDA ROSTA KACANG PANGGANG 95G,0.6038
+IMG_20250622_172814.jpg,food,Munch Max,0.6067,Fitbar multigrain fruits delight,0.5355,Franzzi Cheese Chocolate Flavor Cookie,0.5092
+IMG_20250622_172908.jpg,food,Kukis Kelapa coconut cookies,0.6417,Slai O lai,0.595,Twister Minis,0.5918
+IMG_20250622_172918.jpg,food,maxicorn barbecue,0.5731,Chocopie,0.5457,Yupi Bolicious Strawberry,0.5444
+IMG_20250622_172923.jpg,food,Malkist,0.6219,Arabica Gold,0.5265,Banoffee,0.5045
+IMG_20250622_172928.jpg,food,Yupi Bolicious Wild Blackberry,0.586,Yupi Bolicious Strawberry,0.5666,Garlic Bread Almond,0.5414
+IMG_20250622_172932.jpg,food,Gilus Mix Sweet Ginger,0.556,Yupi Bolicious Wild Blackberry,0.551,Garlic Bread Almond,0.5483
+IMG_20250622_172937.jpg,food,Gilus Mix Sweet Ginger,0.5552,Kapal Api Special Mix,0.5287,Selamat Chocolate Sandwich Biscuit,0.5246
+IMG_20250622_172955.jpg,food,Nestle Sereal Cup Honey Stars,0.5537,Nestle Sereal Cup Koko Crunch,0.5315,Nabati Richeese Black,0.5261
+IMG_20250622_173004.jpg,food,maxicorn barbecue,0.5133,Momogi TWIST Roasted Corn,0.51,GARUDA ROSTA KACANG PANGGANG 95G,0.5081
+IMG_20250622_173007.jpg,food,Yupi Bolicious Wild Blackberry,0.5615,Gilus Mix Sweet Ginger,0.5574,Pota Bee Grilled Seaweed,0.5535
+IMG_20250622_173009.jpg,food,Malkist,0.5351,Arabica Gold,0.5053,Neo Lotte Xylitol Fresh Mint Big,0.4912
+IMG_20250622_173012.jpg,food,OREO Original,0.5506,Gilus Mix Sweet Ginger,0.5496,Kapal Api Special Mix,0.5193
+IMG_20250622_173014.jpg,food,OREO Original,0.5458,Kapal Api Special Mix,0.5416,Gilus Mix Sweet Ginger,0.5406
+IMG_20250622_173112.jpg,food,Nabati Wafer,0.5506,Cho cho Strawberry Flavor,0.5489,Pop Corn Cheese,0.534
+IMG_20250622_173134.jpg,food,White Bread,0.6729,Pop Corn Cheese,0.6359,Chitato Keju Supreme 68gr,0.6171
+IMG_20250622_173142.jpg,food,Franzzi Cheese Chocolate Flavor Cookie,0.5704,Potabee Selections Salted Egg,0.5683,Supero Crackers,0.5603
+IMG_20250622_173158.jpg,food,Supero Crackers,0.5422,Franzzi Cheese Chocolate Flavor Cookie,0.5332,Nabati White,0.5303
+IMG_20250622_173220.jpg,food,Pondan sponge cake,0.6326,Cho cho Strawberry Flavor,0.5974,Nabati Wafer,0.582
+IMG_20250622_173229.jpg,food,Yupi Bolicious Wild Blackberry,0.5453,Yupi Bolicious Strawberry,0.5412,Pondan sponge cake,0.5352
+IMG_20250622_173255.jpg,food,Oreo BlackPink,0.5455,Biskuat Biskuit Original Regular,0.531,Potabee Selections Salted Egg,0.5224
+IMG_20250622_173341.jpg,food,Rasa Rumput Laut Nori Seaweed Flavour,0.6198,Pota Bee Grilled Seaweed,0.6197,CHIMI KERIPIK UBI,0.5958
+IMG_20250622_173403.jpg,food,Malkist,0.6433,Pop Corn Cheese,0.6272,Rasa Rumput Laut Nori Seaweed Flavour,0.6212
+IMG_20250622_173412.jpg,food,Pop Corn Cheese,0.6021,Pondan sponge cake,0.5966,Monde snack gold baked not fried,0.5917
+IMG_20250622_173453.jpg,food,Pota Bee Grilled Seaweed,0.6119,Rasa Rumput Laut Nori Seaweed Flavour,0.603,CHIMI KERIPIK UBI,0.5988
+IMG_20250622_173521.jpg,food,Malkist,0.6177,Waffle Original,0.6056,Franzzi Cheese Chocolate Flavor Cookie,0.603
+IMG_20250622_173740.jpg,food,Walens Sus Kering Isi Krim Rasa Bluber,0.6249,Momogi Nugget Snack Jagung Bakar Pedas,0.6141,Brownies Crispy,0.6096
+IMG_20250622_173744.jpg,food,Cho cho Strawberry Flavor,0.5981,Robusta Gold,0.5774,Arabica Gold,0.544
+IMG_20250622_174510.jpg,food,Better Sandwich Biscuit,0.5676,Boncabe Kulit Pangsit Lev 10,0.5629,Roma Biscuit Sandwich Chocolate Coklat,0.5614
+IMG_20250622_174514.jpg,food,Oreo Softcake,0.5652,White Bread,0.5624,Fitbar,0.5574
+IMG_20250622_174518.jpg,food,Biskuat Biskuit Original Regular,0.5347,Nabati Wafer,0.5312,Nabati White,0.5251
+IMG_20250622_174537.jpg,food,Wafello Chocolate Gelato,0.5538,Monde snack gold baked not fried,0.5452,Pondan sponge cake,0.5419
+IMG_20250622_174646.jpg,food,Banoffee,0.5875,Supero Crackers,0.5239,Biskuat Biskuit Original Regular,0.51
+IMG_20250622_174657.jpg,food,Monde snack gold baked not fried,0.5392,Munch Max,0.5375,Malkist,0.5304
+IMG_20250622_174702.jpg,food,wafer dengan krim cokelat,0.4799,Robusta Gold,0.4731,Nabati White,0.4681
+IMG_20250622_174715.jpg,food,choki choki,0.5763,Momogi Nugget Snack Jagung Bakar Pedas,0.566,Nabati White,0.5628
+IMG_20250622_174723.jpg,food,CHIMI KERIPIK UBI,0.5961,Mi goreng Fried Noodles Flavour,0.5839,Nabati White,0.5814
+IMG_20250622_174734.jpg,food,Kukis Kelapa coconut cookies,0.6433,Roma Biscuit Sandwich Chocolate Coklat,0.6202,Malkist,0.5937
+IMG_20250622_174739.jpg,food,Kukis Kelapa coconut cookies,0.6354,See Hong Puff,0.618,Roma Biscuit Sandwich Chocolate Coklat,0.6155
+IMG_20250622_174749.jpg,food,Fried Cookies,0.5524,Franzzi Cheese Chocolate Flavor Cookie,0.5483,Nabati Wafer,0.5372
+IMG_20250622_174755.jpg,food,Monde snack gold baked not fried,0.5974,Pondan sponge cake,0.5909,Arabica Gold,0.5838
+IMG_20250622_174803.jpg,food,Banoffee,0.546,Monde snack gold baked not fried,0.5443,Munch Max,0.5307
+IMG_20250623_090935.jpg,food,See Hong Puff,0.6808,Lemonia,0.6323,Khong Guan biscuits 1600g,0.595
+IMG_20250623_090948.jpg,food,Boncabe Kulit Pangsit Lev 10,0.6326,Khong Guan biscuits 1600g,0.6312,Garlic Bread Almond,0.6046
+IMG_20250623_091156.jpg,food,Yupi Bolicious Strawberry,0.5407,Neo Lotte Xylitol Fresh Mint Big,0.5386,Nabati Bites Cheese Cream Wafer,0.537
+IMG_20250623_091201.jpg,food,Yupi Bolicious Strawberry,0.5427,Gilus Mix Sweet Ginger,0.5363,Yupi Bolicious Wild Blackberry,0.5348
+IMG_20250623_091310.jpg,food,Slai O lai,0.5829,Cho Cho Chocolate Egg Telur Surprise Toy,0.5675,maxicorn barbecue,0.5509
+IMG_20250625_125227.jpg,food,CHIMI KERIPIK UBI,0.6743,Kukis Kelapa coconut cookies,0.6692,Malkist,0.6493
+IMG_20250625_125314.jpg,food,mrp kacang madu,0.5692,Alfamart popcorn karamel,0.5673,Malkist,0.5647
+IMG_20250625_125354.jpg,food,Malkist,0.6385,Monde snack gold baked not fried,0.6364,almond cookies,0.6211
+IMG_20250625_125404.jpg,food,Pondan sponge cake,0.563,Munch Max,0.5369,Franzzi Cheese Chocolate Flavor Cookie,0.5309
+IMG_20250625_125421.jpg,food,Momogi Nugget Snack Jagung Bakar Pedas,0.6697,CHIMI KERIPIK UBI,0.6611,Momogi Mini Stick Roasted Corn,0.6569
+IMG_20250625_125424.jpg,food,Boncabe Kulit Pangsit Lev 10,0.6635,Momogi Malkist Crackers,0.6464,See Hong Puff,0.6457
+IMG_20250625_125430.jpg,food,Nabati White,0.6157,Nano Nano Rasa Rujak Nanas,0.6008,Potabee Selections Salted Egg,0.5854
+IMG_20250625_125432.jpg,food,Malkist,0.563,Pondan sponge cake,0.553,Potabee Selections Salted Egg,0.5464

@@ -1,0 +1,2 @@
+Web Backend Laravel:  http://54.144.6.206:8000
+phpMyAdmin (Administrasi Database):  http://54.144.6.206:8081

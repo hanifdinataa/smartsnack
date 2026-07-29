@@ -1,0 +1,280 @@
+name,category,filename,image_path,gr_sugar_content,net_weight,serving_size,sugar_grade,data_source
+ABC Choco Malt,drink,3440224600292_ABC_Choco_Malt.jpg,storage/products/3440224600292_ABC_Choco_Malt.jpg,18.0,200,200,D,known_db
+ABC Jambu,drink,32_ABC Jambu.jpg,storage/products/32_ABC Jambu.jpg,20.0,250,250,D,known_db
+ABC Jeruk,drink,33_ABC Jeruk.jpg,storage/products/33_ABC Jeruk.jpg,22.0,250,250,D,known_db
+ABC Kopi Gula Susu,drink,8991002101654_ABC_Kopi_Gula___Susu.jpg,storage/products/8991002101654_ABC_Kopi_Gula___Susu.jpg,16.0,200,200,D,known_db
+ABC Kopi Susu,drink,6_ABC Kopi Susu.jpg,storage/products/6_ABC Kopi Susu.jpg,16.0,200,200,D,known_db
+ABC Mangga,drink,31_ABC Mangga.jpg,storage/products/31_ABC Mangga.jpg,20.0,250,250,D,known_db
+ABC Minuman Soya,drink,85_ABC Minuman Soya.jpg,storage/products/85_ABC Minuman Soya.jpg,10.0,250,250,D,known_db
+ABC Sari Kacang Ijo,drink,7_ABC Sari Kacang Ijo.jpg,storage/products/7_ABC Sari Kacang Ijo.jpg,18.0,250,250,D,known_db
+AMO Spark Lemon C,drink,87_AMO Spark Lemon C.jpg,storage/products/87_AMO Spark Lemon C.jpg,0.0,330,330,A,known_db
+Abc Kopi Susu,drink,8991002122017_Abc_Kopi_Susu.jpg,storage/products/8991002122017_Abc_Kopi_Susu.jpg,16.0,200,200,D,known_db
+Almond Chocolate,drink,9556863110789_Almond_Chocolate.jpg,storage/products/9556863110789_Almond_Chocolate.jpg,,,,N/A,manual_input_needed
+Amo Spark Cola,drink,81_Amo Spark Cola.jpg,storage/products/81_Amo Spark Cola.jpg,0.0,330,330,A,known_db
+Bear brand,drink,8_Bear brand.jpg,storage/products/8_Bear brand.jpg,0.0,140,140,A,known_db
+Buavita Jambu,drink,30_Buavita Jambu.jpg,storage/products/30_Buavita Jambu.jpg,24.0,250,250,D,known_db
+Buavita Mango Juice,drink,9_Buavita Mango Juice.jpg,storage/products/9_Buavita Mango Juice.jpg,24.0,250,250,D,known_db
+Buavita Orange Juice,drink,10_Buavita Orange Juice.jpg,storage/products/10_Buavita Orange Juice.jpg,24.0,250,250,D,known_db
+CLEVO UHT Milk Cokelat,drink,29_CLEVO UHT Milk Cokelat.jpg,storage/products/29_CLEVO UHT Milk Cokelat.jpg,12.0,200,200,D,known_db
+Chi Forest Sparkling Water White Peach,drink,88_Chi Forest Sparkling Water White Peach.jpg,storage/products/88_Chi Forest Sparkling Water White Peach.jpg,0.0,480,480,A,known_db
+Chocolatos Drink Botol,drink,14_Chocolatos Drink Botol.jpg,storage/products/14_Chocolatos Drink Botol.jpg,19.0,200,200,D,known_db
+Cimory Fresh Milk Almond,drink,11_Cimory Fresh Milk Almond.jpg,storage/products/11_Cimory Fresh Milk Almond.jpg,9.0,200,200,C,known_db
+Cimory Yogurt Drink Strawberry,drink,12_Cimory Yogurt Drink Strawberry.jpg,storage/products/12_Cimory Yogurt Drink Strawberry.jpg,16.0,250,250,D,known_db
+Coca Cola,drink,22_Coca Cola.jpg,storage/products/22_Coca Cola.jpg,27.0,250,250,D,known_db
+Coca Cola Zero Sugar,drink,19_Coca Cola Zero Sugar.jpg,storage/products/19_Coca Cola Zero Sugar.jpg,0.0,250,250,A,known_db
+Coffeemix 3 in 1,drink,9311931024036_Coffeemix_3_in_1.jpg,storage/products/9311931024036_Coffeemix_3_in_1.jpg,,,,N/A,manual_input_needed
+Colatta,drink,8992993260351_Colatta.jpg,storage/products/8992993260351_Colatta.jpg,16.0,200,200,D,known_db
+Collagena Susu Steril,drink,89_Collagena Susu Steril.jpg,storage/products/89_Collagena Susu Steril.jpg,8.0,150,150,C,known_db
+Cool Time Air Kelapa,drink,90_Cool Time Air Kelapa.jpg,storage/products/90_Cool Time Air Kelapa.jpg,9.0,310,310,C,known_db
+Delizio Caffino Milky Espresso,drink,77_Delizio Caffino Milky Espresso.jpg,storage/products/77_Delizio Caffino Milky Espresso.jpg,12.0,200,200,D,known_db
+Delizio Caffino Oat Marie Latte,drink,79_Delizio Caffino Oat Marie Latte.jpg,storage/products/79_Delizio Caffino Oat Marie Latte.jpg,13.0,200,200,D,known_db
+Delizio Caffino Spanish Latte,drink,78_Delizio Caffino Spanish Latte.jpg,storage/products/78_Delizio Caffino Spanish Latte.jpg,13.0,200,200,D,known_db
+Espresso Kopi Susu,drink,8991002306813_Espresso_Kopi_Susu.jpg,storage/products/8991002306813_Espresso_Kopi_Susu.jpg,12.0,200,200,D,known_db
+Fanta,drink,23_Fanta.jpg,storage/products/23_Fanta.jpg,26.0,250,250,D,known_db
+Floridina Orange,drink,37_Floridina Orange.jpg,storage/products/37_Floridina Orange.jpg,22.0,350,350,D,known_db
+Franzzi Yogurt Chocolate Flavor Cookie,drink,6947929617428_Franzzi_Yogurt_Chocolate_Flavor_Cookie.jpg,storage/products/6947929617428_Franzzi_Yogurt_Chocolate_Flavor_Cookie.jpg,9.0,80,30,C,known_db
+Frestea Madu,drink,91_Frestea Madu.jpg,storage/products/91_Frestea Madu.jpg,,,,N/A,manual_input_needed
+Frisian Flag Energo+ Mixed Berries,drink,116_Frisian Flag Energo+ Mixed Berries.jpg,storage/products/116_Frisian Flag Energo+ Mixed Berries.jpg,,,,N/A,manual_input_needed
+Frisian Flag Full Cream,drink,36_Frisian Flag Full Cream.jpg,storage/products/36_Frisian Flag Full Cream.jpg,10.0,225,225,D,known_db
+Frisian Flag Nutribrain Strawberry,drink,117_Frisian Flag Nutribrain Strawberry.jpg,storage/products/117_Frisian Flag Nutribrain Strawberry.jpg,14.0,225,225,D,known_db
+Frisian Flag Nutribrain stroberi,drink,94_Frisian Flag Nutribrain stroberi.jpg,storage/products/94_Frisian Flag Nutribrain stroberi.jpg,14.0,225,225,D,known_db
+Fruit Tea Apple,drink,92_Fruit Tea Apple.jpg,storage/products/92_Fruit Tea Apple.jpg,,,,N/A,manual_input_needed
+Golda Coffee Cappucino,drink,2_Golda Coffee Cappucino.jpg,storage/products/2_Golda Coffee Cappucino.jpg,15.0,200,200,D,known_db
+Golda Coffee Dolce Latte,drink,15_Golda Coffee Dolce Latte.jpg,storage/products/15_Golda Coffee Dolce Latte.jpg,18.0,200,200,D,known_db
+Golda Coffee cappuchino,drink,8998866202893_Golda_Coffee_cappuchino.jpg,storage/products/8998866202893_Golda_Coffee_cappuchino.jpg,15.0,200,200,D,known_db
+Golda Dolce latte coffee 200,drink,05306150_Golda_Dolce_latte_coffee_200.jpg,storage/products/05306150_Golda_Dolce_latte_coffee_200.jpg,18.0,200,200,D,known_db
+Good Day Funtastic Mocacinno,drink,18_Good Day Funtastic Mocacinno.jpg,storage/products/18_Good Day Funtastic Mocacinno.jpg,14.0,220,220,D,known_db
+Good Day Originale Cappucino,drink,16_Good Day Originale Cappucino.jpg,storage/products/16_Good Day Originale Cappucino.jpg,14.0,200,200,D,known_db
+Good day funtastic mocachino,drink,8991002121010_Good_day_funtastic_mocachino.jpg,storage/products/8991002121010_Good_day_funtastic_mocachino.jpg,14.0,220,220,D,known_db
+Ground Coffee,drink,8997031720149_Ground_Coffee.jpg,storage/products/8997031720149_Ground_Coffee.jpg,0.0,180,180,A,known_db
+Haribo Happy Cola,drink,8691216090446_Haribo_Happy_Cola.jpg,storage/products/8691216090446_Haribo_Happy_Cola.jpg,17.0,100,10,D,known_db
+Hydro Coco Original,drink,27_Hydro Coco Original.jpg,storage/products/27_Hydro Coco Original.jpg,7.0,310,310,C,known_db
+INACO I'm Coco Strawberry,drink,75_INACO I'm Coco Strawberry.jpg,storage/products/75_INACO I'm Coco Strawberry.jpg,17.0,350,350,D,known_db
+Ichitan Thai Milk Green Tea,drink,13_Ichitan Thai Milk Green Tea.jpg,storage/products/13_Ichitan Thai Milk Green Tea.jpg,13.0,310,310,D,known_db
+Inaco Im Coco Lychee,drink,25_Inaco Im Coco Lychee.jpg,storage/products/25_Inaco Im Coco Lychee.jpg,17.0,350,350,D,known_db
+Instant Coffee,drink,8998866623032_Instant_Coffee.jpg,storage/products/8998866623032_Instant_Coffee.jpg,5.0,180,180,C,known_db
+Kelapa Cream Cokelat,drink,8996001314081_Kelapa_Cream_Cokelat.jpg,storage/products/8996001314081_Kelapa_Cream_Cokelat.jpg,5.0,200,25,C,known_db
+Kopi Latte Choco Hazelnut,drink,8991998110210_Kopi_Latte_Choco_Hazelnut.jpg,storage/products/8991998110210_Kopi_Latte_Choco_Hazelnut.jpg,13.0,200,200,D,known_db
+Kopi Luwak Dukung Indonesia Mendunia,drink,9065330001081_Kopi_Luwak_Dukung_Indonesia_Mendunia.jpg,storage/products/9065330001081_Kopi_Luwak_Dukung_Indonesia_Mendunia.jpg,,,,N/A,manual_input_needed
+Kopiko lucky day thai coffee drink,drink,76_Kopiko lucky day thai coffee drink.jpg,storage/products/76_Kopiko lucky day thai coffee drink.jpg,14.0,240,240,D,known_db
+Luwak kopi gula,drink,8994171101081_Luwak_kopi_gula.jpg,storage/products/8994171101081_Luwak_kopi_gula.jpg,14.0,200,200,D,known_db
+Marie susu,drink,8997025914042_Marie_susu.jpg,storage/products/8997025914042_Marie_susu.jpg,6.0,200,25,C,known_db
+Marie susu milk biscuit,drink,8996001300053_Marie_susu_milk_biscuit.jpg,storage/products/8996001300053_Marie_susu_milk_biscuit.jpg,6.0,200,25,C,known_db
+Milku Made With Belgian Cow Susu Uht Cokelat,drink,80_Milku Made With Belgian Cow Susu Uht Cokelat.jpg,storage/products/80_Milku Made With Belgian Cow Susu Uht Cokelat.jpg,11.0,200,200,D,known_db
+Nescafe Caramel Macchiato,drink,9556001288561_Nescafe_Caramel_Macchiato.jpg,storage/products/9556001288561_Nescafe_Caramel_Macchiato.jpg,,,,N/A,manual_input_needed
+Nescafe cappucino 220ml,drink,9556001288547_Nescafe_cappucino_220ml.jpg,storage/products/9556001288547_Nescafe_cappucino_220ml.jpg,,,,N/A,manual_input_needed
+Nipis Madu,drink,34_Nipis Madu.jpg,storage/products/34_Nipis Madu.jpg,21.0,300,300,D,known_db
+Nutriboost Strawberry,drink,20_Nutriboost Strawberry.jpg,storage/products/20_Nutriboost Strawberry.jpg,18.0,300,300,D,known_db
+Nutty Chocolate Cookies,drink,0749921002228_Nutty_Chocolate_Cookies.jpg,storage/products/0749921002228_Nutty_Chocolate_Cookies.jpg,9.0,100,30,C,known_db
+PLASTIC POT COFFEE,drink,10431972_PLASTIC_POT_COFFEE.jpg,storage/products/10431972_PLASTIC_POT_COFFEE.jpg,12.0,200,200,D,known_db
+Sajuak Air Mineral,drink,118_Sajuak Air Mineral.jpg,storage/products/118_Sajuak Air Mineral.jpg,0.0,330,330,A,known_db
+Sari Gandum Susu Cokelat,drink,8996001304990_Sari_Gandum_Susu___Cokelat.jpg,storage/products/8996001304990_Sari_Gandum_Susu___Cokelat.jpg,7.0,200,25,C,known_db
+Soy Master Minuman Soya,drink,93_Soy Master Minuman Soya.jpg,storage/products/93_Soy Master Minuman Soya.jpg,,,,N/A,manual_input_needed
+Sprite,drink,24_Sprite.jpg,storage/products/24_Sprite.jpg,12.0,250,250,D,known_db
+Superco Malkist dengan Krim Rasa Cokela,drink,8888166603431_Superco__Malkist_dengan_Krim_Rasa_Cokela.jpg,storage/products/8888166603431_Superco__Malkist_dengan_Krim_Rasa_Cokela.jpg,7.0,200,25,C,known_db
+Susu Frisian Flag Nutribrain Chocolate,drink,28_Susu Frisian Flag Nutribrain Chocolate.jpg,storage/products/28_Susu Frisian Flag Nutribrain Chocolate.jpg,14.0,225,225,D,known_db
+Teh Kotak Melati Less Sugar,drink,21_Teh Kotak Melati Less Sugar.jpg,storage/products/21_Teh Kotak Melati Less Sugar.jpg,8.0,200,200,C,known_db
+Teh Pucuk,drink,26_Teh Pucuk.jpg,storage/products/26_Teh Pucuk.jpg,13.5,350,350,D,known_db
+Top Cappuccino,drink,8998866809689_Top_Cappuccino.jpg,storage/products/8998866809689_Top_Cappuccino.jpg,14.0,200,200,D,known_db
+Top Coffee Gula Aren,drink,8998866202626_Top_Coffee_Gula_Aren.jpg,storage/products/8998866202626_Top_Coffee_Gula_Aren.jpg,14.0,200,200,D,known_db
+Tujuh Kurma Susu Steril Kurma,drink,5_Tujuh Kurma Susu Steril Kurma.jpg,storage/products/5_Tujuh Kurma Susu Steril Kurma.jpg,13.0,200,200,D,known_db
+Tummy Yogurt Bar,drink,7499221208457_Tummy_Yogurt_Bar.jpg,storage/products/7499221208457_Tummy_Yogurt_Bar.jpg,9.0,25,25,C,known_db
+Ultra Milk Cokelat,drink,115_Ultra Milk Cokelat.jpg,storage/products/115_Ultra Milk Cokelat.jpg,12.0,200,200,D,known_db
+Ultra Milk Strawberry,drink,35_Ultra Milk Strawberry.jpg,storage/products/35_Ultra Milk Strawberry.jpg,14.0,200,200,D,known_db
+YOU C1000 Lemon,drink,17_YOU C1000 Lemon.jpg,storage/products/17_YOU C1000 Lemon.jpg,18.0,140,140,D,known_db
+YOUC1000 Orange,drink,3_YOUC1000 Orange.jpg,storage/products/3_YOUC1000 Orange.jpg,18.0,140,140,D,known_db
+Yakult,drink,1_Yakult.jpg,storage/products/1_Yakult.jpg,11.0,65,65,D,known_db
+golda coffee latte,drink,8998866201841_golda_coffee_latte.jpg,storage/products/8998866201841_golda_coffee_latte.jpg,15.0,200,200,D,known_db
+kopiko w 52g,drink,8998666001726_kopiko__w__52g.jpg,storage/products/8998666001726_kopiko__w__52g.jpg,14.0,200,200,D,known_db
+oatside chocolate,drink,4_oatside-chocolate.jpg,storage/products/4_oatside-chocolate.jpg,9.0,200,200,C,known_db
+AOKA Roti Bun Isian Vanilla panggang,food,69_AOKA Roti Bun Isian Vanilla panggang.jpg,storage/products/69_AOKA Roti Bun Isian Vanilla panggang.jpg,,,,N/A,manual_input_needed
+AOKA Roti Bun Isian cokelat panggang,food,70_AOKA Roti Bun Isian cokelat panggang.jpg,storage/products/70_AOKA Roti Bun Isian cokelat panggang.jpg,,,,N/A,manual_input_needed
+Aice Chocolate crispy,food,55_Aice Chocolate crispy.jpg,storage/products/55_Aice Chocolate crispy.jpg,,,,N/A,manual_input_needed
+Alfamart popcorn karamel,food,8994016001026_Alfamart_popcorn_karamel.jpg,storage/products/8994016001026_Alfamart_popcorn_karamel.jpg,,,,N/A,manual_input_needed
+Apollo Checker Wafer Chocolate Strawberry,food,52_Apollo Checker Wafer Chocolate - Strawberry.jpg,storage/products/52_Apollo Checker Wafer Chocolate - Strawberry.jpg,,,,N/A,manual_input_needed
+Arabica Gold,food,8991002102231_Arabica_Gold.jpg,storage/products/8991002102231_Arabica_Gold.jpg,,,,N/A,manual_input_needed
+BALAJI CREAM ONION,food,8906010500870_BALAJI_CREAM_ONION.jpg,storage/products/8906010500870_BALAJI_CREAM_ONION.jpg,2.0,60,30,A,known_db
+Banoffee,food,8994251001867_Banoffee.jpg,storage/products/8994251001867_Banoffee.jpg,,,,N/A,manual_input_needed
+Beng beng,food,8996001355756_Beng_beng.jpg,storage/products/8996001355756_Beng_beng.jpg,,,,N/A,manual_input_needed
+Better Sandwich Biscuit,food,8996001318430_Better_Sandwich_Biscuit.jpg,storage/products/8996001318430_Better_Sandwich_Biscuit.jpg,,,,N/A,manual_input_needed
+Better Sandwich Biscuit Vanilla Cream,food,82_Better Sandwich Biscuit Vanilla Cream.jpg,storage/products/82_Better Sandwich Biscuit Vanilla Cream.jpg,,,,N/A,manual_input_needed
+Biskuat Biskuit Chocolate Regular,food,104_Biskuat Biskuit Chocolate Regular.jpg,storage/products/104_Biskuat Biskuit Chocolate Regular.jpg,,,,N/A,manual_input_needed
+Biskuat Biskuit Original Regular,food,105_Biskuat Biskuit Original Regular.jpg,storage/products/105_Biskuat Biskuit Original Regular.jpg,,,,N/A,manual_input_needed
+Biskuit Stik Rasa Sayuran dan Keju,food,8993083932141_Biskuit_Stik_Rasa_Sayuran_dan_Keju.jpg,storage/products/8993083932141_Biskuit_Stik_Rasa_Sayuran_dan_Keju.jpg,,,,N/A,manual_input_needed
+Boncabe Kulit Pangsit Lev 10,food,8995899219126_Boncabe_Kulit_Pangsit_Lev_10.jpg,storage/products/8995899219126_Boncabe_Kulit_Pangsit_Lev_10.jpg,,,,N/A,manual_input_needed
+Bourbon Gandum,food,8888166343788_Bourbon_Gandum.jpg,storage/products/8888166343788_Bourbon_Gandum.jpg,6.0,200,25,C,known_db
+Brownies Crispy,food,8997232970046_Brownies_Crispy.jpg,storage/products/8997232970046_Brownies_Crispy.jpg,,,,N/A,manual_input_needed
+CHIMI KERIPIK UBI,food,8997014021867_CHIMI_KERIPIK_UBI.jpg,storage/products/8997014021867_CHIMI_KERIPIK_UBI.jpg,,,,N/A,manual_input_needed
+Caramel Cream Egg Cookies,food,8934760212897_Caramel_Cream_Egg_Cookies.jpg,storage/products/8934760212897_Caramel_Cream_Egg_Cookies.jpg,9.0,200,30,C,known_db
+Carman s Super Berry Muesli Bars Cranbe,food,9319133333574_Carman_s_Super_Berry_Muesli_Bars__Cranbe.jpg,storage/products/9319133333574_Carman_s_Super_Berry_Muesli_Bars__Cranbe.jpg,,,,N/A,manual_input_needed
+Cheese,food,7622202217630_Cheese.jpg,storage/products/7622202217630_Cheese.jpg,2.0,104,16,A,known_db
+Cheese Cake Duo,food,8992907001728_Cheese_Cake_Duo.jpg,storage/products/8992907001728_Cheese_Cake_Duo.jpg,,,,N/A,manual_input_needed
+Cheese and Onion Chips,food,8997216840020_Cheese_and_Onion_Chips.jpg,storage/products/8997216840020_Cheese_and_Onion_Chips.jpg,,,,N/A,manual_input_needed
+Chic Choc Biscuit,food,8991001501011_Chic_Choc_Biscuit.jpg,storage/products/8991001501011_Chic_Choc_Biscuit.jpg,8.0,150,28,C,known_db
+Chiki Twist Jagung Bakar,food,0089686723021_Chiki_Twist_Jagung_Bakar.jpg,storage/products/0089686723021_Chiki_Twist_Jagung_Bakar.jpg,1.5,55,28,A,known_db
+Chitato Keju Supreme 68gr,food,0089686598957_Chitato_Keju_Supreme_68gr.jpg,storage/products/0089686598957_Chitato_Keju_Supreme_68gr.jpg,1.5,68,30,A,known_db
+Chitato Sapi Bumbu Bakar 68gr,food,0089686598599_Chitato_Sapi_Bumbu_Bakar_68gr.jpg,storage/products/0089686598599_Chitato_Sapi_Bumbu_Bakar_68gr.jpg,1.0,68,30,A,known_db
+Cho Cho Chocolate Egg Telur Surprise Toy,food,98_Cho Cho Chocolate Egg Telur Surprise Toy.jpg,storage/products/98_Cho Cho Chocolate Egg Telur Surprise Toy.jpg,,,,N/A,manual_input_needed
+Cho cho Strawberry Flavor,food,47_Cho cho Strawberry Flavor.jpg,storage/products/47_Cho cho Strawberry Flavor.jpg,,,,N/A,manual_input_needed
+Choco Chocolate Flavor,food,49_Choco Chocolate Flavor.jpg,storage/products/49_Choco Chocolate Flavor.jpg,,,,N/A,manual_input_needed
+Choco Pie,food,8990333811317_Choco_Pie.jpg,storage/products/8990333811317_Choco_Pie.jpg,11.0,28,28,D,known_db
+Chocolate Chip Cookie,food,0749921040213_Chocolate_Chip_Cookie.jpg,storage/products/0749921040213_Chocolate_Chip_Cookie.jpg,10.0,100,28,D,known_db
+Chocolatos Vanilla Flavour,food,54_Chocolatos Vanilla Flavour.jpg,storage/products/54_Chocolatos Vanilla Flavour.jpg,,,,N/A,manual_input_needed
+Chocolatos chocolate flavor,food,68_Chocolatos chocolate flavor.jpg,storage/products/68_Chocolatos chocolate flavor.jpg,,,,N/A,manual_input_needed
+Chocopie,food,8936036025712_Chocopie.jpg,storage/products/8936036025712_Chocopie.jpg,11.0,28,28,D,known_db
+Cookies Dark Chocolate,food,8992802099011_Cookies__Dark_Chocolate.jpg,storage/products/8992802099011_Cookies__Dark_Chocolate.jpg,9.0,100,30,C,known_db
+DELIZIO CAFFINO,food,8991998110012_DELIZIO_CAFFINO.jpg,storage/products/8991998110012_DELIZIO_CAFFINO.jpg,12.0,200,200,D,known_db
+DENEX WAFER ROLL STRAWBERRY,food,8993083940559_DENEX_WAFER_ROLL_STRAWBERRY.jpg,storage/products/8993083940559_DENEX_WAFER_ROLL_STRAWBERRY.jpg,,,,N/A,manual_input_needed
+Dark Chocolate Cookies,food,8997026411380_Dark_Chocolate_Cookies.jpg,storage/products/8997026411380_Dark_Chocolate_Cookies.jpg,9.0,100,30,C,known_db
+Delfi Chocolate Wafer Top Triple Choc,food,100_Delfi Chocolate Wafer Top Triple Choc.jpg,storage/products/100_Delfi Chocolate Wafer Top Triple Choc.jpg,,,,N/A,manual_input_needed
+Delfi TOP Black In White,food,99_Delfi TOP Black In White.jpg,storage/products/99_Delfi TOP Black In White.jpg,,,,N/A,manual_input_needed
+Delfi TOP Chocolate Extra Large,food,101_Delfi TOP Chocolate Extra Large.jpg,storage/products/101_Delfi TOP Chocolate Extra Large.jpg,,,,N/A,manual_input_needed
+Dilan Bon Bon Milk Chocolate,food,39_Dilan Bon Bon Milk Chocolate.jpg,storage/products/39_Dilan Bon Bon Milk Chocolate.jpg,,,,N/A,manual_input_needed
+Fiesta Sosis Ready To Go Saus Pedas Korea,food,120_Fiesta Sosis Ready To Go Saus Pedas Korea.jpg,storage/products/120_Fiesta Sosis Ready To Go Saus Pedas Korea.jpg,,,,N/A,manual_input_needed
+Fitbar,food,8992802063173_Fitbar.jpg,storage/products/8992802063173_Fitbar.jpg,,,,N/A,manual_input_needed
+Fitbar multigrain fruits delight,food,8992802063012_Fitbar_multigrain_fruits_delight.jpg,storage/products/8992802063012_Fitbar_multigrain_fruits_delight.jpg,,,,N/A,manual_input_needed
+Foxs gummy emot HappySad,food,8997212801391_Foxs_gummy_emot_HappySad.jpg,storage/products/8997212801391_Foxs_gummy_emot_HappySad.jpg,,,,N/A,manual_input_needed
+Franzzi Cheese Chocolate Flavor Cookie,food,6947929617534_Franzzi_Cheese_Chocolate_Flavor_Cookie.jpg,storage/products/6947929617534_Franzzi_Cheese_Chocolate_Flavor_Cookie.jpg,8.0,80,30,C,known_db
+Fried Cookies,food,8888166990104_Fried_Cookies.jpg,storage/products/8888166990104_Fried_Cookies.jpg,6.0,200,25,C,known_db
+GARUDA ROSTA KACANG PANGGANG 95G,food,8992775203422_GARUDA_ROSTA_KACANG_PANGGANG_95G.jpg,storage/products/8992775203422_GARUDA_ROSTA_KACANG_PANGGANG_95G.jpg,,,,N/A,manual_input_needed
+Gabin super,food,8999918182095_Gabin_super.jpg,storage/products/8999918182095_Gabin_super.jpg,,,,N/A,manual_input_needed
+Garlic Bread Almond,food,8809617944941_Garlic_Bread_Almond.jpg,storage/products/8809617944941_Garlic_Bread_Almond.jpg,3.0,70,35,B,known_db
+Genji Soft Pie biscuits,food,8888166989832_Genji_Soft_Pie_biscuits.jpg,storage/products/8888166989832_Genji_Soft_Pie_biscuits.jpg,8.0,180,28,C,known_db
+Gilus Mix Sweet Ginger,food,8998666003072_Gilus_Mix_Sweet_Ginger.jpg,storage/products/8998666003072_Gilus_Mix_Sweet_Ginger.jpg,,,,N/A,manual_input_needed
+Good Day Mocacinno,food,8991002103238_Good_Day_Mocacinno.jpg,storage/products/8991002103238_Good_Day_Mocacinno.jpg,14.0,220,220,D,known_db
+Good Time Double Choc,food,46_Good Time Double Choc.jpg,storage/products/46_Good Time Double Choc.jpg,,,,N/A,manual_input_needed
+Grand Classic Chocolate Cream Wafer,food,8888166609327_Grand_Classic_Chocolate_Cream_Wafer.jpg,storage/products/8888166609327_Grand_Classic_Chocolate_Cream_Wafer.jpg,7.0,100,25,C,known_db
+Happydent cool white 24g,food,8990800021898_Happydent_cool_white_24g.jpg,storage/products/8990800021898_Happydent_cool_white_24g.jpg,0.0,24,24,A,known_db
+Inaco jelly ast,food,8992726938199_Inaco_jelly_ast.jpg,storage/products/8992726938199_Inaco_jelly_ast.jpg,,,,N/A,manual_input_needed
+Kalpa Wafer Cokelat Kelapa,food,67_Kalpa Wafer Cokelat Kelapa.jpg,storage/products/67_Kalpa Wafer Cokelat Kelapa.jpg,,,,N/A,manual_input_needed
+Kapal Api Grande Java Latte,food,8991002115101_Kapal_Api_Grande_Java_Latte.jpg,storage/products/8991002115101_Kapal_Api_Grande_Java_Latte.jpg,,,,N/A,manual_input_needed
+Kapal Api Special Mix,food,8991002105485_Kapal_Api_Special_Mix.jpg,storage/products/8991002105485_Kapal_Api_Special_Mix.jpg,,,,N/A,manual_input_needed
+Kellogg's Corn Flakes Honey Crunch,food,106_Kellogg's Corn Flakes Honey Crunch.jpg,storage/products/106_Kellogg's Corn Flakes Honey Crunch.jpg,,,,N/A,manual_input_needed
+Kellogg's Froot Loops,food,97_Kellogg's Froot Loops.jpg,storage/products/97_Kellogg's Froot Loops.jpg,,,,N/A,manual_input_needed
+Khong Guan biscuits 1600g,food,8888166603554_Khong_Guan_biscuits_1600g.jpg,storage/products/8888166603554_Khong_Guan_biscuits_1600g.jpg,8.0,1600,25,C,known_db
+Kraft Keju Cake,food,53_Kraft Keju Cake.jpg,storage/products/53_Kraft Keju Cake.jpg,,,,N/A,manual_input_needed
+Kukis Kelapa coconut cookies,food,8993083940023_Kukis_Kelapa_coconut_cookies.jpg,storage/products/8993083940023_Kukis_Kelapa_coconut_cookies.jpg,,,,N/A,manual_input_needed
+Lemonia,food,8888166336940_Lemonia.jpg,storage/products/8888166336940_Lemonia.jpg,7.0,130,25,C,known_db
+Lemonia Lemon Flavored Biscuit,food,86_Lemonia Lemon Flavored Biscuit.jpg,storage/products/86_Lemonia Lemon Flavored Biscuit.jpg,,,,N/A,manual_input_needed
+Lemonilo Brownies Crispy Strawberry Cheese,food,44_Lemonilo Brownies Crispy Strawberry Cheese.jpg,storage/products/44_Lemonilo Brownies Crispy Strawberry Cheese.jpg,,,,N/A,manual_input_needed
+Luwak White Koffie Original,food,8994171101289_Luwak_White_Koffie_Original.jpg,storage/products/8994171101289_Luwak_White_Koffie_Original.jpg,,,,N/A,manual_input_needed
+M Ms Chocolate Bar Cookies,food,9300682051422_M_Ms_Chocolate_Bar_Cookies.jpg,storage/products/9300682051422_M_Ms_Chocolate_Bar_Cookies.jpg,,,,N/A,manual_input_needed
+MOMOGI Chocolate,food,61_MOMOGI Chocolate.jpg,storage/products/61_MOMOGI Chocolate.jpg,,,,N/A,manual_input_needed
+Malkist,food,8996001302316_Malkist.jpg,storage/products/8996001302316_Malkist.jpg,7.0,200,25,C,known_db
+Malkist,food,8996001302620_Malkist.jpg,storage/products/8996001302620_Malkist.jpg,7.0,200,25,C,known_db
+Mangosteen,food,8997225273819_Mangosteen.jpg,storage/products/8997225273819_Mangosteen.jpg,,,,N/A,manual_input_needed
+Marshmallow kepang stick,food,6921823505159_Marshmallow_kepang_stick.jpg,storage/products/6921823505159_Marshmallow_kepang_stick.jpg,22.0,50,25,D,known_db
+Mi goreng Fried Noodles Flavour,food,0089686599077_Mi_goreng_Fried_Noodles_Flavour.jpg,storage/products/0089686599077_Mi_goreng_Fried_Noodles_Flavour.jpg,1.0,85,85,A,known_db
+Migi Migi Wafer krim vanilla cokelat,food,62_Migi Migi Wafer krim vanilla cokelat.jpg,storage/products/62_Migi Migi Wafer krim vanilla cokelat.jpg,,,,N/A,manual_input_needed
+Migi Migi Wafer krim vanilla strawberry,food,63_Migi Migi Wafer krim vanilla strawberry.jpeg,storage/products/63_Migi Migi Wafer krim vanilla strawberry.jpeg,,,,N/A,manual_input_needed
+Migi migi wafer krim keju,food,72_Migi migi wafer krim keju.jpg,storage/products/72_Migi migi wafer krim keju.jpg,,,,N/A,manual_input_needed
+MoMogi,food,8994075260013_MoMogi.jpg,storage/products/8994075260013_MoMogi.jpg,,,,N/A,manual_input_needed
+Momogi Corn Stick Roasted Corn Flavor,food,66_Momogi Corn Stick Roasted Corn Flavor.jpg,storage/products/66_Momogi Corn Stick Roasted Corn Flavor.jpg,,,,N/A,manual_input_needed
+Momogi Malkist Crackers,food,59_Momogi Malkist Crackers.jpg,storage/products/59_Momogi Malkist Crackers.jpg,,,,N/A,manual_input_needed
+Momogi Mini Stick Roasted Corn,food,57_Momogi Mini Stick Roasted Corn.jpg,storage/products/57_Momogi Mini Stick Roasted Corn.jpg,,,,N/A,manual_input_needed
+Momogi Nugget Snack Jagung Bakar Pedas,food,65_Momogi Nugget Snack Jagung Bakar Pedas.jpg,storage/products/65_Momogi Nugget Snack Jagung Bakar Pedas.jpg,,,,N/A,manual_input_needed
+Momogi TWIST Roasted Corn,food,64_Momogi TWIST Roasted Corn.jpg,storage/products/64_Momogi TWIST Roasted Corn.jpg,,,,N/A,manual_input_needed
+Monde,food,8888166989559_Monde.jpg,storage/products/8888166989559_Monde.jpg,9.0,200,30,C,known_db
+Monde snack gold baked not fried,food,8888166989634_Monde_snack_gold_baked_not_fried.jpg,storage/products/8888166989634_Monde_snack_gold_baked_not_fried.jpg,8.0,200,30,C,known_db
+Munch Max,food,8901058005080_Munch_Max.jpg,storage/products/8901058005080_Munch_Max.jpg,8.0,38,38,C,known_db
+Nabati,food,8993175537346_Nabati.jpg,storage/products/8993175537346_Nabati.jpg,,,,N/A,manual_input_needed
+Nabati Bites Cheese Cream Wafer,food,8993175535250_Nabati_Bites_Cheese_Cream_Wafer.jpg,storage/products/8993175535250_Nabati_Bites_Cheese_Cream_Wafer.jpg,,,,N/A,manual_input_needed
+Nabati Bites Rasa keju,food,8993175538572_Nabati_Bites__Rasa_keju.jpg,storage/products/8993175538572_Nabati_Bites__Rasa_keju.jpg,,,,N/A,manual_input_needed
+Nabati Richeese Black,food,8993175547635_Nabati_Richeese_Black.jpg,storage/products/8993175547635_Nabati_Richeese_Black.jpg,,,,N/A,manual_input_needed
+Nabati Wafer,food,8993175537285_Nabati_Wafer.jpg,storage/products/8993175537285_Nabati_Wafer.jpg,,,,N/A,manual_input_needed
+Nabati Wafer Cokelat,food,8993175535885_Nabati_Wafer_Cokelat.jpg,storage/products/8993175535885_Nabati_Wafer_Cokelat.jpg,,,,N/A,manual_input_needed
+Nabati Wafer Lemon,food,8993175550178_Nabati_Wafer_Lemon.jpg,storage/products/8993175550178_Nabati_Wafer_Lemon.jpg,,,,N/A,manual_input_needed
+Nabati Wafer Richeese,food,40_Nabati Wafer Richeese.jpg,storage/products/40_Nabati Wafer Richeese.jpg,,,,N/A,manual_input_needed
+Nabati Wafer chocolate,food,95_Nabati Wafer chocolate.jpg,storage/products/95_Nabati Wafer chocolate.jpg,,,,N/A,manual_input_needed
+Nabati White,food,8993175539821_Nabati_White.jpg,storage/products/8993175539821_Nabati_White.jpg,,,,N/A,manual_input_needed
+Nano Nano Rasa Rujak Nanas,food,119_Nano Nano Rasa Rujak Nanas.jpg,storage/products/119_Nano Nano Rasa Rujak Nanas.jpg,,,,N/A,manual_input_needed
+Neo Lotte Xylitol Fresh Mint Big,food,8990333164055_Neo_Lotte_Xylitol_Fresh_Mint__Big_.jpg,storage/products/8990333164055_Neo_Lotte_Xylitol_Fresh_Mint__Big_.jpg,0.0,35,35,A,known_db
+Nescafe Calssic,food,8992696418370_Nescafe_Calssic.jpg,storage/products/8992696418370_Nescafe_Calssic.jpg,,,,N/A,manual_input_needed
+Nescafe Original,food,8992696420557_Nescafe_Original.jpg,storage/products/8992696420557_Nescafe_Original.jpg,,,,N/A,manual_input_needed
+Nestle Sereal Cup Honey Stars,food,107_Nestle Sereal Cup Honey Stars.jpg,storage/products/107_Nestle Sereal Cup Honey Stars.jpg,,,,N/A,manual_input_needed
+Nestle Sereal Cup Koko Crunch,food,110_Nestle Sereal Cup Koko Crunch.jpg,storage/products/110_Nestle Sereal Cup Koko Crunch.jpg,,,,N/A,manual_input_needed
+Nestle Sereal Cup Milo,food,108_Nestle Sereal Cup Milo.jpg,storage/products/108_Nestle Sereal Cup Milo.jpg,,,,N/A,manual_input_needed
+Nextar Chocolate Pie,food,48_Nextar Chocolate Pie.jpg,storage/products/48_Nextar Chocolate Pie.jpg,,,,N/A,manual_input_needed
+Nextar Nastar Pineapple,food,102_Nextar Nastar Pineapple.jpg,storage/products/102_Nextar Nastar Pineapple.jpg,,,,N/A,manual_input_needed
+Nextar Nastar Pineapple Jam 80g,food,8993175538947_Nextar_Nastar_-_Pineapple_Jam_-_80g.jpg,storage/products/8993175538947_Nextar_Nastar_-_Pineapple_Jam_-_80g.jpg,,,,N/A,manual_input_needed
+Nextar Nastar Strawberry Jam,food,8993175548335_Nextar_Nastar_-_Strawberry_Jam.jpg,storage/products/8993175548335_Nextar_Nastar_-_Strawberry_Jam.jpg,,,,N/A,manual_input_needed
+Nextar brownies 8x10g,food,8993175540797_Nextar_brownies_8x10g.jpg,storage/products/8993175540797_Nextar_brownies_8x10g.jpg,,,,N/A,manual_input_needed
+Nyam nyam fantasy stick strawberry,food,45_Nyam nyam fantasy stick strawberry.jpg,storage/products/45_Nyam nyam fantasy stick strawberry.jpg,,,,N/A,manual_input_needed
+Nylon Sev,food,8904071700864_Nylon_Sev.jpg,storage/products/8904071700864_Nylon_Sev.jpg,1.0,60,30,A,known_db
+OREO Original,food,8992760121014_OREO_Original.jpg,storage/products/8992760121014_OREO_Original.jpg,8.5,133,34,C,known_db
+Oreo BlackPink,food,7622201704902_Oreo_BlackPink.jpg,storage/products/7622201704902_Oreo_BlackPink.jpg,8.5,133,34,C,known_db
+Oreo Blueberry Ice Cream,food,7622300442507_Oreo_Blueberry_Ice_Cream.jpg,storage/products/7622300442507_Oreo_Blueberry_Ice_Cream.jpg,8.0,133,34,C,known_db
+Oreo Original Vanilla,food,8992760221028_Oreo_Original__Vanilla_.jpg,storage/products/8992760221028_Oreo_Original__Vanilla_.jpg,,,,N/A,manual_input_needed
+Oreo Softcake,food,103_Oreo Softcake.jpg,storage/products/103_Oreo Softcake.jpg,8.5,133,34,C,known_db
+Padimas cream cake pandan,food,73_Padimas cream cake pandan.jpg,storage/products/73_Padimas cream cake pandan.jpg,,,,N/A,manual_input_needed
+Padimas cream cake strawberry,food,74_Padimas cream cake strawberry.jpg,storage/products/74_Padimas cream cake strawberry.jpg,,,,N/A,manual_input_needed
+Pie Bis,food,8888166343405_Pie_Bis.jpg,storage/products/8888166343405_Pie_Bis.jpg,7.5,100,25,C,known_db
+Plantain Chips Yellow Banana Chips,food,8904071704527_Plantain_Chips__Yellow_Banana_Chips_.jpg,storage/products/8904071704527_Plantain_Chips__Yellow_Banana_Chips_.jpg,2.0,80,30,A,known_db
+Pocky,food,8851019210223_Pocky.jpg,storage/products/8851019210223_Pocky.jpg,10.0,47,23,D,known_db
+Pocky Chocolate Flavour,food,43_Pocky Chocolate Flavour.jpg,storage/products/43_Pocky Chocolate Flavour.jpg,10.0,47,23,D,known_db
+Pocky chocolate,food,8990044000000_Pocky_chocolate.jpg,storage/products/8990044000000_Pocky_chocolate.jpg,10.0,47,23,D,known_db
+Pocky strawberry,food,8851019210124_Pocky_strawberry.jpg,storage/products/8851019210124_Pocky_strawberry.jpg,9.0,47,23,C,known_db
+Pondan Brownies,food,8992786400292_Pondan_Brownies.jpg,storage/products/8992786400292_Pondan_Brownies.jpg,,,,N/A,manual_input_needed
+Pondan sponge cake,food,8992786601163_Pondan_sponge_cake.jpg,storage/products/8992786601163_Pondan_sponge_cake.jpg,,,,N/A,manual_input_needed
+Pop Corn Cheese,food,8997021760018_Pop_Corn_Cheese.jpg,storage/products/8997021760018_Pop_Corn_Cheese.jpg,,,,N/A,manual_input_needed
+Pota Bee Grilled Seaweed,food,50_Pota Bee Grilled Seaweed.jpg,storage/products/50_Pota Bee Grilled Seaweed.jpg,,,,N/A,manual_input_needed
+Potabee Selections Salted Egg,food,8998866201728_Potabee_Selections_Salted_Egg.jpg,storage/products/8998866201728_Potabee_Selections_Salted_Egg.jpg,,,,N/A,manual_input_needed
+Pringles Hot Spicy,food,8886467100055_Pringles_Hot___Spicy.jpg,storage/products/8886467100055_Pringles_Hot___Spicy.jpg,1.0,107,30,A,known_db
+Pringles Original 107gr,food,8886467100017_Pringles_Original_107gr.jpg,storage/products/8886467100017_Pringles_Original_107gr.jpg,1.0,107,30,A,known_db
+Pringles Sour Cream Onion,food,8886467100024_Pringles_Sour_Cream___Onion.jpg,storage/products/8886467100024_Pringles_Sour_Cream___Onion.jpg,1.5,107,30,A,known_db
+Rasa Rumput Laut Nori Seaweed Flavour,food,0089686596465_Rasa_Rumput_Laut__Nori_Seaweed_Flavour_.jpg,storage/products/0089686596465_Rasa_Rumput_Laut__Nori_Seaweed_Flavour_.jpg,1.0,68,30,A,known_db
+Richeese wfr nabati box 135g,food,8993175549912_Richeese_wfr_nabati_box_135g.jpg,storage/products/8993175549912_Richeese_wfr_nabati_box_135g.jpg,,,,N/A,manual_input_needed
+Richoco Nabati Wafer White,food,111_Richoco Nabati Wafer White.jpg,storage/products/111_Richoco Nabati Wafer White.jpg,,,,N/A,manual_input_needed
+Ritz Cheese,food,4893049120046_Ritz_Cheese.jpg,storage/products/4893049120046_Ritz_Cheese.jpg,2.0,104,16,A,known_db
+Robusta Gold,food,8991002102156_Robusta_Gold.jpg,storage/products/8991002102156_Robusta_Gold.jpg,,,,N/A,manual_input_needed
+Roma Biscuit Sandwich Chocolate Coklat,food,8996001305041_Roma_Biscuit_Sandwich_Chocolate__Coklat_.jpg,storage/products/8996001305041_Roma_Biscuit_Sandwich_Chocolate__Coklat_.jpg,,,,N/A,manual_input_needed
+Roma bisc kelapa 300G,food,8996001301142_Roma_bisc_kelapa_300G.jpg,storage/products/8996001301142_Roma_bisc_kelapa_300G.jpg,,,,N/A,manual_input_needed
+Roti Saku Rasa Bluberi,food,8994462850063_Roti_Saku_Rasa_Bluberi.jpg,storage/products/8994462850063_Roti_Saku_Rasa_Bluberi.jpg,,,,N/A,manual_input_needed
+Roti Tawar,food,8992907953270_Roti_Tawar.jpg,storage/products/8992907953270_Roti_Tawar.jpg,,,,N/A,manual_input_needed
+SIMBA CHOCO Chips CUP Chocolate Flavor,food,41_SIMBA CHOCO Chips CUP Chocolate Flavor.jpg,storage/products/41_SIMBA CHOCO Chips CUP Chocolate Flavor.jpg,,,,N/A,manual_input_needed
+SIMBA CHOCO Chips CUP Chocolate Flavor dengan Susu,food,109_SIMBA CHOCO Chips CUP Chocolate Flavor dengan Susu.jpg,storage/products/109_SIMBA CHOCO Chips CUP Chocolate Flavor dengan Susu.jpg,,,,N/A,manual_input_needed
+SIMBA CHOCO Chips CUP Strawberry Flavor,food,42_SIMBA CHOCO Chips CUP Strawberry Flavor.jpg,storage/products/42_SIMBA CHOCO Chips CUP Strawberry Flavor.jpg,,,,N/A,manual_input_needed
+SPN Snack,food,8995139505019_SPN_Snack.jpg,storage/products/8995139505019_SPN_Snack.jpg,,,,N/A,manual_input_needed
+Sandwich Biscuit Coka Peanut Cream,food,56_Sandwich Biscuit Coka Peanut Cream.jpg,storage/products/56_Sandwich Biscuit Coka Peanut Cream.jpg,,,,N/A,manual_input_needed
+Sari gandum 240g,food,8996001302347_Sari_gandum_240g.jpg,storage/products/8996001302347_Sari_gandum_240g.jpg,,,,N/A,manual_input_needed
+Sea Salt Popcorn,food,2341082040255_Sea_Salt_Popcorn.jpg,storage/products/2341082040255_Sea_Salt_Popcorn.jpg,0.5,50,28,A,known_db
+See Hong Puff,food,8997025911058_See_Hong_Puff.jpg,storage/products/8997025911058_See_Hong_Puff.jpg,,,,N/A,manual_input_needed
+Selamat Chocolate Sandwich Biscuit,food,8991001770011_Selamat_Chocolate_Sandwich_Biscuit.jpg,storage/products/8991001770011_Selamat_Chocolate_Sandwich_Biscuit.jpg,9.0,200,25,C,known_db
+Selamat Chocolate Sandwich Wafer,food,83_Selamat Chocolate Sandwich Wafer.jpg,storage/products/83_Selamat Chocolate Sandwich Wafer.jpg,9.0,200,25,C,known_db
+Slai O lai,food,8996001304013_Slai_O_lai.jpg,storage/products/8996001304013_Slai_O_lai.jpg,,,,N/A,manual_input_needed
+Slai O lai Blueberry,food,8996001304044_Slai_O_lai_Blueberry.jpg,storage/products/8996001304044_Slai_O_lai_Blueberry.jpg,,,,N/A,manual_input_needed
+Small Bhakarwadi,food,8904071701090_Small_Bhakarwadi.jpg,storage/products/8904071701090_Small_Bhakarwadi.jpg,2.0,80,30,A,known_db
+Sponge Strawberry Flavor,food,51_Sponge Strawberry Flavor.jpg,storage/products/51_Sponge Strawberry Flavor.jpg,,,,N/A,manual_input_needed
+Supero Crackers,food,8888166338012_Supero_Crackers.jpg,storage/products/8888166338012_Supero_Crackers.jpg,3.0,200,30,B,known_db
+Superstar Full Chocolate,food,84_Superstar Full Chocolate.jpg,storage/products/84_Superstar Full Chocolate.jpg,,,,N/A,manual_input_needed
+Tango Wafer Cokelat,food,8991102374309_Tango_Wafer_Cokelat.jpg,storage/products/8991102374309_Tango_Wafer_Cokelat.jpg,,,,N/A,manual_input_needed
+Tango Wafer Vanilla Delight,food,71_Tango Wafer Vanilla Delight.jpg,storage/products/71_Tango Wafer Vanilla Delight.jpg,,,,N/A,manual_input_needed
+Twister Minis,food,8991001780225_Twister_Minis.jpg,storage/products/8991001780225_Twister_Minis.jpg,5.0,100,25,C,known_db
+Unibis Bon Bon Chocolate Cream Biscuits,food,96_Unibis Bon Bon Chocolate Cream Biscuits.jpg,storage/products/96_Unibis Bon Bon Chocolate Cream Biscuits.jpg,,,,N/A,manual_input_needed
+Vegetable Crackers,food,8888166335608_Vegetable_Crackers.jpg,storage/products/8888166335608_Vegetable_Crackers.jpg,2.0,250,30,A,known_db
+Vitafruit,food,8991002312135_Vitafruit.jpg,storage/products/8991002312135_Vitafruit.jpg,,,,N/A,manual_input_needed
+Wafello Chocolate Gelato,food,8996001350829_Wafello_Chocolate_Gelato.jpg,storage/products/8996001350829_Wafello_Chocolate_Gelato.jpg,,,,N/A,manual_input_needed
+Wafer krim cokelat,food,8994075730080_Wafer_krim_cokelat.jpg,storage/products/8994075730080_Wafer_krim_cokelat.jpg,,,,N/A,manual_input_needed
+Waffle Original,food,8992907000820_Waffle_Original.jpg,storage/products/8992907000820_Waffle_Original.jpg,,,,N/A,manual_input_needed
+Walens Sus Kering Isi Krim Rasa Bluber,food,8888166350458_Walens_-_Sus_Kering_Isi_Krim_Rasa_Bluber.jpg,storage/products/8888166350458_Walens_-_Sus_Kering_Isi_Krim_Rasa_Bluber.jpg,7.0,150,25,C,known_db
+Walkers,food,5011555041122_Walkers.jpg,storage/products/5011555041122_Walkers.jpg,0.5,35,35,A,known_db
+White Bread,food,00035014_White_Bread.jpg,storage/products/00035014_White_Bread.jpg,3.0,400,35,B,known_db
+White Koffie,food,8994171101296_White_Koffie.jpg,storage/products/8994171101296_White_Koffie.jpg,,,,N/A,manual_input_needed
+YALE Snack Stick Bulat Coklat,food,58_YALE Snack Stick Bulat Coklat.jpg,storage/products/58_YALE Snack Stick Bulat Coklat.jpg,,,,N/A,manual_input_needed
+Yale Yale Rice Crispy,food,60_Yale Yale Rice Crispy.jpg,storage/products/60_Yale Yale Rice Crispy.jpg,,,,N/A,manual_input_needed
+Yupi Bolicious Strawberry,food,112_Yupi Bolicious Strawberry.jpg,storage/products/112_Yupi Bolicious Strawberry.jpg,,,,N/A,manual_input_needed
+Yupi Bolicious Wild Blackberry,food,114_Yupi Bolicious Wild Blackberry.jpg,storage/products/114_Yupi Bolicious Wild Blackberry.jpg,,,,N/A,manual_input_needed
+Yupi Choco Glee,food,38_Yupi Choco Glee.jpg,storage/products/38_Yupi Choco Glee.jpg,,,,N/A,manual_input_needed
+Yupi Strawberry Kiss,food,113_Yupi Strawberry Kiss.jpg,storage/products/113_Yupi Strawberry Kiss.jpg,,,,N/A,manual_input_needed
+almond cookies,food,8997227860376_almond_cookies.jpg,storage/products/8997227860376_almond_cookies.jpg,,,,N/A,manual_input_needed
+beng beng extra chocolate caramel,food,8996001354124_beng-beng_extra_chocolate_caramel.jpg,storage/products/8996001354124_beng-beng_extra_chocolate_caramel.jpg,,,,N/A,manual_input_needed
+choki choki,food,8996001370131_choki_choki.jpg,storage/products/8996001370131_choki_choki.jpg,,,,N/A,manual_input_needed
+chupa chups,food,8935001706908_chupa_chups.jpg,storage/products/8935001706908_chupa_chups.jpg,7.0,12,12,C,known_db
+kalpa,food,8996001354001_kalpa.jpg,storage/products/8996001354001_kalpa.jpg,,,,N/A,manual_input_needed
+maxicorn barbecue,food,0089686729054_maxicorn_barbecue.jpg,storage/products/0089686729054_maxicorn_barbecue.jpg,1.0,60,28,A,known_db
+mmm . mallows,food,9338713001757_mmm_._mallows.jpg,storage/products/9338713001757_mmm_._mallows.jpg,,,,N/A,manual_input_needed
+mrp kacang madu,food,8992709818807_mrp_kacang_madu.jpg,storage/products/8992709818807_mrp_kacang_madu.jpg,,,,N/A,manual_input_needed
+nissin Crispy Crackers bks 250gr,food,8888166336568_nissin_Crispy_Crackers_bks_250gr.jpg,storage/products/8888166336568_nissin_Crispy_Crackers_bks_250gr.jpg,2.0,250,30,A,known_db
+roma kelapa cream coklat,food,8996001314005_roma_kelapa_cream_coklat.jpg,storage/products/8996001314005_roma_kelapa_cream_coklat.jpg,,,,N/A,manual_input_needed
+tango waffle,food,8991102794619_tango_waffle.jpg,storage/products/8991102794619_tango_waffle.jpg,,,,N/A,manual_input_needed
+wafer dengan krim cokelat,food,8996001350522_wafer_dengan_krim_cokelat.jpg,storage/products/8996001350522_wafer_dengan_krim_cokelat.jpg,,,,N/A,manual_input_needed

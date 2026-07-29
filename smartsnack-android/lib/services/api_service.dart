@@ -1347,12 +1347,16 @@ class ApiService {
     required String email,
     required String password,
     required String passwordConfirmation,
+    required int age,
+    required String gender,
   }) async {
     final map = await _post('/api/register', data: {
       'name': name,
       'email': email,
       'password': password,
       'password_confirmation': passwordConfirmation,
+      'age': age,
+      'gender': gender,
     });
 
     final envelope = ApiEnvelope<AuthData>.fromJson(map, (raw) => AuthData.fromJson(raw as Map<String, dynamic>));
@@ -1869,7 +1873,7 @@ class ApiService {
       if (raw == null) return 0;
       return double.tryParse(raw.toString()) ?? 0;
     });
-    return envelope.data ?? 0;
+    return envelope.data ?? 0; 
   }
 
   Future<Map<String, dynamic>> checkHeartRate() async {
@@ -1891,21 +1895,35 @@ class ApiService {
     );
   }
 
+  // Trigger baca berat badan dari sensor LoadCell (HX711) via MQTT
+  Future<Map<String, dynamic>> checkWeight({required int checkId}) async {
+    return _postWithTimeout(
+      '/api/health-monitoring/check-weight',
+      data: {'check_id': checkId},
+      connectTimeout: const Duration(seconds: 60),
+      sendTimeout: const Duration(seconds: 20),
+      receiveTimeout: const Duration(seconds: 60),
+    );
+  }
+
+  // Trigger baca tinggi badan dari sensor HC-SR04 (ultrasonik) via MQTT
+  Future<Map<String, dynamic>> checkHeight({required int checkId}) async {
+    return _postWithTimeout(
+      '/api/health-monitoring/check-height',
+      data: {'check_id': checkId},
+      connectTimeout: const Duration(seconds: 60),
+      sendTimeout: const Duration(seconds: 20),
+      receiveTimeout: const Duration(seconds: 60),
+    );
+  }
+
+  // Proses cek kesehatan: kirim check_id, backend gabung semua data sensor,
+  // evaluasi status (rule-based tanpa ML), simpan hasil, dan buka servo box.
   Future<HealthMonitoringRecord> analyzeHealthMonitoring({
     required int checkId,
-    required int age,
-    required String gender,
-    required double heightCm,
-    required double weightKg,
-    required double bmi,
   }) async {
     final map = await _post('/api/health-monitoring/analyze', data: {
       'check_id': checkId,
-      'age': age,
-      'gender': gender,
-      'height_cm': heightCm,
-      'weight_kg': weightKg,
-      'bmi': bmi,
     });
     final envelope = ApiEnvelope<HealthMonitoringRecord>.fromJson(
       map,

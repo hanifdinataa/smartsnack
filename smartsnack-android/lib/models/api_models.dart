@@ -29,17 +29,24 @@ class UserModel {
     required this.id,
     required this.name,
     required this.email,
+    this.age,
+    this.gender,
   });
 
   final int id;
   final String name;
   final String email;
+  // Profil anak — diset saat register, tidak bisa diubah di monitoring
+  final int? age;
+  final String? gender;
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
       id: _asInt(json['id']),
       name: (json['name'] ?? '').toString(),
       email: (json['email'] ?? '').toString(),
+      age: json['age'] == null ? null : _asInt(json['age']),
+      gender: json['gender']?.toString(),
     );
   }
 }
@@ -107,66 +114,76 @@ class ProductItem {
   }
 }
 
+// Hasil monitoring kesehatan anak.
+// overallStatus / heartStatus / tempStatus / bmiStatus: 'normal' | 'perlu_perhatian'
+// bmiStatus juga bisa: 'kurus' | 'gemuk' | 'obesitas'
 class HealthMonitoringRecord {
   const HealthMonitoringRecord({
     required this.checkId,
     required this.heartRate,
     required this.bodyTemp,
+    required this.weightKg,
+    required this.heightCm,
+    required this.bmi,
     required this.age,
     required this.gender,
-    required this.heightCm,
-    required this.weightKg,
-    required this.bmi,
-    required this.riskDiabetes,
-    required this.algorithm,
-    this.riskPercent,
+    required this.heartStatus,
+    required this.tempStatus,
+    required this.bmiStatus,
+    required this.overallStatus,
     required this.checkedAtIso,
   });
 
   final int checkId;
   final double heartRate;
   final double bodyTemp;
+  final double weightKg;
+  final double heightCm;
+  final double bmi;
   final int age;
   final String gender;
-  final double heightCm;
-  final double weightKg;
-  final double bmi;
-  final String riskDiabetes;
-  final String algorithm;
-  final double? riskPercent;
+  // Status per parameter
+  final String heartStatus;    // 'normal' | 'perlu_perhatian'
+  final String tempStatus;     // 'normal' | 'perlu_perhatian'
+  final String bmiStatus;      // 'normal' | 'kurus' | 'gemuk' | 'obesitas'
+  final String overallStatus;  // 'normal' | 'perlu_perhatian'
   final String checkedAtIso;
+
+  bool get isNormal => overallStatus.toLowerCase() == 'normal';
 
   factory HealthMonitoringRecord.fromJson(Map<String, dynamic> json) {
     return HealthMonitoringRecord(
       checkId: _asInt(json['check_id']),
       heartRate: _asDouble(json['heart_rate']),
       bodyTemp: _asDouble(json['body_temp']),
+      weightKg: _asDouble(json['weight_kg']),
+      heightCm: _asDouble(json['height_cm']),
+      bmi: _asDouble(json['bmi']),
       age: _asInt(json['age']),
       gender: (json['gender'] ?? 'Male').toString(),
-      heightCm: _asDouble(json['height_cm']),
-      weightKg: _asDouble(json['weight_kg']),
-      bmi: _asDouble(json['bmi']),
-      riskDiabetes: (json['risk_diabetes'] ?? 'TIDAK').toString().toUpperCase(),
-      algorithm: (json['algorithm'] ?? '').toString(),
-      riskPercent: _asNullableDouble(json['risk_percent'] ?? json['probability_diabetes'] ?? json['probability']),
+      heartStatus: (json['heart_status']   ?? 'normal').toString().toLowerCase(),
+      tempStatus:  (json['temp_status']    ?? 'normal').toString().toLowerCase(),
+      bmiStatus:   (json['bmi_status']     ?? 'normal').toString().toLowerCase(),
+      overallStatus: (json['overall_status'] ?? 'normal').toString().toLowerCase(),
       checkedAtIso: (json['checked_at'] ?? DateTime.now().toIso8601String()).toString(),
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'check_id': checkId,
-      'heart_rate': heartRate,
-      'body_temp': bodyTemp,
-      'age': age,
-      'gender': gender,
-      'height_cm': heightCm,
-      'weight_kg': weightKg,
-      'bmi': bmi,
-      'risk_diabetes': riskDiabetes,
-      'algorithm': algorithm,
-      'risk_percent': riskPercent,
-      'checked_at': checkedAtIso,
+      'check_id':      checkId,
+      'heart_rate':    heartRate,
+      'body_temp':     bodyTemp,
+      'weight_kg':     weightKg,
+      'height_cm':     heightCm,
+      'bmi':           bmi,
+      'age':           age,
+      'gender':        gender,
+      'heart_status':  heartStatus,
+      'temp_status':   tempStatus,
+      'bmi_status':    bmiStatus,
+      'overall_status': overallStatus,
+      'checked_at':    checkedAtIso,
     };
   }
 }

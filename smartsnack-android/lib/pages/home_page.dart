@@ -7,7 +7,6 @@ import '../widgets/smart_network_image.dart';
 import 'cek_sugar_page.dart';
 import 'product_result_page.dart';
 import 'product_search_page.dart';
-import 'report_page.dart';
 import 'sugar_info_page.dart';
 import 'tambah_kemasan_page.dart';
 
@@ -164,10 +163,6 @@ class _HomePageState extends ConsumerState<HomePage> {
               onTap: () { Navigator.of(context).push(MaterialPageRoute(builder: (_) => const SugarInfoPage())); },
             )),
           ]),
-          const SizedBox(height: 16),
-          _ReportCard(onTap: () {
-            Navigator.of(context).push(MaterialPageRoute(builder: (_) => const ReportPage()));
-          }),
           const SizedBox(height: 28),
           // Recommendations header
           Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
@@ -388,50 +383,6 @@ class _ShortcutCard extends StatelessWidget {
   }
 }
 
-// ─── REPORT CARD ─────────────────────────────────────────────────────────────
-class _ReportCard extends StatelessWidget {
-  const _ReportCard({required this.onTap});
-  final VoidCallback onTap;
-  @override
-  Widget build(BuildContext context) {
-    // ─── OLD ───
-    // return Material(color: Colors.transparent, child: InkWell(...));
-    // ─── NEW ───
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        borderRadius: BorderRadius.circular(22),
-        onTap: onTap,
-        child: Ink(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(22),
-            gradient: const LinearGradient(colors: [Color(0xFF0D9F6E), Color(0xFF10B981)]),
-            boxShadow: const [BoxShadow(color: Color(0x300D9F6E), blurRadius: 20, offset: Offset(0, 8))],
-          ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 22),
-            child: Row(children: [
-              Container(
-                width: 56, height: 56,
-                decoration: BoxDecoration(color: Colors.white.withOpacity(0.2), borderRadius: BorderRadius.circular(16)),
-                child: const Icon(Icons.assessment_rounded, color: Colors.white, size: 28),
-              ),
-              const SizedBox(width: 18),
-              const Expanded(
-                child: Text('Report Konsumsi\nKemasan', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white, height: 1.4, letterSpacing: -0.2)),
-              ),
-              Container(
-                width: 44, height: 44,
-                decoration: BoxDecoration(color: Colors.white.withOpacity(0.2), shape: BoxShape.circle),
-                child: const Icon(Icons.chevron_right_rounded, color: Colors.white, size: 26),
-              ),
-            ]),
-          ),
-        ),
-      ),
-    );
-  }
-}
 
 // ─── RECOMMENDATION CARD ─────────────────────────────────────────────────────
 class _RecommendationCard extends StatelessWidget {

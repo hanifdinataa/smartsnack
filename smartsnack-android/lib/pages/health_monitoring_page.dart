@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/api_models.dart';
@@ -13,116 +12,96 @@ class HealthMonitoringPage extends ConsumerStatefulWidget {
   ConsumerState<HealthMonitoringPage> createState() => _HealthMonitoringPageState();
 }
 
-class _HealthMonitoringPageState extends ConsumerState<HealthMonitoringPage> {
+class _HealthMonitoringPageState extends ConsumerState<HealthMonitoringPage>
+    with TickerProviderStateMixin {
+  // ── Countdown constants ──────────────────────────────
   static const int _heartMeasureSeconds = 60;
-  static const int _tempMeasureSeconds = 5;
+  static const int _tempMeasureSeconds  = 5;
+  static const int _weightMeasureSeconds = 15;
+  static const int _heightMeasureSeconds = 10;
 
-  final _ageController = TextEditingController();
-  final _heightController = TextEditingController();
-  final _weightController = TextEditingController();
-  String _selectedGender = 'Male';
-
-  int? _checkId;
+  // ── Session state ────────────────────────────────────
+  int?    _checkId;
   double? _heartRate;
   double? _bodyTemp;
+  double? _weightKg;
+  double? _heightCm;
 
+  // ── Loading flags ────────────────────────────────────
   bool _loadingHeartRate = false;
-  bool _loadingBodyTemp = false;
-  bool _processing = false;
-  int _heartRemainingSeconds = 0;
-  int _tempRemainingSeconds = 0;
+  bool _loadingBodyTemp  = false;
+  bool _loadingWeight    = false;
+  bool _loadingHeight    = false;
+  bool _processing       = false;
+
+  // ── Countdown timers ─────────────────────────────────
+  int    _heartRemainingSeconds  = 0;
+  int    _tempRemainingSeconds   = 0;
+  int    _weightRemainingSeconds = 0;
+  int    _heightRemainingSeconds = 0;
   Timer? _heartTimer;
   Timer? _tempTimer;
+  Timer? _weightTimer;
+  Timer? _heightTimer;
 
+  // ── Result ───────────────────────────────────────────
   HealthMonitoringRecord? _result;
 
-  // ─── ALL LOGIC UNCHANGED ────────────────────────────────────────────────
-  bool get _isHighRisk {
-    final risk = _result?.riskDiabetes.toUpperCase().trim() ?? '';
-    return risk == 'YES' || risk == 'YA' || risk == 'TINGGI' || risk == 'HIGH';
+  // ── Animation ────────────────────────────────────────
+  late AnimationController _successAnimController;
+  late Animation<double>    _successAnim;
+
+  // ── Computed ─────────────────────────────────────────
+  double? get _bmi {
+    if (_weightKg == null || _heightCm == null) return null;
+    if (_weightKg! <= 0 || _heightCm! <= 0) return null;
+    final meter = _heightCm! / 100;
+    return _weightKg! / (meter * meter);
   }
-  String get _riskLabel => _isHighRisk ? 'YES "Resiko Tinggi"' : 'NO "Resiko rendah"';
-  String get _riskRecommendation {
-    if (_isHighRisk) return 'Tubuh kamu perlu dijaga lebih baik ⚠️\nKurangi makan makanan manis, pilih makanan sehat, dan jangan lupa cek kesehatan ya!.';
-    return 'Terus makan makanan sehat dan jangan kebanyakan gula \ntetap rajin bergerak ya!';
+
+  bool get _canProcess =>
+      _checkId != null &&
+      _heartRate != null &&
+      _bodyTemp != null &&
+      _weightKg != null &&
+      _heightCm != null;
+
+  @override
+  void initState() {
+    super.initState();
+    _successAnimController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 800),
+    );
+    _successAnim = CurvedAnimation(
+      parent: _successAnimController,
+      curve: Curves.elasticOut,
+    );
   }
 
   @override
-  void dispose() { _heartTimer?.cancel(); _tempTimer?.cancel(); _ageController.dispose(); _heightController.dispose(); _weightController.dispose(); super.dispose(); }
-
-  double? get _bmi {
-    final heightCm = double.tryParse(_heightController.text.replaceAll(',', '.'));
-    final weightKg = double.tryParse(_weightController.text.replaceAll(',', '.'));
-    if (heightCm == null || weightKg == null || heightCm <= 0 || weightKg <= 0) return null;
-    final meter = heightCm / 100;
-    return weightKg / (meter * meter);
+  void dispose() {
+    _heartTimer?.cancel();
+    _tempTimer?.cancel();
+    _weightTimer?.cancel();
+    _heightTimer?.cancel();
+    _successAnimController.dispose();
+    super.dispose();
   }
 
-  Future<void> _checkHeartRate() async {
-    _heartTimer?.cancel(); setState(() => _loadingHeartRate = true); _startHeartCountdown();
-    _snack('Letakkan jari Anda ke sensor. Sistem mulai menghitung detak jantung 60 detik.');
-    try {
-      final map = await ref.read(apiServiceProvider).checkHeartRate();
-      final raw = map['data'];
-      if (raw is! Map<String, dynamic>) throw Exception('Data detak jantung tidak valid.');
-      final nextCheckId = int.tryParse(raw['check_id'].toString());
-      final nextHeartRate = double.tryParse(raw['heart_rate'].toString());
-      if (nextCheckId == null || nextHeartRate == null) throw Exception('Data detak jantung dari server tidak lengkap.');
-      if (!mounted) return;
-      setState(() { _checkId = nextCheckId; _heartRate = nextHeartRate; _bodyTemp = null; _result = null; });
-      _snack('Detak jantung berhasil diambil. Lanjut cek suhu tubuh.');
-    } catch (e) { if (!mounted) return; _snack(e.toString().replaceFirst('Exception: ', '')); }
-    finally { _heartTimer?.cancel(); if (mounted) setState(() { _loadingHeartRate = false; _heartRemainingSeconds = 0; }); }
+  // ─── COUNTDOWN HELPERS ───────────────────────────────────────────────────
+  void _startCountdown(int seconds, void Function(int) onTick, void Function() onDone, Timer? Function() timerRef) {
+    Timer? t;
+    t = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (!mounted) { timer.cancel(); return; }
+      onTick(timer.tick);
+      if (timer.tick >= seconds) { timer.cancel(); onDone(); }
+    });
   }
-
-  Future<void> _checkBodyTemperature() async {
-    final checkId = _checkId;
-    if (checkId == null) { _snack('Tekan Cek Detak Jantung dulu supaya sesi pengecekan dibuat.'); return; }
-    _tempTimer?.cancel(); setState(() => _loadingBodyTemp = true); _startTempCountdown();
-    _snack('Silakan arahkan dahi Anda ke sensor sampai suhu terbaca.');
-    try {
-      final map = await ref.read(apiServiceProvider).checkBodyTemperature(checkId: checkId);
-      final raw = map['data'];
-      if (raw is! Map<String, dynamic>) throw Exception('Data suhu tubuh tidak valid.');
-      final nextBodyTemp = double.tryParse(raw['body_temp'].toString());
-      if (nextBodyTemp == null) throw Exception('Data suhu tubuh dari server tidak lengkap.');
-      if (!mounted) return;
-      setState(() { _bodyTemp = nextBodyTemp; _result = null; });
-      _snack('Suhu tubuh berhasil diambil.');
-    } catch (e) { if (!mounted) return; _snack(e.toString().replaceFirst('Exception: ', '')); }
-    finally { _tempTimer?.cancel(); if (mounted) setState(() { _loadingBodyTemp = false; _tempRemainingSeconds = 0; }); }
-  }
-
-  Future<void> _process() async {
-    final checkId = _checkId; final heartRate = _heartRate; final bodyTemp = _bodyTemp;
-    final age = int.tryParse(_ageController.text);
-    final heightCm = double.tryParse(_heightController.text.replaceAll(',', '.'));
-    final weightKg = double.tryParse(_weightController.text.replaceAll(',', '.'));
-    final bmi = _bmi;
-    if (checkId == null || heartRate == null) { _snack('Cek Detak Jantung dulu.'); return; }
-    if (bodyTemp == null) { _snack('Cek Suhu Tubuh dulu.'); return; }
-    if (age == null || age <= 0) { _snack('Umur wajib diisi dengan angka valid.'); return; }
-    if (heightCm == null || heightCm <= 0) { _snack('Tinggi badan wajib diisi dengan angka valid.'); return; }
-    if (weightKg == null || weightKg <= 0) { _snack('Berat badan wajib diisi dengan angka valid.'); return; }
-    if (bmi == null) { _snack('BMI belum bisa dihitung.'); return; }
-    setState(() => _processing = true);
-    try {
-      final result = await ref.read(apiServiceProvider).analyzeHealthMonitoring(checkId: checkId, age: age, gender: _selectedGender, heightCm: heightCm, weightKg: weightKg, bmi: bmi);
-      final finalResult = HealthMonitoringRecord(checkId: result.checkId, heartRate: result.heartRate, bodyTemp: result.bodyTemp, age: result.age, gender: result.gender, heightCm: result.heightCm, weightKg: result.weightKg, bmi: result.bmi, riskDiabetes: result.riskDiabetes, algorithm: result.algorithm, riskPercent: result.riskPercent, checkedAtIso: result.checkedAtIso);
-      await ref.read(localStorageProvider).saveHealthMonitoringRecord(finalResult);
-      await ref.read(localStorageProvider).appendHealthMonitoringHistory(finalResult);
-      if (!mounted) return;
-      setState(() => _result = finalResult);
-      ref.read(profileRefreshSignalProvider.notifier).state++;
-      _snack('Monitoring kesehatan berhasil diproses.');
-    } catch (e) { if (!mounted) return; _snack(e.toString().replaceFirst('Exception: ', '')); }
-    finally { if (mounted) setState(() => _processing = false); }
-  }
-
-  void _snack(String message) { ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message))); }
 
   void _startHeartCountdown() {
     setState(() => _heartRemainingSeconds = _heartMeasureSeconds);
+    _heartTimer?.cancel();
     _heartTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (!mounted) { timer.cancel(); return; }
       if (_heartRemainingSeconds <= 1) { timer.cancel(); setState(() => _heartRemainingSeconds = 0); return; }
@@ -132,6 +111,7 @@ class _HealthMonitoringPageState extends ConsumerState<HealthMonitoringPage> {
 
   void _startTempCountdown() {
     setState(() => _tempRemainingSeconds = _tempMeasureSeconds);
+    _tempTimer?.cancel();
     _tempTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (!mounted) { timer.cancel(); return; }
       if (_tempRemainingSeconds <= 1) { timer.cancel(); setState(() => _tempRemainingSeconds = 0); return; }
@@ -139,117 +119,386 @@ class _HealthMonitoringPageState extends ConsumerState<HealthMonitoringPage> {
     });
   }
 
-  // ─── BUILD (UI UPGRADED) ────────────────────────────────────────────────
+  void _startWeightCountdown() {
+    setState(() => _weightRemainingSeconds = _weightMeasureSeconds);
+    _weightTimer?.cancel();
+    _weightTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (!mounted) { timer.cancel(); return; }
+      if (_weightRemainingSeconds <= 1) { timer.cancel(); setState(() => _weightRemainingSeconds = 0); return; }
+      setState(() => _weightRemainingSeconds -= 1);
+    });
+  }
+
+  void _startHeightCountdown() {
+    setState(() => _heightRemainingSeconds = _heightMeasureSeconds);
+    _heightTimer?.cancel();
+    _heightTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (!mounted) { timer.cancel(); return; }
+      if (_heightRemainingSeconds <= 1) { timer.cancel(); setState(() => _heightRemainingSeconds = 0); return; }
+      setState(() => _heightRemainingSeconds -= 1);
+    });
+  }
+
+  // ─── SENSOR ACTIONS ──────────────────────────────────────────────────────
+  Future<void> _checkHeartRate() async {
+    _heartTimer?.cancel();
+    setState(() { _loadingHeartRate = true; _result = null; });
+    _startHeartCountdown();
+    _snack('Letakkan jari ke sensor. Sistem mulai mengukur detak jantung selama 60 detik.');
+    try {
+      final map = await ref.read(apiServiceProvider).checkHeartRate();
+      final raw = map['data'];
+      if (raw is! Map<String, dynamic>) throw Exception('Data detak jantung tidak valid.');
+      final nextCheckId   = int.tryParse(raw['check_id'].toString());
+      final nextHeartRate = double.tryParse(raw['heart_rate'].toString());
+      if (nextCheckId == null || nextHeartRate == null) throw Exception('Data detak jantung dari server tidak lengkap.');
+      if (!mounted) return;
+      setState(() { _checkId = nextCheckId; _heartRate = nextHeartRate; _bodyTemp = null; _weightKg = null; _heightCm = null; _result = null; });
+      _snack('✅ Detak jantung berhasil diambil. Lanjut cek suhu tubuh.');
+    } catch (e) {
+      if (!mounted) return;
+      _snack(e.toString().replaceFirst('Exception: ', ''));
+    } finally {
+      _heartTimer?.cancel();
+      if (mounted) setState(() { _loadingHeartRate = false; _heartRemainingSeconds = 0; });
+    }
+  }
+
+  Future<void> _checkBodyTemperature() async {
+    final checkId = _checkId;
+    if (checkId == null) { _snack('Cek Detak Jantung dulu untuk membuat sesi pengecekan.'); return; }
+    _tempTimer?.cancel();
+    setState(() { _loadingBodyTemp = true; _result = null; });
+    _startTempCountdown();
+    _snack('Arahkan dahi ke sensor sampai suhu terbaca.');
+    try {
+      final map = await ref.read(apiServiceProvider).checkBodyTemperature(checkId: checkId);
+      final raw = map['data'];
+      if (raw is! Map<String, dynamic>) throw Exception('Data suhu tubuh tidak valid.');
+      final nextBodyTemp = double.tryParse(raw['body_temp'].toString());
+      if (nextBodyTemp == null) throw Exception('Data suhu tubuh dari server tidak lengkap.');
+      if (!mounted) return;
+      setState(() { _bodyTemp = nextBodyTemp; _result = null; });
+      _snack('✅ Suhu tubuh berhasil diambil. Lanjut cek berat badan.');
+    } catch (e) {
+      if (!mounted) return;
+      _snack(e.toString().replaceFirst('Exception: ', ''));
+    } finally {
+      _tempTimer?.cancel();
+      if (mounted) setState(() { _loadingBodyTemp = false; _tempRemainingSeconds = 0; });
+    }
+  }
+
+  Future<void> _checkWeight() async {
+    final checkId = _checkId;
+    if (checkId == null) { _snack('Cek Detak Jantung dulu untuk membuat sesi pengecekan.'); return; }
+    _weightTimer?.cancel();
+    setState(() { _loadingWeight = true; _result = null; });
+    _startWeightCountdown();
+    _snack('Berdiri di atas timbangan. Sistem membaca berat badan...');
+    try {
+      final map = await ref.read(apiServiceProvider).checkWeight(checkId: checkId);
+      final raw = map['data'];
+      if (raw is! Map<String, dynamic>) throw Exception('Data berat badan tidak valid.');
+      final nextWeight = double.tryParse(raw['weight_kg'].toString());
+      if (nextWeight == null) throw Exception('Data berat badan dari server tidak lengkap.');
+      if (!mounted) return;
+      setState(() { _weightKg = nextWeight; _result = null; });
+      _snack('✅ Berat badan berhasil diambil. Lanjut cek tinggi badan.');
+    } catch (e) {
+      if (!mounted) return;
+      _snack(e.toString().replaceFirst('Exception: ', ''));
+    } finally {
+      _weightTimer?.cancel();
+      if (mounted) setState(() { _loadingWeight = false; _weightRemainingSeconds = 0; });
+    }
+  }
+
+  Future<void> _checkHeight() async {
+    final checkId = _checkId;
+    if (checkId == null) { _snack('Cek Detak Jantung dulu untuk membuat sesi pengecekan.'); return; }
+    _heightTimer?.cancel();
+    setState(() { _loadingHeight = true; _result = null; });
+    _startHeightCountdown();
+    _snack('Berdiri tegak di bawah sensor ultrasonik. Sistem mengukur tinggi badan...');
+    try {
+      final map = await ref.read(apiServiceProvider).checkHeight(checkId: checkId);
+      final raw = map['data'];
+      if (raw is! Map<String, dynamic>) throw Exception('Data tinggi badan tidak valid.');
+      final nextHeight = double.tryParse(raw['height_cm'].toString());
+      if (nextHeight == null) throw Exception('Data tinggi badan dari server tidak lengkap.');
+      if (!mounted) return;
+      setState(() { _heightCm = nextHeight; _result = null; });
+      _snack('✅ Tinggi badan berhasil diambil. Sekarang tekan Proses Cek Kesehatan!');
+    } catch (e) {
+      if (!mounted) return;
+      _snack(e.toString().replaceFirst('Exception: ', ''));
+    } finally {
+      _heightTimer?.cancel();
+      if (mounted) setState(() { _loadingHeight = false; _heightRemainingSeconds = 0; });
+    }
+  }
+
+  Future<void> _process() async {
+    final checkId = _checkId;
+    if (checkId == null || _heartRate == null) { _snack('Cek Detak Jantung dulu.'); return; }
+    if (_bodyTemp == null) { _snack('Cek Suhu Tubuh dulu.'); return; }
+    if (_weightKg == null) { _snack('Cek Berat Badan dulu.'); return; }
+    if (_heightCm == null) { _snack('Cek Tinggi Badan dulu.'); return; }
+
+    setState(() => _processing = true);
+    try {
+      final result = await ref.read(apiServiceProvider).analyzeHealthMonitoring(checkId: checkId);
+      await ref.read(localStorageProvider).saveHealthMonitoringRecord(result);
+      await ref.read(localStorageProvider).appendHealthMonitoringHistory(result);
+      if (!mounted) return;
+      setState(() => _result = result);
+      ref.read(profileRefreshSignalProvider.notifier).state++;
+      _successAnimController.forward(from: 0);
+      _snack(result.isNormal
+          ? '🎁 Selamat! Status kesehatan Normal. Kotak snack sedang dibuka!'
+          : '⚠️ Ada parameter yang perlu diperhatikan. Tetap perhatikan kesehatanmu ya!');
+    } catch (e) {
+      if (!mounted) return;
+      _snack(e.toString().replaceFirst('Exception: ', ''));
+    } finally {
+      if (mounted) setState(() => _processing = false);
+    }
+  }
+
+  void _snack(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      ),
+    );
+  }
+
+  // ─── BUILD ───────────────────────────────────────────────────────────────
   @override
   Widget build(BuildContext context) {
-    final bmi = _bmi;
+    final user = ref.watch(sessionProvider).user;
+    final bmi  = _bmi;
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Monitoring Kesehatan')),
+      backgroundColor: const Color(0xFFF8FAF9),
+      appBar: AppBar(
+        title: const Text('Monitoring Kesehatan', style: TextStyle(fontWeight: FontWeight.w700)),
+        backgroundColor: Colors.white,
+        foregroundColor: const Color(0xFF111827),
+        elevation: 0,
+        bottom: const PreferredSize(
+          preferredSize: Size.fromHeight(1),
+          child: Divider(height: 1, color: Color(0xFFE5E7EB)),
+        ),
+      ),
       body: ListView(
-        padding: const EdgeInsets.fromLTRB(20, 8, 20, 32),
+        padding: const EdgeInsets.fromLTRB(20, 16, 20, 40),
         children: [
-          if (_checkId != null)
+
+          // ─── Session ID chip ──────────────────────────
+          if (_checkId != null) ...[
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
               margin: const EdgeInsets.only(bottom: 16),
-              decoration: BoxDecoration(color: const Color(0xFFD1FAE5), borderRadius: BorderRadius.circular(12)),
+              decoration: BoxDecoration(
+                color: const Color(0xFFD1FAE5),
+                borderRadius: BorderRadius.circular(12),
+              ),
               child: Row(children: [
                 const Icon(Icons.tag_rounded, size: 16, color: Color(0xFF0D9F6E)),
                 const SizedBox(width: 8),
-                Text('Sesi Check ID: $_checkId', style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13, color: Color(0xFF065F46))),
+                Text('Sesi Check ID: $_checkId',
+                    style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13, color: Color(0xFF065F46))),
               ]),
             ),
-          // Sensor section
-          _sectionLabel('Sensor', Icons.sensors_rounded),
+          ],
+
+          // ─── Profil Anak (read-only dari akun) ────────
+          _buildSectionLabel('Profil Anak', Icons.child_care_rounded),
+          const SizedBox(height: 12),
+          _buildProfileCard(user),
+          const SizedBox(height: 24),
+
+          // ─── Sensor Detak Jantung ──────────────────────
+          _buildSectionLabel('Data Sensor', Icons.sensors_rounded),
           const SizedBox(height: 12),
           _sensorCard(
-            icon: Icons.favorite_rounded, iconColor: const Color(0xFFEF4444), iconBg: const Color(0xFFFEE2E2),
+            icon: Icons.favorite_rounded,
+            iconColor: const Color(0xFFEF4444),
+            iconBg: const Color(0xFFFEE2E2),
             title: 'Detak Jantung',
             value: _heartRate == null ? '-' : '${_heartRate!.toStringAsFixed(0)} bpm',
-            buttonLabel: _loadingHeartRate ? 'Menghitung...' : 'Cek Detak Jantung',
+            statusChip: _heartRate != null && _result != null
+                ? _statusChip(_result!.heartStatus) : null,
+            buttonLabel: _loadingHeartRate ? 'Mengukur...' : 'Cek Detak Jantung',
+            hint: 'Letakkan jari pada sensor MAX30102',
             loading: _loadingHeartRate,
             onPressed: _loadingHeartRate ? null : _checkHeartRate,
-            countdown: _loadingHeartRate ? (_heartRemainingSeconds > 0 ? 'Letakkan jari di sensor... ${_heartRemainingSeconds}s' : 'Memproses hasil...') : null,
-            progress: _loadingHeartRate ? (_heartMeasureSeconds == 0 ? null : ((_heartMeasureSeconds - _heartRemainingSeconds) / _heartMeasureSeconds).clamp(0.0, 1.0)) : null,
+            countdown: _loadingHeartRate
+                ? (_heartRemainingSeconds > 0 ? 'Jari di sensor... ${_heartRemainingSeconds}s' : 'Memproses...')
+                : null,
+            progress: _loadingHeartRate
+                ? ((_heartMeasureSeconds - _heartRemainingSeconds) / _heartMeasureSeconds).clamp(0.0, 1.0)
+                : null,
           ),
           const SizedBox(height: 12),
+
+          // ─── Sensor Suhu Tubuh ─────────────────────────
           _sensorCard(
-            icon: Icons.thermostat_rounded, iconColor: const Color(0xFFF59E0B), iconBg: const Color(0xFFFEF3C7),
+            icon: Icons.thermostat_rounded,
+            iconColor: const Color(0xFFF59E0B),
+            iconBg: const Color(0xFFFEF3C7),
             title: 'Suhu Tubuh',
             value: _bodyTemp == null ? '-' : '${_bodyTemp!.toStringAsFixed(1)} °C',
+            statusChip: _bodyTemp != null && _result != null
+                ? _statusChip(_result!.tempStatus) : null,
             buttonLabel: _loadingBodyTemp ? 'Membaca...' : 'Cek Suhu Tubuh',
+            hint: 'Arahkan dahi ke sensor MLX90614',
             loading: _loadingBodyTemp,
-            onPressed: _loadingBodyTemp ? null : _checkBodyTemperature,
-            countdown: _loadingBodyTemp ? (_tempRemainingSeconds > 0 ? 'Arahkan dahi ke sensor... ${_tempRemainingSeconds}s' : 'Memproses hasil...') : null,
-            progress: _loadingBodyTemp ? (_tempMeasureSeconds == 0 ? null : ((_tempMeasureSeconds - _tempRemainingSeconds) / _tempMeasureSeconds).clamp(0.0, 1.0)) : null,
+            onPressed: (_loadingBodyTemp || _checkId == null) ? null : _checkBodyTemperature,
+            countdown: _loadingBodyTemp
+                ? (_tempRemainingSeconds > 0 ? 'Arahkan dahi... ${_tempRemainingSeconds}s' : 'Memproses...')
+                : null,
+            progress: _loadingBodyTemp
+                ? ((_tempMeasureSeconds - _tempRemainingSeconds) / _tempMeasureSeconds).clamp(0.0, 1.0)
+                : null,
           ),
-          const SizedBox(height: 24),
-          // Form section
-          _sectionLabel('Data Pribadi', Icons.person_rounded),
           const SizedBox(height: 12),
-          Container(
-            padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              color: Colors.white, borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: const Color(0xFFF0F0F0)),
-              boxShadow: const [BoxShadow(color: Color(0x08000000), blurRadius: 16, offset: Offset(0, 6))],
-            ),
-            child: Column(children: [
-              TextField(controller: _ageController, keyboardType: TextInputType.number, inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                decoration: const InputDecoration(labelText: 'Umur', prefixIcon: Icon(Icons.cake_outlined, size: 20)), onChanged: (_) => setState(() {})),
-              const SizedBox(height: 14),
-              DropdownButtonFormField<String>(value: _selectedGender,
-                items: const [DropdownMenuItem(value: 'Male', child: Text('Laki-laki')), DropdownMenuItem(value: 'Female', child: Text('Perempuan'))],
-                onChanged: (value) { if (value == null) return; setState(() => _selectedGender = value); },
-                decoration: const InputDecoration(labelText: 'Gender', prefixIcon: Icon(Icons.wc_outlined, size: 20))),
-              const SizedBox(height: 14),
-              TextField(controller: _heightController, keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9.,]'))],
-                decoration: const InputDecoration(labelText: 'Tinggi badan (cm)', prefixIcon: Icon(Icons.height_rounded, size: 20)), onChanged: (_) => setState(() {})),
-              const SizedBox(height: 14),
-              TextField(controller: _weightController, keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9.,]'))],
-                decoration: const InputDecoration(labelText: 'Berat badan (kg)', prefixIcon: Icon(Icons.monitor_weight_outlined, size: 20)), onChanged: (_) => setState(() {})),
-              const SizedBox(height: 14),
-              _readOnlyField('BMI', bmi == null ? '-' : bmi.toStringAsFixed(2), Icons.speed_rounded),
-            ]),
+
+          // ─── Sensor Berat Badan (LoadCell) ─────────────
+          _sensorCard(
+            icon: Icons.monitor_weight_rounded,
+            iconColor: const Color(0xFF6366F1),
+            iconBg: const Color(0xFFEDE9FE),
+            title: 'Berat Badan',
+            value: _weightKg == null ? '-' : '${_weightKg!.toStringAsFixed(1)} kg',
+            statusChip: null, // berat badan tidak ada status sendiri, lihat BMI
+            buttonLabel: _loadingWeight ? 'Menimbang...' : 'Mulai Timbang',
+            hint: 'Berdiri di atas timbangan (LoadCell)',
+            loading: _loadingWeight,
+            onPressed: (_loadingWeight || _checkId == null) ? null : _checkWeight,
+            countdown: _loadingWeight
+                ? (_weightRemainingSeconds > 0 ? 'Berdiri di timbangan... ${_weightRemainingSeconds}s' : 'Memproses...')
+                : null,
+            progress: _loadingWeight
+                ? ((_weightMeasureSeconds - _weightRemainingSeconds) / _weightMeasureSeconds).clamp(0.0, 1.0)
+                : null,
           ),
-          const SizedBox(height: 20),
-          SizedBox(width: double.infinity, child: FilledButton.icon(
-            onPressed: _processing ? null : _process,
-            icon: _processing
-              ? const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
-              : const Icon(Icons.analytics_rounded, size: 20),
-            label: Text(_processing ? 'Memproses...' : 'Proses Prediksi Dini'),
-            style: FilledButton.styleFrom(padding: const EdgeInsets.symmetric(vertical: 16)),
-          )),
-          // Result
-          if (_result != null) ...[
-            const SizedBox(height: 20),
+          const SizedBox(height: 12),
+
+          // ─── Sensor Tinggi Badan (HC-SR04) ─────────────
+          _sensorCard(
+            icon: Icons.height_rounded,
+            iconColor: const Color(0xFF0891B2),
+            iconBg: const Color(0xFFCFFAFE),
+            title: 'Tinggi Badan',
+            value: _heightCm == null ? '-' : '${_heightCm!.toStringAsFixed(1)} cm',
+            statusChip: null,
+            buttonLabel: _loadingHeight ? 'Mengukur...' : 'Mulai Ukur',
+            hint: 'Berdiri tegak di bawah sensor ultrasonik',
+            loading: _loadingHeight,
+            onPressed: (_loadingHeight || _checkId == null) ? null : _checkHeight,
+            countdown: _loadingHeight
+                ? (_heightRemainingSeconds > 0 ? 'Berdiri tegak... ${_heightRemainingSeconds}s' : 'Memproses...')
+                : null,
+            progress: _loadingHeight
+                ? ((_heightMeasureSeconds - _heightRemainingSeconds) / _heightMeasureSeconds).clamp(0.0, 1.0)
+                : null,
+          ),
+          const SizedBox(height: 12),
+
+          // ─── BMI read-only ─────────────────────────────
+          if (_weightKg != null && _heightCm != null) ...[
             Container(
-              padding: const EdgeInsets.all(24),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
               decoration: BoxDecoration(
-                color: Colors.white, borderRadius: BorderRadius.circular(24),
-                border: Border.all(color: _isHighRisk ? const Color(0xFFFEE2E2) : const Color(0xFFD1FAE5), width: 1.5),
-                boxShadow: [BoxShadow(color: (_isHighRisk ? const Color(0xFFEF4444) : const Color(0xFF0D9F6E)).withOpacity(0.08), blurRadius: 24, offset: const Offset(0, 8))],
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: const Color(0xFFF0F0F0)),
+                boxShadow: const [BoxShadow(color: Color(0x08000000), blurRadius: 12, offset: Offset(0, 4))],
               ),
-              child: Column(children: [
-                const Text('ESTIMASI KONDISI', style: TextStyle(fontSize: 11, color: Color(0xFF6B7280), fontWeight: FontWeight.w600, letterSpacing: 1)),
-                const SizedBox(height: 4),
-                const Text('Hasil Deteksi Dini', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 22, color: Color(0xFF111827), letterSpacing: -0.3)),
-                const SizedBox(height: 16),
+              child: Row(children: [
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                  decoration: BoxDecoration(
-                    color: _isHighRisk ? const Color(0xFFEF4444) : const Color(0xFF0D9F6E),
-                    borderRadius: BorderRadius.circular(99),
-                    boxShadow: [BoxShadow(color: (_isHighRisk ? const Color(0xFFEF4444) : const Color(0xFF0D9F6E)).withOpacity(0.3), blurRadius: 16, offset: const Offset(0, 6))],
-                  ),
-                  child: Text(_riskLabel, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 16)),
+                  width: 44, height: 44,
+                  decoration: BoxDecoration(color: const Color(0xFFF0FDF4), borderRadius: BorderRadius.circular(12)),
+                  child: const Icon(Icons.speed_rounded, color: Color(0xFF0D9F6E), size: 22),
                 ),
-                const SizedBox(height: 16),
-                Text(_riskRecommendation, textAlign: TextAlign.center, style: const TextStyle(fontSize: 14, color: Color(0xFF6B7280), height: 1.5)),
+                const SizedBox(width: 14),
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  const Text('BMI (dihitung otomatis)', style: TextStyle(fontSize: 13, color: Color(0xFF6B7280))),
+                  const SizedBox(height: 2),
+                  Text(
+                    bmi == null ? '-' : '${bmi.toStringAsFixed(2)}  •  ${_bmiLabel(bmi)}',
+                    style: TextStyle(
+                      fontSize: 18, fontWeight: FontWeight.w800,
+                      color: bmi == null ? const Color(0xFF9CA3AF) : _bmiColor(bmi),
+                    ),
+                  ),
+                ]),
+                if (_result != null) ...[
+                  const Spacer(),
+                  _statusChip(_result!.bmiStatus),
+                ],
               ]),
+            ),
+            const SizedBox(height: 8),
+          ],
+
+          const SizedBox(height: 16),
+
+          // ─── Progress indicator sensors ────────────────
+          if (!_canProcess) ...[
+            Container(
+              padding: const EdgeInsets.all(14),
+              decoration: BoxDecoration(
+                color: const Color(0xFFFFF7ED),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: const Color(0xFFFED7AA)),
+              ),
+              child: Row(children: [
+                const Icon(Icons.info_outline, color: Color(0xFFD97706), size: 18),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    _processingHint(),
+                    style: const TextStyle(fontSize: 13, color: Color(0xFF92400E)),
+                  ),
+                ),
+              ]),
+            ),
+            const SizedBox(height: 16),
+          ],
+
+          // ─── Tombol Proses ────────────────────────────
+          SizedBox(
+            width: double.infinity,
+            child: FilledButton.icon(
+              onPressed: (_processing || !_canProcess) ? null : _process,
+              style: FilledButton.styleFrom(
+                backgroundColor: const Color(0xFF0D9F6E),
+                disabledBackgroundColor: const Color(0xFFD1FAE5),
+                padding: const EdgeInsets.symmetric(vertical: 18),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+              ),
+              icon: _processing
+                  ? const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
+                  : const Icon(Icons.health_and_safety_rounded, size: 22),
+              label: Text(
+                _processing ? 'Memproses...' : 'Proses Cek Kesehatan',
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+              ),
+            ),
+          ),
+
+          // ─── Hasil Cek Kesehatan ───────────────────────
+          if (_result != null) ...[
+            const SizedBox(height: 24),
+            ScaleTransition(
+              scale: _successAnim,
+              child: _buildResultCard(_result!),
             ),
           ],
         ],
@@ -257,7 +506,9 @@ class _HealthMonitoringPageState extends ConsumerState<HealthMonitoringPage> {
     );
   }
 
-  Widget _sectionLabel(String label, IconData icon) {
+  // ─── HELPER WIDGETS ───────────────────────────────────────────────────────
+
+  Widget _buildSectionLabel(String label, IconData icon) {
     return Row(children: [
       Icon(icon, size: 20, color: const Color(0xFF0D9F6E)),
       const SizedBox(width: 8),
@@ -265,46 +516,346 @@ class _HealthMonitoringPageState extends ConsumerState<HealthMonitoringPage> {
     ]);
   }
 
+  Widget _buildProfileCard(UserModel? user) {
+    return Container(
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: const Color(0xFFF0F0F0)),
+        boxShadow: const [BoxShadow(color: Color(0x08000000), blurRadius: 16, offset: Offset(0, 6))],
+      ),
+      child: Column(children: [
+        Row(children: [
+          Container(
+            width: 52, height: 52,
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                colors: [Color(0xFF0D9F6E), Color(0xFF059669)],
+                begin: Alignment.topLeft, end: Alignment.bottomRight,
+              ),
+              borderRadius: BorderRadius.circular(14),
+            ),
+            child: const Icon(Icons.child_care_rounded, color: Colors.white, size: 28),
+          ),
+          const SizedBox(width: 14),
+          Expanded(
+            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Text(
+                user?.name ?? '-',
+                style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w800, color: Color(0xFF111827)),
+              ),
+              const SizedBox(height: 4),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFD1FAE5),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: const Text(
+                  'Data dari akun • Tidak dapat diubah',
+                  style: TextStyle(fontSize: 11, color: Color(0xFF065F46), fontWeight: FontWeight.w600),
+                ),
+              ),
+            ]),
+          ),
+        ]),
+        const SizedBox(height: 14),
+        const Divider(height: 1, color: Color(0xFFF0F0F0)),
+        const SizedBox(height: 14),
+        Row(children: [
+          _profileItem(Icons.cake_outlined, 'Umur', user?.age != null ? '${user!.age} tahun' : '-'),
+          const SizedBox(width: 12),
+          _profileItem(Icons.wc_outlined, 'Gender',
+              user?.gender == 'Male' ? 'Laki-laki' : (user?.gender == 'Female' ? 'Perempuan' : '-')),
+        ]),
+      ]),
+    );
+  }
+
+  Widget _profileItem(IconData icon, String label, String value) {
+    return Expanded(
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: const Color(0xFFF9FAFB),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Row(children: [
+          Icon(icon, size: 18, color: const Color(0xFF6B7280)),
+          const SizedBox(width: 8),
+          Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Text(label, style: const TextStyle(fontSize: 11, color: Color(0xFF9CA3AF))),
+            Text(value, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: Color(0xFF111827))),
+          ])),
+        ]),
+      ),
+    );
+  }
+
   Widget _sensorCard({
-    required IconData icon, required Color iconColor, required Color iconBg,
-    required String title, required String value, required String buttonLabel,
-    required bool loading, required VoidCallback? onPressed, String? countdown, double? progress,
+    required IconData icon,
+    required Color iconColor,
+    required Color iconBg,
+    required String title,
+    required String value,
+    required String buttonLabel,
+    required String hint,
+    required bool loading,
+    required VoidCallback? onPressed,
+    Widget? statusChip,
+    String? countdown,
+    double? progress,
   }) {
     return Container(
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: Colors.white, borderRadius: BorderRadius.circular(20),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
         border: Border.all(color: const Color(0xFFF0F0F0)),
         boxShadow: const [BoxShadow(color: Color(0x08000000), blurRadius: 16, offset: Offset(0, 6))],
       ),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Row(children: [
-          Container(width: 44, height: 44, decoration: BoxDecoration(color: iconBg, borderRadius: BorderRadius.circular(12)),
-            child: Icon(icon, color: iconColor, size: 22)),
+          Container(
+            width: 44, height: 44,
+            decoration: BoxDecoration(color: iconBg, borderRadius: BorderRadius.circular(12)),
+            child: Icon(icon, color: iconColor, size: 22),
+          ),
           const SizedBox(width: 14),
           Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Text(title, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Color(0xFF6B7280))),
             const SizedBox(height: 2),
             Text(value, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w800, color: Color(0xFF111827))),
           ])),
+          if (statusChip != null) statusChip,
         ]),
-        if (countdown != null) ...[const SizedBox(height: 10), Text(countdown, style: const TextStyle(fontSize: 13, color: Color(0xFF6B7280)))],
-        if (progress != null) ...[const SizedBox(height: 8), ClipRRect(borderRadius: BorderRadius.circular(8), child: LinearProgressIndicator(value: progress, minHeight: 4))],
+        if (countdown != null) ...[
+          const SizedBox(height: 8),
+          Text(countdown, style: const TextStyle(fontSize: 12, color: Color(0xFF6B7280))),
+        ],
+        if (progress != null) ...[
+          const SizedBox(height: 6),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: LinearProgressIndicator(
+              value: progress,
+              minHeight: 4,
+              backgroundColor: const Color(0xFFE5E7EB),
+              valueColor: AlwaysStoppedAnimation(iconColor),
+            ),
+          ),
+        ],
         const SizedBox(height: 12),
-        SizedBox(width: double.infinity, child: FilledButton.icon(onPressed: onPressed,
-          icon: Icon(icon, size: 18), label: Text(buttonLabel, style: const TextStyle(fontSize: 13)))),
+        Row(children: [
+          Expanded(
+            child: SizedBox(
+              height: 40,
+              child: FilledButton.icon(
+                onPressed: onPressed,
+                style: FilledButton.styleFrom(
+                  backgroundColor: iconColor,
+                  disabledBackgroundColor: iconColor.withOpacity(0.3),
+                ),
+                icon: Icon(icon, size: 16),
+                label: Text(buttonLabel, style: const TextStyle(fontSize: 13)),
+              ),
+            ),
+          ),
+          const SizedBox(width: 10),
+          Tooltip(
+            message: hint,
+            child: Container(
+              width: 40, height: 40,
+              decoration: BoxDecoration(color: const Color(0xFFF3F4F6), borderRadius: BorderRadius.circular(10)),
+              child: const Icon(Icons.help_outline_rounded, size: 18, color: Color(0xFF6B7280)),
+            ),
+          ),
+        ]),
       ]),
     );
   }
 
-  Widget _readOnlyField(String label, String value, IconData icon) {
-    return InputDecorator(
-      decoration: InputDecoration(labelText: label, prefixIcon: Icon(icon, size: 20)),
-      child: Text(value, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Color(0xFF111827))),
+  Widget _buildResultCard(HealthMonitoringRecord r) {
+    final isNormal = r.isNormal;
+    final cardColor   = isNormal ? const Color(0xFF0D9F6E) : const Color(0xFFF59E0B);
+    final bgColor     = isNormal ? const Color(0xFFECFDF5) : const Color(0xFFFFFBEB);
+    final borderColor = isNormal ? const Color(0xFF6EE7B7) : const Color(0xFFFCD34D);
+
+    return Container(
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: borderColor, width: 1.5),
+        boxShadow: [BoxShadow(color: cardColor.withOpacity(0.12), blurRadius: 24, offset: const Offset(0, 8))],
+      ),
+      child: Column(children: [
+        // ── Header ──
+        Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+          Container(
+            width: 56, height: 56,
+            decoration: BoxDecoration(color: bgColor, borderRadius: BorderRadius.circular(14)),
+            child: Icon(isNormal ? Icons.check_circle_rounded : Icons.warning_rounded, size: 32, color: cardColor),
+          ),
+        ]),
+        const SizedBox(height: 12),
+        const Text('HASIL CEK KESEHATAN', style: TextStyle(fontSize: 11, color: Color(0xFF6B7280), fontWeight: FontWeight.w600, letterSpacing: 1.2)),
+        const SizedBox(height: 4),
+        Text(
+          isNormal ? 'Status Normal ✅' : 'Perlu Perhatian ⚠️',
+          style: TextStyle(fontWeight: FontWeight.w800, fontSize: 22, color: cardColor, letterSpacing: -0.3),
+        ),
+        const SizedBox(height: 20),
+
+        // ── Per-parameter status ──
+        Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(color: bgColor, borderRadius: BorderRadius.circular(16)),
+          child: Column(children: [
+            _resultRow(Icons.favorite_rounded, const Color(0xFFEF4444), 'Detak Jantung',
+                '${r.heartRate.toStringAsFixed(0)} bpm', r.heartStatus),
+            const SizedBox(height: 10),
+            _resultRow(Icons.thermostat_rounded, const Color(0xFFF59E0B), 'Suhu Tubuh',
+                '${r.bodyTemp.toStringAsFixed(1)} °C', r.tempStatus),
+            const SizedBox(height: 10),
+            _resultRow(Icons.monitor_weight_rounded, const Color(0xFF6366F1), 'Berat Badan',
+                '${r.weightKg.toStringAsFixed(1)} kg', null),
+            const SizedBox(height: 10),
+            _resultRow(Icons.height_rounded, const Color(0xFF0891B2), 'Tinggi Badan',
+                '${r.heightCm.toStringAsFixed(1)} cm', null),
+            const SizedBox(height: 10),
+            _resultRow(Icons.speed_rounded, const Color(0xFF0D9F6E), 'BMI',
+                '${r.bmi.toStringAsFixed(2)}  •  ${_bmiLabel(r.bmi)}', r.bmiStatus),
+          ]),
+        ),
+        const SizedBox(height: 16),
+
+        // ── Pesan ──
+        if (isNormal) ...[
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                colors: [Color(0xFF0D9F6E), Color(0xFF059669)],
+                begin: Alignment.topLeft, end: Alignment.bottomRight,
+              ),
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: Row(children: [
+              const Text('🎁', style: TextStyle(fontSize: 28)),
+              const SizedBox(width: 12),
+              const Expanded(
+                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  Text('Kotak Snack Terbuka!',
+                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 15)),
+                  SizedBox(height: 4),
+                  Text('Ambil snack kamu dalam 10 detik ya! Kotak akan menutup otomatis.',
+                      style: TextStyle(color: Colors.white70, fontSize: 12)),
+                ]),
+              ),
+            ]),
+          ),
+        ] else ...[
+          Container(
+            padding: const EdgeInsets.all(14),
+            decoration: BoxDecoration(
+              color: const Color(0xFFFFFBEB),
+              borderRadius: BorderRadius.circular(14),
+              border: Border.all(color: const Color(0xFFFCD34D)),
+            ),
+            child: const Row(children: [
+              Text('💪', style: TextStyle(fontSize: 24)),
+              SizedBox(width: 12),
+              Expanded(
+                child: Text(
+                  'Tetap semangat menjaga kesehatan! Konsultasikan ke dokter jika diperlukan.',
+                  style: TextStyle(fontSize: 13, color: Color(0xFF78350F), height: 1.4),
+                ),
+              ),
+            ]),
+          ),
+        ],
+      ]),
     );
   }
 
-  // ─── OLD _readOnly & _info widgets ───
-  // Widget _readOnly(String label, String value) { return InputDecorator(...); }
-  // Widget _info(String label, String value) { return Padding(...); }
+  Widget _resultRow(IconData icon, Color color, String label, String value, String? status) {
+    return Row(children: [
+      Container(
+        width: 36, height: 36,
+        decoration: BoxDecoration(color: color.withOpacity(0.12), borderRadius: BorderRadius.circular(10)),
+        child: Icon(icon, color: color, size: 18),
+      ),
+      const SizedBox(width: 12),
+      Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Text(label, style: const TextStyle(fontSize: 12, color: Color(0xFF6B7280))),
+        Text(value, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: Color(0xFF111827))),
+      ])),
+      if (status != null) _statusChip(status),
+    ]);
+  }
+
+  Widget _statusChip(String status) {
+    final isNormal = status == 'normal';
+    // BMI statuses
+    final isKurus    = status == 'kurus';
+    final isGemuk    = status == 'gemuk';
+    final isObesitas = status == 'obesitas';
+
+    Color bgColor;
+    Color textColor;
+    String label;
+    IconData icon;
+
+    if (isNormal) {
+      bgColor = const Color(0xFFD1FAE5); textColor = const Color(0xFF065F46);
+      label = 'Normal'; icon = Icons.check_circle_rounded;
+    } else if (isKurus) {
+      bgColor = const Color(0xFFDDD6FE); textColor = const Color(0xFF4C1D95);
+      label = 'Kurus'; icon = Icons.warning_rounded;
+    } else if (isGemuk) {
+      bgColor = const Color(0xFFFEF3C7); textColor = const Color(0xFF78350F);
+      label = 'Gemuk'; icon = Icons.warning_rounded;
+    } else if (isObesitas) {
+      bgColor = const Color(0xFFFEE2E2); textColor = const Color(0xFF7F1D1D);
+      label = 'Obesitas'; icon = Icons.error_rounded;
+    } else {
+      bgColor = const Color(0xFFFEE2E2); textColor = const Color(0xFF7F1D1D);
+      label = 'Perlu Perhatian'; icon = Icons.warning_rounded;
+    }
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      decoration: BoxDecoration(color: bgColor, borderRadius: BorderRadius.circular(20)),
+      child: Row(mainAxisSize: MainAxisSize.min, children: [
+        Icon(icon, size: 12, color: textColor),
+        const SizedBox(width: 4),
+        Text(label, style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: textColor)),
+      ]),
+    );
+  }
+
+  String _bmiLabel(double bmi) {
+    if (bmi < 18.5) return 'Kurus';
+    if (bmi < 25.0) return 'Normal';
+    if (bmi < 30.0) return 'Gemuk';
+    return 'Obesitas';
+  }
+
+  Color _bmiColor(double bmi) {
+    if (bmi < 18.5) return const Color(0xFF7C3AED);
+    if (bmi < 25.0) return const Color(0xFF0D9F6E);
+    if (bmi < 30.0) return const Color(0xFFF59E0B);
+    return const Color(0xFFEF4444);
+  }
+
+  String _processingHint() {
+    if (_checkId == null)   return 'Mulai dengan menekan "Cek Detak Jantung"';
+    if (_heartRate == null) return 'Tunggu hasil detak jantung...';
+    if (_bodyTemp == null)  return 'Lanjut cek suhu tubuh';
+    if (_weightKg == null)  return 'Lanjut timbang berat badan';
+    if (_heightCm == null)  return 'Lanjut ukur tinggi badan';
+    return 'Semua sensor selesai. Tekan proses!';
+  }
 }

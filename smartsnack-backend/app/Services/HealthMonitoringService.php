@@ -2,9 +2,12 @@
 
 namespace App\Services;
 
-use Illuminate\Support\Facades\Http;
 use RuntimeException;
 
+// Service ini menangani semua logika monitoring kesehatan:
+// - Fetch data sensor (detak jantung, suhu, berat badan, tinggi badan) via MQTT
+// - Evaluasi status kesehatan (normal/perlu_perhatian) tanpa machine learning
+// - Publish perintah buka servo ke MQTT setelah cek kesehatan berhasil
 class HealthMonitoringService
 {
     private function mqttHost(): string
@@ -44,15 +47,7 @@ class HealthMonitoringService
         return max(5, (int) config('services.mqtt.timeout_seconds', 120));
     }
 
-    private function xgboostEndpoint(): string
-    {
-        return trim((string) config('services.diabetes_xgboost.endpoint', ''));
-    }
-
-    private function requireXgboostModel(): bool
-    {
-        return (bool) config('services.diabetes_xgboost.require_model', true);
-    }
+    // ─── FETCH SENSOR DATA VIA MQTT ────────────────────────────────────────
 
     public function fetchHeartRate(int $checkId, int $userId): array
     {
@@ -72,8 +67,8 @@ class HealthMonitoringService
         }
 
         return [
-            'value' => $value,
-            'source' => 'mqtt',
+            'value'     => $value,
+            'source'    => 'mqtt',
             'transport' => 'mqtt',
             'device_id' => $this->mqttDeviceId(),
         ];
@@ -94,22 +89,168 @@ class HealthMonitoringService
         }
 
         return [
-            'value' => $value,
-            'source' => 'mqtt',
+            'value'     => $value,
+            'source'    => 'mqtt',
             'transport' => 'mqtt',
             'device_id' => $this->mqttDeviceId(),
         ];
     }
 
-    private function sendMqttCommandAndWait(int $checkId, int $userId, string $action, int $timeoutSeconds): array
+    // Fetch berat badan dari sensor LoadCell (HX711) via MQTT command "weight"
+    public function fetchWeight(int $checkId, int $userId): array
     {
-        $deviceId = $this->mqttDeviceId();
-        $commandTopic = "smartsnack/health/command/{$deviceId}";
-        $resultTopic = "smartsnack/health/result/{$deviceId}";
+        $response = $this->sendMqttCommandAndWait(
+            checkId: $checkId,
+            userId: $userId,
+            action: 'weight',
+            timeoutSeconds: 30
+        );
+
+        $value = $this->toFloat($response['weight_kg'] ?? null);
+        if ($value === null || $value <= 0) {
+            throw new RuntimeException('Berat badan tidak terbaca. Pastikan berdiri di atas timbangan dengan stabil.');
+        }
+        if ($value < 1 || $value > 200) {
+            throw new RuntimeException('Berat badan tidak valid (' . round($value, 1) . ' kg). Ulangi pengukuran.');
+        }
+
+        return [
+            'value'     => $value,
+            'source'    => 'mqtt',
+            'transport' => 'mqtt',
+            'device_id' => $this->mqttDeviceId(),
+        ];
+    }
+
+    // Fetch tinggi badan dari sensor HC-SR04 via MQTT command "height"
+    public function fetchHeight(int $checkId, int $userId): array
+    {
+        $response = $this->sendMqttCommandAndWait(
+            checkId: $checkId,
+            userId: $userId,
+            action: 'height',
+            timeoutSeconds: 30
+        );
+
+        $value = $this->toFloat($response['height_cm'] ?? null);
+        if ($value === null || $value <= 0) {
+            throw new RuntimeException('Tinggi badan tidak terbaca. Pastikan berdiri tegak di bawah sensor ultrasonik.');
+        }
+        if ($value < 50 || $value > 250) {
+            throw new RuntimeException('Tinggi badan tidak valid (' . round($value, 1) . ' cm). Ulangi pengukuran.');
+        }
+
+        return [
+            'value'     => $value,
+            'source'    => 'mqtt',
+            'transport' => 'mqtt',
+            'device_id' => $this->mqttDeviceId(),
+        ];
+    }
+
+    // ─── EVALUASI STATUS KESEHATAN (tanpa machine learning) ────────────────
+
+    // Evaluasi status kesehatan berdasarkan nilai sensor.
+    // Mengembalikan array berisi status per parameter dan status keseluruhan.
+    public function evaluateHealthStatus(array $payload): array
+    {
+        $heartRate = (float) ($payload['heart_rate'] ?? 0);
+        $bodyTemp  = (float) ($payload['body_temp']  ?? 0);
+        $bmi       = (float) ($payload['bmi']        ?? 0);
+        $age       = (int)   ($payload['age']         ?? 10);
+
+        // ─ Detak Jantung ─
+        // Nilai normal untuk anak: 70-110 bpm, dewasa: 60-100 bpm
+        // Pakai rentang 60-110 sebagai adaptif untuk anak-anak
+        if ($age <= 12) {
+            $heartNormal = ($heartRate >= 70 && $heartRate <= 110);
+        } else {
+            $heartNormal = ($heartRate >= 60 && $heartRate <= 100);
+        }
+        $heartStatus = $heartNormal ? 'normal' : 'perlu_perhatian';
+
+        // ─ Suhu Tubuh ─
+        // Normal: 36.0 – 37.5 °C
+        $tempNormal = ($bodyTemp >= 36.0 && $bodyTemp <= 37.5);
+        $tempStatus = $tempNormal ? 'normal' : 'perlu_perhatian';
+
+        // ─ BMI (WHO) ─
+        if ($bmi <= 0) {
+            $bmiStatus = 'normal'; // tidak ada data BMI, anggap normal
+        } elseif ($bmi < 18.5) {
+            $bmiStatus = 'kurus';
+        } elseif ($bmi < 25.0) {
+            $bmiStatus = 'normal';
+        } elseif ($bmi < 30.0) {
+            $bmiStatus = 'gemuk';
+        } else {
+            $bmiStatus = 'obesitas';
+        }
+
+        // ─ Status Keseluruhan ─
+        $bmiNormal = in_array($bmiStatus, ['normal'], true);
+        $allNormal = $heartNormal && $tempNormal && $bmiNormal;
+        $overallStatus = $allNormal ? 'normal' : 'perlu_perhatian';
+
+        return [
+            'heart_status'   => $heartStatus,
+            'temp_status'    => $tempStatus,
+            'bmi_status'     => $bmiStatus,
+            'overall_status' => $overallStatus,
+        ];
+    }
+
+    // ─── MQTT: BUKA SERVO BOX ──────────────────────────────────────────────
+
+    // Publish perintah buka servo ke ESP32 via MQTT.
+    // Dipanggil setelah proses cek kesehatan berhasil — box otomatis terbuka
+    // sebagai hadiah, dan akan menutup sendiri setelah 10 detik (di firmware).
+    public function publishOpenBox(): bool
+    {
+        $deviceId  = $this->mqttDeviceId();
+        $openTopic = "smartsnack/box/open/{$deviceId}";
+
+        $payload = json_encode([
+            'event'      => 'open_after_health_check',
+            'device_id'  => $deviceId,
+            'duration_ms' => 10000,
+            'sent_at'    => now()->toIso8601String(),
+        ], JSON_UNESCAPED_SLASHES);
+
+        if ($payload === false) {
+            return false;
+        }
 
         $client = new SimpleMqttClient(
-            host: $this->mqttHost(),
-            port: $this->mqttPort(),
+            host:     $this->mqttHost(),
+            port:     $this->mqttPort(),
+            clientId: $this->mqttClientPrefix() . '_open_' . uniqid(),
+            username: $this->mqttUsername(),
+            password: $this->mqttPassword()
+        );
+
+        try {
+            $client->connect(10);
+            $sent = $client->publish($openTopic, $payload);
+            return $sent;
+        } catch (\Throwable) {
+            return false;
+        } finally {
+            $client->disconnect();
+        }
+    }
+
+    // ─── MQTT INTERNAL ─────────────────────────────────────────────────────
+
+    private function sendMqttCommandAndWait(int $checkId, int $userId, string $action, int $timeoutSeconds): array
+    {
+        $deviceId     = $this->mqttDeviceId();
+        $commandTopic = "smartsnack/health/command/{$deviceId}";
+        $resultTopic  = "smartsnack/health/result/{$deviceId}";
+
+        $client = new SimpleMqttClient(
+            host:     $this->mqttHost(),
+            port:     $this->mqttPort(),
             clientId: $this->mqttClientPrefix() . '_' . uniqid(),
             username: $this->mqttUsername(),
             password: $this->mqttPassword()
@@ -120,9 +261,9 @@ class HealthMonitoringService
             $client->subscribe($resultTopic);
 
             $commandPayload = json_encode([
-                'action' => $action,
-                'check_id' => $checkId,
-                'user_id' => $userId,
+                'action'       => $action,
+                'check_id'     => $checkId,
+                'user_id'      => $userId,
                 'requested_at' => now()->toIso8601String(),
             ], JSON_UNESCAPED_SLASHES);
 
@@ -151,7 +292,7 @@ class HealthMonitoringService
                     throw new RuntimeException('Jari belum terdeteksi. Tempelkan jari menutup sensor MAX30102 dengan stabil sampai pengukuran selesai.');
                 }
                 if ($error === 'signal_invalid') {
-                    throw new RuntimeException('Sinyal detak tidak stabil. Coba ulang dan kurangi gerakan jari saat pengukuran.');
+                    throw new RuntimeException('Sinyal tidak stabil. Coba ulang dan kurangi gerakan saat pengukuran.');
                 }
                 if ($error === 'sensor_unavailable') {
                     throw new RuntimeException('Sensor tidak tersedia. Cek koneksi kabel dan catu daya perangkat.');
@@ -163,80 +304,6 @@ class HealthMonitoringService
         } finally {
             $client->disconnect();
         }
-    }
-
-    public function analyzeRisk(array $payload): array
-    {
-        $endpoint = $this->xgboostEndpoint();
-        if ($endpoint === '') {
-            if ($this->requireXgboostModel()) {
-                throw new RuntimeException('Service XGBoost belum diaktifkan. Jalankan XGBOOST/main.py dalam mode API lalu isi DIABETES_XGBOOST_ENDPOINT di .env backend.');
-            }
-            throw new RuntimeException('Service XGBoost endpoint kosong.');
-        }
-
-        $requestPayload = $payload;
-        $requestPayload['gender'] = $requestPayload['gender'] ?? 'Male';
-
-        try {
-            $resp = Http::timeout(20)->post($endpoint, $requestPayload);
-        } catch (\Throwable $e) {
-            throw new RuntimeException('Service XGBoost tidak dapat dihubungi. Pastikan XGBOOST/main.py berjalan sebagai API.');
-        }
-
-        if (!$resp->successful()) {
-            throw new RuntimeException('Service XGBoost merespons gagal (HTTP ' . $resp->status() . ').');
-        }
-
-        $data = $resp->json();
-        if (!is_array($data)) {
-            throw new RuntimeException('Response XGBoost tidak valid.');
-        }
-
-        $probabilityDiabetes = $this->extractProbabilityDiabetes($data);
-        $rawRisk = strtoupper((string) ($data['risk'] ?? $data['risk_diabetes'] ?? $data['result'] ?? ''));
-        if (in_array($rawRisk, ['YA', 'YES'], true)) {
-            return [
-                'risk' => 'yes',
-                'algorithm' => 'xgboost_service',
-                'risk_percent' => $probabilityDiabetes === null ? null : round($probabilityDiabetes * 100, 2),
-            ];
-        }
-        if (in_array($rawRisk, ['TIDAK', 'NO'], true)) {
-            return [
-                'risk' => 'no',
-                'algorithm' => 'xgboost_service',
-                'risk_percent' => $probabilityDiabetes === null ? null : round($probabilityDiabetes * 100, 2),
-            ];
-        }
-        throw new RuntimeException('Response XGBoost tidak memiliki label risiko yang valid.');
-    }
-
-    private function extractProbabilityDiabetes(array $data): ?float
-    {
-        $candidates = [
-            $data['probability_diabetes'] ?? null,
-            $data['probability'] ?? null,
-            $data['score'] ?? null,
-            $data['risk_probability'] ?? null,
-        ];
-
-        foreach ($candidates as $candidate) {
-            $value = $this->toFloat($candidate);
-            if ($value === null) {
-                continue;
-            }
-
-            if ($value > 1 && $value <= 100) {
-                $value = $value / 100;
-            }
-
-            if ($value >= 0 && $value <= 1) {
-                return $value;
-            }
-        }
-
-        return null;
     }
 
     private function toFloat($value): ?float

@@ -5,8 +5,8 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Models\BodyMetric;
 use App\Models\BodyTemperature;
-use App\Models\DiabetesPrediction;
 use App\Models\HealthCheck;
+use App\Models\HealthResult;
 use App\Models\HeartRate;
 use App\Services\HealthMonitoringService;
 use Carbon\Carbon;
@@ -16,20 +16,26 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Throwable;
 
+// Controller ini menangani seluruh alur monitoring kesehatan anak:
+// 1. Cek detak jantung (MAX30102)
+// 2. Cek suhu tubuh (MLX90614)
+// 3. Cek berat badan (LoadCell + HX711)
+// 4. Cek tinggi badan (HC-SR04 ultrasonik)
+// 5. Proses hasil: evaluasi status kesehatan (normal/perlu_perhatian) tanpa ML
+// 6. Setelah berhasil, buka servo box otomatis via MQTT
 class HealthMonitoringController extends Controller
 {
     public function __construct(private readonly HealthMonitoringService $service)
     {
     }
 
-
-    // Alur fungsi ini: app trigger cek detak jantung, backend command device via MQTT, simpan hasil sensor, lalu kirim ke app.
+    // Alur: app trigger cek detak jantung → backend command device via MQTT → simpan hasil → kirim ke app.
     public function checkHeartRate(Request $request): JsonResponse
     {
         @set_time_limit(0);
         try {
             $check = HealthCheck::create([
-                'user_id' => $request->user()->id,
+                'user_id'    => $request->user()->id,
                 'created_at' => now(),
             ]);
 
@@ -38,16 +44,16 @@ class HealthMonitoringController extends Controller
                 userId: (int) $request->user()->id
             );
             HeartRate::create([
-                'check_id' => $check->id,
+                'check_id'   => $check->id,
                 'heart_rate' => (int) round((float) $sensor['value']),
             ]);
 
             return successResponse([
-                'check_id' => $check->id,
+                'check_id'   => $check->id,
                 'heart_rate' => (float) $sensor['value'],
-                'source' => (string) $sensor['source'],
-                'transport' => (string) ($sensor['transport'] ?? 'mqtt'),
-                'device_id' => (string) ($sensor['device_id'] ?? ''),
+                'source'     => (string) $sensor['source'],
+                'transport'  => (string) ($sensor['transport'] ?? 'mqtt'),
+                'device_id'  => (string) ($sensor['device_id'] ?? ''),
                 'checked_at' => $this->toIso8601($check->created_at),
             ], 'Data detak jantung berhasil diambil.');
         } catch (Throwable $e) {
@@ -55,9 +61,7 @@ class HealthMonitoringController extends Controller
         }
     }
 
-
-
-    // Alur fungsi ini: app trigger cek suhu, backend command device via MQTT, simpan suhu ke database, lalu kirim hasil.
+    // Alur: app trigger cek suhu tubuh → backend command device via MQTT → simpan suhu → kirim hasil.
     public function checkBodyTemperature(Request $request): JsonResponse
     {
         @set_time_limit(0);
@@ -82,11 +86,11 @@ class HealthMonitoringController extends Controller
             );
 
             return successResponse([
-                'check_id' => $check->id,
-                'body_temp' => (float) $sensor['value'],
-                'source' => (string) $sensor['source'],
-                'transport' => (string) ($sensor['transport'] ?? 'mqtt'),
-                'device_id' => (string) ($sensor['device_id'] ?? ''),
+                'check_id'   => $check->id,
+                'body_temp'  => (float) $sensor['value'],
+                'source'     => (string) $sensor['source'],
+                'transport'  => (string) ($sensor['transport'] ?? 'mqtt'),
+                'device_id'  => (string) ($sensor['device_id'] ?? ''),
                 'checked_at' => $this->toIso8601($check->created_at),
             ], 'Data suhu tubuh berhasil diambil.');
         } catch (Throwable $e) {
@@ -94,21 +98,12 @@ class HealthMonitoringController extends Controller
         }
     }
 
-
-
-
-
-
-    // Alur fungsi ini: app kirim data biometrik+check_id, backend gabung data sensor lalu panggil model XGBoost, simpan hasil risiko.
-    public function analyze(Request $request): JsonResponse
+    // Alur: app trigger cek berat badan → backend command LoadCell via MQTT → simpan → kirim hasil.
+    public function checkWeight(Request $request): JsonResponse
     {
+        @set_time_limit(0);
         $validated = $request->validate([
             'check_id' => 'required|integer|exists:health_checks,id',
-            'age' => 'required|integer|min:1|max:120',
-            'gender' => 'required|in:Male,Female',
-            'height_cm' => 'required|numeric|min:50|max:260',
-            'weight_kg' => 'required|numeric|min:10|max:350',
-            'bmi' => 'required|numeric|min:5|max:80',
         ]);
 
         $check = HealthCheck::query()
@@ -116,75 +111,176 @@ class HealthMonitoringController extends Controller
             ->where('user_id', $request->user()->id)
             ->firstOrFail();
 
-        $heart = HeartRate::query()->where('check_id', $check->id)->latest('id')->first();
-        $temp = BodyTemperature::query()->where('check_id', $check->id)->latest('id')->first();
+        try {
+            $sensor = $this->service->fetchWeight(
+                checkId: $check->id,
+                userId: (int) $request->user()->id
+            );
+
+            // Simpan berat badan ke body_metrics (updateOrCreate)
+            BodyMetric::query()->updateOrCreate(
+                ['check_id' => $check->id],
+                ['weight' => round((float) $sensor['value'], 2)]
+            );
+
+            return successResponse([
+                'check_id'   => $check->id,
+                'weight_kg'  => (float) $sensor['value'],
+                'source'     => (string) $sensor['source'],
+                'transport'  => (string) ($sensor['transport'] ?? 'mqtt'),
+                'device_id'  => (string) ($sensor['device_id'] ?? ''),
+                'checked_at' => $this->toIso8601($check->created_at),
+            ], 'Data berat badan berhasil diambil.');
+        } catch (Throwable $e) {
+            return errorResponse($e->getMessage(), null, 422);
+        }
+    }
+
+    // Alur: app trigger cek tinggi badan → backend command HC-SR04 via MQTT → simpan → kirim hasil.
+    public function checkHeight(Request $request): JsonResponse
+    {
+        @set_time_limit(0);
+        $validated = $request->validate([
+            'check_id' => 'required|integer|exists:health_checks,id',
+        ]);
+
+        $check = HealthCheck::query()
+            ->where('id', $validated['check_id'])
+            ->where('user_id', $request->user()->id)
+            ->firstOrFail();
+
+        try {
+            $sensor = $this->service->fetchHeight(
+                checkId: $check->id,
+                userId: (int) $request->user()->id
+            );
+
+            // Simpan tinggi badan ke body_metrics (updateOrCreate)
+            BodyMetric::query()->updateOrCreate(
+                ['check_id' => $check->id],
+                ['height' => round((float) $sensor['value'], 2)]
+            );
+
+            return successResponse([
+                'check_id'   => $check->id,
+                'height_cm'  => (float) $sensor['value'],
+                'source'     => (string) $sensor['source'],
+                'transport'  => (string) ($sensor['transport'] ?? 'mqtt'),
+                'device_id'  => (string) ($sensor['device_id'] ?? ''),
+                'checked_at' => $this->toIso8601($check->created_at),
+            ], 'Data tinggi badan berhasil diambil.');
+        } catch (Throwable $e) {
+            return errorResponse($e->getMessage(), null, 422);
+        }
+    }
+
+    // Alur: app kirim check_id → backend ambil semua data sensor, hitung BMI,
+    // evaluasi status (normal/perlu_perhatian) tanpa ML, simpan hasil,
+    // lalu publish MQTT untuk buka servo box selama 10 detik.
+    public function analyze(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'check_id' => 'required|integer|exists:health_checks,id',
+        ]);
+
+        $check = HealthCheck::query()
+            ->where('id', $validated['check_id'])
+            ->where('user_id', $request->user()->id)
+            ->firstOrFail();
+
+        $user   = $request->user();
+        $heart  = HeartRate::query()->where('check_id', $check->id)->latest('id')->first();
+        $temp   = BodyTemperature::query()->where('check_id', $check->id)->latest('id')->first();
+        $metric = BodyMetric::query()->where('check_id', $check->id)->first();
 
         if ($heart === null || $temp === null) {
             return errorResponse('Data sensor belum lengkap. Cek detak jantung dan suhu tubuh terlebih dahulu.', null, 422);
         }
 
-        $payload = [
+        $weightKg = $metric ? (float) $metric->weight : null;
+        $heightCm = $metric ? (float) $metric->height : null;
+
+        if ($weightKg === null || $weightKg <= 0) {
+            return errorResponse('Data berat badan belum tersedia. Lakukan cek berat badan terlebih dahulu.', null, 422);
+        }
+        if ($heightCm === null || $heightCm <= 0) {
+            return errorResponse('Data tinggi badan belum tersedia. Lakukan cek tinggi badan terlebih dahulu.', null, 422);
+        }
+
+        // Hitung BMI
+        $heightM = $heightCm / 100;
+        $bmi     = round($weightKg / ($heightM * $heightM), 2);
+
+        // Ambil age dari profil user
+        $age    = (int) ($user->age ?? 10);
+        $gender = (string) ($user->gender ?? 'Male');
+
+        // Evaluasi status kesehatan (rule-based, tanpa ML)
+        $evaluation = $this->service->evaluateHealthStatus([
             'heart_rate' => (float) $heart->heart_rate,
-            'body_temp' => (float) $temp->temperature,
-            'age' => (int) $validated['age'],
-            'gender' => (string) $validated['gender'],
-            'height_cm' => (float) $validated['height_cm'],
-            'weight_kg' => (float) $validated['weight_kg'],
-            'bmi' => (float) $validated['bmi'],
-        ];
+            'body_temp'  => (float) $temp->temperature,
+            'bmi'        => $bmi,
+            'age'        => $age,
+        ]);
 
-        $risk = $this->service->analyzeRisk($payload);
-
-        DB::transaction(function () use ($check, $validated, $risk): void {
+        DB::transaction(function () use ($check, $user, $weightKg, $heightCm, $bmi, $age, $gender, $evaluation): void {
             BodyMetric::query()->updateOrCreate(
                 ['check_id' => $check->id],
                 [
-                    'age' => (int) $validated['age'],
-                    'gender' => (string) $validated['gender'],
-                    'height' => round((float) $validated['height_cm'], 2),
-                    'weight' => round((float) $validated['weight_kg'], 2),
-                    'bmi' => round((float) $validated['bmi'], 2),
+                    'age'    => $age,
+                    'gender' => $gender,
+                    'height' => round($heightCm, 2),
+                    'weight' => round($weightKg, 2),
+                    'bmi'    => $bmi,
                 ]
             );
 
-            DiabetesPrediction::query()->updateOrCreate(
+            HealthResult::query()->updateOrCreate(
                 ['check_id' => $check->id],
-                ['result' => (string) $risk['risk']]
+                [
+                    'heart_status'   => $evaluation['heart_status'],
+                    'temp_status'    => $evaluation['temp_status'],
+                    'bmi_status'     => $evaluation['bmi_status'],
+                    'overall_status' => $evaluation['overall_status'],
+                ]
             );
         });
 
+        // Buka servo box setelah cek kesehatan berhasil (tidak bergantung hasilnya)
+        try {
+            $this->service->publishOpenBox();
+        } catch (\Throwable) {
+            // Tidak gagalkan response jika MQTT buka box gagal
+        }
+
         return successResponse([
-            'check_id' => $check->id,
-            'heart_rate' => (float) $heart->heart_rate,
-            'body_temp' => (float) $temp->temperature,
-            'age' => (int) $validated['age'],
-            'gender' => (string) $validated['gender'],
-            'height_cm' => (float) $validated['height_cm'],
-            'weight_kg' => (float) $validated['weight_kg'],
-            'bmi' => (float) $validated['bmi'],
-            'risk_diabetes' => (string) $risk['risk'],
-            'algorithm' => (string) $risk['algorithm'],
-            'risk_percent' => isset($risk['risk_percent']) ? (float) $risk['risk_percent'] : null,
-            'checked_at' => $this->toIso8601($check->created_at),
-        ], 'Analisis dini risiko diabetes berhasil diproses.');
+            'check_id'       => $check->id,
+            'heart_rate'     => (float) $heart->heart_rate,
+            'body_temp'      => (float) $temp->temperature,
+            'weight_kg'      => round($weightKg, 2),
+            'height_cm'      => round($heightCm, 2),
+            'bmi'            => $bmi,
+            'age'            => $age,
+            'gender'         => $gender,
+            'heart_status'   => $evaluation['heart_status'],
+            'temp_status'    => $evaluation['temp_status'],
+            'bmi_status'     => $evaluation['bmi_status'],
+            'overall_status' => $evaluation['overall_status'],
+            'checked_at'     => $this->toIso8601($check->created_at),
+        ], 'Monitoring kesehatan berhasil diproses.');
     }
 
-
-
-
-
-
-    // Alur fungsi ini: request dari app diproses di controller (validasi + service/model/database), lalu response dikirim balik ke aplikasi.
+    // Ambil riwayat monitoring kesehatan user dari database.
     public function history(Request $request): JsonResponse
     {
         $rows = HealthCheck::query()
             ->where('health_checks.user_id', $request->user()->id)
-            ->leftJoin('heart_rates', 'heart_rates.check_id', '=', 'health_checks.id')
+            ->leftJoin('heart_rates',       'heart_rates.check_id',       '=', 'health_checks.id')
             ->leftJoin('body_temperatures', 'body_temperatures.check_id', '=', 'health_checks.id')
-            ->leftJoin('body_metrics', 'body_metrics.check_id', '=', 'health_checks.id')
-            ->leftJoin('diabetes_predictions', 'diabetes_predictions.check_id', '=', 'health_checks.id')
+            ->leftJoin('body_metrics',      'body_metrics.check_id',      '=', 'health_checks.id')
+            ->leftJoin('health_results',    'health_results.check_id',    '=', 'health_checks.id')
             ->whereNotNull('body_metrics.id')
-            ->whereNotNull('diabetes_predictions.id')
+            ->whereNotNull('health_results.id')
             ->orderByDesc('health_checks.created_at')
             ->get([
                 'health_checks.id as check_id',
@@ -196,21 +292,26 @@ class HealthMonitoringController extends Controller
                 'body_metrics.height',
                 'body_metrics.weight',
                 'body_metrics.bmi',
-                'diabetes_predictions.result',
+                'health_results.heart_status',
+                'health_results.temp_status',
+                'health_results.bmi_status',
+                'health_results.overall_status',
             ])
             ->map(function ($row) {
                 return [
-                    'check_id' => (int) $row->check_id,
-                    'heart_rate' => (float) ($row->heart_rate ?? 0),
-                    'body_temp' => (float) ($row->temperature ?? 0),
-                    'age' => (int) ($row->age ?? 0),
-                    'gender' => (string) ($row->gender ?? 'Male'),
-                    'height_cm' => (float) ($row->height ?? 0),
-                    'weight_kg' => (float) ($row->weight ?? 0),
-                    'bmi' => (float) ($row->bmi ?? 0),
-                    'risk_diabetes' => strtoupper((string) ($row->result ?? 'TIDAK')),
-                    'algorithm' => 'xgboost_service',
-                    'checked_at' => $this->toIso8601($row->created_at),
+                    'check_id'       => (int) $row->check_id,
+                    'heart_rate'     => (float) ($row->heart_rate ?? 0),
+                    'body_temp'      => (float) ($row->temperature ?? 0),
+                    'age'            => (int) ($row->age ?? 0),
+                    'gender'         => (string) ($row->gender ?? 'Male'),
+                    'height_cm'      => (float) ($row->height ?? 0),
+                    'weight_kg'      => (float) ($row->weight ?? 0),
+                    'bmi'            => (float) ($row->bmi ?? 0),
+                    'heart_status'   => (string) ($row->heart_status   ?? 'normal'),
+                    'temp_status'    => (string) ($row->temp_status    ?? 'normal'),
+                    'bmi_status'     => (string) ($row->bmi_status     ?? 'normal'),
+                    'overall_status' => (string) ($row->overall_status ?? 'normal'),
+                    'checked_at'     => $this->toIso8601($row->created_at),
                 ];
             })
             ->values();
@@ -235,5 +336,3 @@ class HealthMonitoringController extends Controller
         }
     }
 }
-
-
