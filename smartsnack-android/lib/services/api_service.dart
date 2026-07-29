@@ -1876,19 +1876,20 @@ class ApiService {
     return envelope.data ?? 0; 
   }
 
-  Future<Map<String, dynamic>> checkHeartRate() async {
+  Future<Map<String, dynamic>> checkHeartRate({int? checkId}) async {
     return _postWithTimeout(
       '/api/health-monitoring/check-heart-rate',
+      data: checkId != null ? {'check_id': checkId} : null,
       connectTimeout: const Duration(seconds: 120),
       sendTimeout: const Duration(seconds: 30),
       receiveTimeout: const Duration(seconds: 180),
     );
   }
 
-  Future<Map<String, dynamic>> checkBodyTemperature({required int checkId}) async {
+  Future<Map<String, dynamic>> checkBodyTemperature({int? checkId}) async {
     return _postWithTimeout(
       '/api/health-monitoring/check-body-temperature',
-      data: {'check_id': checkId},
+      data: checkId != null ? {'check_id': checkId} : null,
       connectTimeout: const Duration(seconds: 60),
       sendTimeout: const Duration(seconds: 20),
       receiveTimeout: const Duration(seconds: 60),
@@ -1896,10 +1897,10 @@ class ApiService {
   }
 
   // Trigger baca berat badan dari sensor LoadCell (HX711) via MQTT
-  Future<Map<String, dynamic>> checkWeight({required int checkId}) async {
+  Future<Map<String, dynamic>> checkWeight({int? checkId}) async {
     return _postWithTimeout(
       '/api/health-monitoring/check-weight',
-      data: {'check_id': checkId},
+      data: checkId != null ? {'check_id': checkId} : null,
       connectTimeout: const Duration(seconds: 60),
       sendTimeout: const Duration(seconds: 20),
       receiveTimeout: const Duration(seconds: 60),
@@ -1907,10 +1908,10 @@ class ApiService {
   }
 
   // Trigger baca tinggi badan dari sensor HC-SR04 (ultrasonik) via MQTT
-  Future<Map<String, dynamic>> checkHeight({required int checkId}) async {
+  Future<Map<String, dynamic>> checkHeight({int? checkId}) async {
     return _postWithTimeout(
       '/api/health-monitoring/check-height',
-      data: {'check_id': checkId},
+      data: checkId != null ? {'check_id': checkId} : null,
       connectTimeout: const Duration(seconds: 60),
       sendTimeout: const Duration(seconds: 20),
       receiveTimeout: const Duration(seconds: 60),

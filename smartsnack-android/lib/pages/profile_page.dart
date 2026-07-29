@@ -202,7 +202,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> with SingleTickerProv
           _healthRow(Icons.thermostat_rounded, 'Suhu Tubuh', data == null ? '-' : '${data.bodyTemp.toStringAsFixed(1)} °C'),
           _healthRow(Icons.wc_rounded, 'Gender', data == null ? '-' : (data.gender == 'Female' ? 'Perempuan' : 'Laki-laki')),
           _healthRow(Icons.speed_rounded, 'BMI', data == null ? '-' : data.bmi.toStringAsFixed(2)),
-          _healthRow(Icons.warning_amber_rounded, 'Risiko Diabetes', data?.riskDiabetes ?? '-'),
+          _healthRow(Icons.health_and_safety_rounded, 'Status Kesehatan', data == null ? '-' : (data.isNormal ? 'Normal ✅' : 'Perlu Perhatian ⚠️')),
           const SizedBox(height: 14),
           Container(height: 1, color: const Color(0xFFF3F4F6)),
           const SizedBox(height: 14),
@@ -301,9 +301,6 @@ class _HealthHistoryList extends StatelessWidget {
       final dt = DateTime.tryParse(item.checkedAtIso);
       final dateText = dt == null ? item.checkedAtIso
         : '${dt.day.toString().padLeft(2, '0')}-${dt.month.toString().padLeft(2, '0')}-${dt.year} ${dt.hour.toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}';
-      // ─── OLD Card ───
-      // return Card(margin: const EdgeInsets.symmetric(vertical: 6), child: Padding(...));
-      // ─── NEW Card ───
       return Container(
         margin: const EdgeInsets.symmetric(vertical: 6),
         padding: const EdgeInsets.all(16),
@@ -332,15 +329,16 @@ class _HealthHistoryList extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(
-              color: (item.riskDiabetes.toUpperCase().trim() == 'YES' || item.riskDiabetes.toUpperCase().trim() == 'YA')
-                ? const Color(0xFFFEE2E2) : const Color(0xFFD1FAE5),
+              color: item.isNormal ? const Color(0xFFD1FAE5) : const Color(0xFFFEF3C7),
               borderRadius: BorderRadius.circular(99),
             ),
-            child: Text('Risiko: ${item.riskDiabetes}', style: TextStyle(
-              fontWeight: FontWeight.w700, fontSize: 12,
-              color: (item.riskDiabetes.toUpperCase().trim() == 'YES' || item.riskDiabetes.toUpperCase().trim() == 'YA')
-                ? const Color(0xFFDC2626) : const Color(0xFF065F46),
-            )),
+            child: Text(
+              'Status: ${item.isNormal ? "Normal ✅" : "Perlu Perhatian ⚠️"}',
+              style: TextStyle(
+                fontWeight: FontWeight.w700, fontSize: 12,
+                color: item.isNormal ? const Color(0xFF065F46) : const Color(0xFF78350F),
+              ),
+            ),
           ),
         ]),
       );

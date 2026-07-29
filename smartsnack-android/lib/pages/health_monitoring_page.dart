@@ -144,17 +144,21 @@ class _HealthMonitoringPageState extends ConsumerState<HealthMonitoringPage>
     _heartTimer?.cancel();
     setState(() { _loadingHeartRate = true; _result = null; });
     _startHeartCountdown();
-    _snack('Letakkan jari ke sensor. Sistem mulai mengukur detak jantung selama 60 detik.');
+    _snack('Letakkan jari ke sensor. Sistem mulai mengukur detak jantung...');
     try {
-      final map = await ref.read(apiServiceProvider).checkHeartRate();
+      final map = await ref.read(apiServiceProvider).checkHeartRate(checkId: _checkId);
       final raw = map['data'];
       if (raw is! Map<String, dynamic>) throw Exception('Data detak jantung tidak valid.');
       final nextCheckId   = int.tryParse(raw['check_id'].toString());
       final nextHeartRate = double.tryParse(raw['heart_rate'].toString());
-      if (nextCheckId == null || nextHeartRate == null) throw Exception('Data detak jantung dari server tidak lengkap.');
+      if (nextHeartRate == null) throw Exception('Data detak jantung dari server tidak lengkap.');
       if (!mounted) return;
-      setState(() { _checkId = nextCheckId; _heartRate = nextHeartRate; _bodyTemp = null; _weightKg = null; _heightCm = null; _result = null; });
-      _snack('✅ Detak jantung berhasil diambil. Lanjut cek suhu tubuh.');
+      setState(() {
+        if (nextCheckId != null) _checkId = nextCheckId;
+        _heartRate = nextHeartRate;
+        _result = null;
+      });
+      _snack('✅ Detak jantung berhasil diambil.');
     } catch (e) {
       if (!mounted) return;
       _snack(e.toString().replaceFirst('Exception: ', ''));
@@ -165,21 +169,24 @@ class _HealthMonitoringPageState extends ConsumerState<HealthMonitoringPage>
   }
 
   Future<void> _checkBodyTemperature() async {
-    final checkId = _checkId;
-    if (checkId == null) { _snack('Cek Detak Jantung dulu untuk membuat sesi pengecekan.'); return; }
     _tempTimer?.cancel();
     setState(() { _loadingBodyTemp = true; _result = null; });
     _startTempCountdown();
-    _snack('Arahkan dahi ke sensor sampai suhu terbaca.');
+    _snack('Arahkan dahi ke sensor sampai suhu terbaca...');
     try {
-      final map = await ref.read(apiServiceProvider).checkBodyTemperature(checkId: checkId);
+      final map = await ref.read(apiServiceProvider).checkBodyTemperature(checkId: _checkId);
       final raw = map['data'];
       if (raw is! Map<String, dynamic>) throw Exception('Data suhu tubuh tidak valid.');
+      final nextCheckId  = int.tryParse(raw['check_id'].toString());
       final nextBodyTemp = double.tryParse(raw['body_temp'].toString());
       if (nextBodyTemp == null) throw Exception('Data suhu tubuh dari server tidak lengkap.');
       if (!mounted) return;
-      setState(() { _bodyTemp = nextBodyTemp; _result = null; });
-      _snack('✅ Suhu tubuh berhasil diambil. Lanjut cek berat badan.');
+      setState(() {
+        if (nextCheckId != null) _checkId = nextCheckId;
+        _bodyTemp = nextBodyTemp;
+        _result = null;
+      });
+      _snack('✅ Suhu tubuh berhasil diambil.');
     } catch (e) {
       if (!mounted) return;
       _snack(e.toString().replaceFirst('Exception: ', ''));
@@ -190,21 +197,24 @@ class _HealthMonitoringPageState extends ConsumerState<HealthMonitoringPage>
   }
 
   Future<void> _checkWeight() async {
-    final checkId = _checkId;
-    if (checkId == null) { _snack('Cek Detak Jantung dulu untuk membuat sesi pengecekan.'); return; }
     _weightTimer?.cancel();
     setState(() { _loadingWeight = true; _result = null; });
     _startWeightCountdown();
     _snack('Berdiri di atas timbangan. Sistem membaca berat badan...');
     try {
-      final map = await ref.read(apiServiceProvider).checkWeight(checkId: checkId);
+      final map = await ref.read(apiServiceProvider).checkWeight(checkId: _checkId);
       final raw = map['data'];
       if (raw is! Map<String, dynamic>) throw Exception('Data berat badan tidak valid.');
-      final nextWeight = double.tryParse(raw['weight_kg'].toString());
+      final nextCheckId = int.tryParse(raw['check_id'].toString());
+      final nextWeight  = double.tryParse(raw['weight_kg'].toString());
       if (nextWeight == null) throw Exception('Data berat badan dari server tidak lengkap.');
       if (!mounted) return;
-      setState(() { _weightKg = nextWeight; _result = null; });
-      _snack('✅ Berat badan berhasil diambil. Lanjut cek tinggi badan.');
+      setState(() {
+        if (nextCheckId != null) _checkId = nextCheckId;
+        _weightKg = nextWeight;
+        _result = null;
+      });
+      _snack('✅ Berat badan berhasil diambil.');
     } catch (e) {
       if (!mounted) return;
       _snack(e.toString().replaceFirst('Exception: ', ''));
@@ -215,21 +225,24 @@ class _HealthMonitoringPageState extends ConsumerState<HealthMonitoringPage>
   }
 
   Future<void> _checkHeight() async {
-    final checkId = _checkId;
-    if (checkId == null) { _snack('Cek Detak Jantung dulu untuk membuat sesi pengecekan.'); return; }
     _heightTimer?.cancel();
     setState(() { _loadingHeight = true; _result = null; });
     _startHeightCountdown();
     _snack('Berdiri tegak di bawah sensor ultrasonik. Sistem mengukur tinggi badan...');
     try {
-      final map = await ref.read(apiServiceProvider).checkHeight(checkId: checkId);
+      final map = await ref.read(apiServiceProvider).checkHeight(checkId: _checkId);
       final raw = map['data'];
       if (raw is! Map<String, dynamic>) throw Exception('Data tinggi badan tidak valid.');
-      final nextHeight = double.tryParse(raw['height_cm'].toString());
+      final nextCheckId = int.tryParse(raw['check_id'].toString());
+      final nextHeight  = double.tryParse(raw['height_cm'].toString());
       if (nextHeight == null) throw Exception('Data tinggi badan dari server tidak lengkap.');
       if (!mounted) return;
-      setState(() { _heightCm = nextHeight; _result = null; });
-      _snack('✅ Tinggi badan berhasil diambil. Sekarang tekan Proses Cek Kesehatan!');
+      setState(() {
+        if (nextCheckId != null) _checkId = nextCheckId;
+        _heightCm = nextHeight;
+        _result = null;
+      });
+      _snack('✅ Tinggi badan berhasil diambil.');
     } catch (e) {
       if (!mounted) return;
       _snack(e.toString().replaceFirst('Exception: ', ''));
@@ -358,7 +371,7 @@ class _HealthMonitoringPageState extends ConsumerState<HealthMonitoringPage>
             buttonLabel: _loadingBodyTemp ? 'Membaca...' : 'Cek Suhu Tubuh',
             hint: 'Arahkan dahi ke sensor MLX90614',
             loading: _loadingBodyTemp,
-            onPressed: (_loadingBodyTemp || _checkId == null) ? null : _checkBodyTemperature,
+            onPressed: _loadingBodyTemp ? null : _checkBodyTemperature,
             countdown: _loadingBodyTemp
                 ? (_tempRemainingSeconds > 0 ? 'Arahkan dahi... ${_tempRemainingSeconds}s' : 'Memproses...')
                 : null,
@@ -379,7 +392,7 @@ class _HealthMonitoringPageState extends ConsumerState<HealthMonitoringPage>
             buttonLabel: _loadingWeight ? 'Menimbang...' : 'Mulai Timbang',
             hint: 'Berdiri di atas timbangan (LoadCell)',
             loading: _loadingWeight,
-            onPressed: (_loadingWeight || _checkId == null) ? null : _checkWeight,
+            onPressed: _loadingWeight ? null : _checkWeight,
             countdown: _loadingWeight
                 ? (_weightRemainingSeconds > 0 ? 'Berdiri di timbangan... ${_weightRemainingSeconds}s' : 'Memproses...')
                 : null,
@@ -400,7 +413,7 @@ class _HealthMonitoringPageState extends ConsumerState<HealthMonitoringPage>
             buttonLabel: _loadingHeight ? 'Mengukur...' : 'Mulai Ukur',
             hint: 'Berdiri tegak di bawah sensor ultrasonik',
             loading: _loadingHeight,
-            onPressed: (_loadingHeight || _checkId == null) ? null : _checkHeight,
+            onPressed: _loadingHeight ? null : _checkHeight,
             countdown: _loadingHeight
                 ? (_heightRemainingSeconds > 0 ? 'Berdiri tegak... ${_heightRemainingSeconds}s' : 'Memproses...')
                 : null,

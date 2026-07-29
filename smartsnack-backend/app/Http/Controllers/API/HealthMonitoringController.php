@@ -29,24 +29,40 @@ class HealthMonitoringController extends Controller
     {
     }
 
+    private function getOrCreateCheck(Request $request): HealthCheck
+    {
+        $checkId = $request->input('check_id');
+        if ($checkId !== null && is_numeric($checkId)) {
+            $check = HealthCheck::query()
+                ->where('id', (int) $checkId)
+                ->where('user_id', $request->user()->id)
+                ->first();
+            if ($check !== null) {
+                return $check;
+            }
+        }
+
+        return HealthCheck::create([
+            'user_id'    => $request->user()->id,
+            'created_at' => now(),
+        ]);
+    }
+
     // Alur: app trigger cek detak jantung → backend command device via MQTT → simpan hasil → kirim ke app.
     public function checkHeartRate(Request $request): JsonResponse
     {
         @set_time_limit(0);
         try {
-            $check = HealthCheck::create([
-                'user_id'    => $request->user()->id,
-                'created_at' => now(),
-            ]);
+            $check = $this->getOrCreateCheck($request);
 
             $sensor = $this->service->fetchHeartRate(
                 checkId: $check->id,
                 userId: (int) $request->user()->id
             );
-            HeartRate::create([
-                'check_id'   => $check->id,
-                'heart_rate' => (int) round((float) $sensor['value']),
-            ]);
+            HeartRate::query()->updateOrCreate(
+                ['check_id' => $check->id],
+                ['heart_rate' => (int) round((float) $sensor['value'])]
+            );
 
             return successResponse([
                 'check_id'   => $check->id,
@@ -65,16 +81,9 @@ class HealthMonitoringController extends Controller
     public function checkBodyTemperature(Request $request): JsonResponse
     {
         @set_time_limit(0);
-        $validated = $request->validate([
-            'check_id' => 'required|integer|exists:health_checks,id',
-        ]);
-
-        $check = HealthCheck::query()
-            ->where('id', $validated['check_id'])
-            ->where('user_id', $request->user()->id)
-            ->firstOrFail();
-
         try {
+            $check = $this->getOrCreateCheck($request);
+
             $sensor = $this->service->fetchBodyTemperature(
                 checkId: $check->id,
                 userId: (int) $request->user()->id
@@ -102,22 +111,14 @@ class HealthMonitoringController extends Controller
     public function checkWeight(Request $request): JsonResponse
     {
         @set_time_limit(0);
-        $validated = $request->validate([
-            'check_id' => 'required|integer|exists:health_checks,id',
-        ]);
-
-        $check = HealthCheck::query()
-            ->where('id', $validated['check_id'])
-            ->where('user_id', $request->user()->id)
-            ->firstOrFail();
-
         try {
+            $check = $this->getOrCreateCheck($request);
+
             $sensor = $this->service->fetchWeight(
                 checkId: $check->id,
                 userId: (int) $request->user()->id
             );
 
-            // Simpan berat badan ke body_metrics (updateOrCreate)
             BodyMetric::query()->updateOrCreate(
                 ['check_id' => $check->id],
                 ['weight' => round((float) $sensor['value'], 2)]
@@ -140,22 +141,14 @@ class HealthMonitoringController extends Controller
     public function checkHeight(Request $request): JsonResponse
     {
         @set_time_limit(0);
-        $validated = $request->validate([
-            'check_id' => 'required|integer|exists:health_checks,id',
-        ]);
-
-        $check = HealthCheck::query()
-            ->where('id', $validated['check_id'])
-            ->where('user_id', $request->user()->id)
-            ->firstOrFail();
-
         try {
+            $check = $this->getOrCreateCheck($request);
+
             $sensor = $this->service->fetchHeight(
                 checkId: $check->id,
                 userId: (int) $request->user()->id
             );
 
-            // Simpan tinggi badan ke body_metrics (updateOrCreate)
             BodyMetric::query()->updateOrCreate(
                 ['check_id' => $check->id],
                 ['height' => round((float) $sensor['value'], 2)]
