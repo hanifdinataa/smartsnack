@@ -25,6 +25,8 @@ class UpdateUserProfileRequest extends FormRequest
             'name' => ['sometimes', 'required', 'string', 'max:255'],
             'email' => ['sometimes', 'required', 'email', 'max:255', 'unique:users,email,' . $this->user()->id],
             'password' => ['sometimes', 'nullable', 'confirmed', 'min:6'],
+            'age' => ['sometimes', 'required', 'integer', 'min:1', 'max:18'],
+            'gender' => ['sometimes', 'required', 'string', 'in:Male,Female'],
         ];
     }
 }

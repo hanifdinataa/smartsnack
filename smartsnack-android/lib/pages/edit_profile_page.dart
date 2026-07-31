@@ -14,6 +14,8 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
   final _formKey = GlobalKey<FormState>();
   late final TextEditingController _name;
   late final TextEditingController _email;
+  late final TextEditingController _age;
+  late String _selectedGender;
   bool _loading = false;
 
   @override
@@ -22,12 +24,15 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
     final user = ref.read(sessionProvider).user;
     _name = TextEditingController(text: user?.name ?? '');
     _email = TextEditingController(text: user?.email ?? '');
+    _age = TextEditingController(text: user?.age?.toString() ?? '');
+    _selectedGender = user?.gender ?? 'Male';
   }
 
   @override
   void dispose() {
     _name.dispose();
     _email.dispose();
+    _age.dispose();
     super.dispose();
   }
 
@@ -38,6 +43,8 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
     final ok = await ref.read(sessionProvider.notifier).updateUser(
           name: _name.text.trim(),
           email: _email.text.trim(),
+          age: int.tryParse(_age.text),
+          gender: _selectedGender,
         );
     if (mounted) {
       setState(() => _loading = false);
@@ -72,6 +79,30 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
                   final ok = RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value);
                   if (!ok) return 'Format email tidak valid';
                   return null;
+                },
+              ),
+              const SizedBox(height: 12),
+              TextFormField(
+                controller: _age,
+                decoration: const InputDecoration(labelText: 'Umur (tahun)'),
+                keyboardType: TextInputType.number,
+                validator: (value) {
+                  if (value == null || value.isEmpty) return 'Umur tidak boleh kosong';
+                  final age = int.tryParse(value);
+                  if (age == null || age < 1 || age > 18) return 'Umur harus 1-18 tahun';
+                  return null;
+                },
+              ),
+              const SizedBox(height: 12),
+              DropdownButtonFormField<String>(
+                value: _selectedGender,
+                decoration: const InputDecoration(labelText: 'Jenis Kelamin'),
+                items: const [
+                  DropdownMenuItem(value: 'Male', child: Text('Laki-laki')),
+                  DropdownMenuItem(value: 'Female', child: Text('Perempuan')),
+                ],
+                onChanged: (val) {
+                  if (val != null) setState(() => _selectedGender = val);
                 },
               ),
               const SizedBox(height: 20),

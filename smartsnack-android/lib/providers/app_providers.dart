@@ -220,11 +220,21 @@ class SessionController extends StateNotifier<SessionState> {
     }
   }
 
-  Future<bool> updateUser({required String name, required String email}) async {
+  Future<bool> updateUser({
+    String? name,
+    String? email,
+    int? age,
+    String? gender,
+  }) async {
     state = state.copyWith(loading: true, clearError: true);
     try {
-      final user = await _api.updateProfile(name: name, email: email);
-      state = state.copyWith(loading: false, user: user, clearError: true);
+      final updated = await _api.updateProfile(
+        name: name,
+        email: email,
+        age: age,
+        gender: gender,
+      );
+      state = state.copyWith(loading: false, user: updated, clearError: true);
       return true;
     } catch (e) {
       state = state.copyWith(loading: false, error: e.toString().replaceFirst('Exception: ', ''));

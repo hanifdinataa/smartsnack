@@ -1377,10 +1377,12 @@ class ApiService {
     return data;
   }
 
-  Future<UserModel> updateProfile({String? name, String? email}) async {
+  Future<UserModel> updateProfile({String? name, String? email, int? age, String? gender}) async {
     final data = <String, dynamic>{};
     if (name != null && name.isNotEmpty) data['name'] = name;
     if (email != null && email.isNotEmpty) data['email'] = email;
+    if (age != null) data['age'] = age;
+    if (gender != null && gender.isNotEmpty) data['gender'] = gender;
 
     final map = await _patch('/api/user', data: data);
     final envelope = ApiEnvelope<UserModel>.fromJson(map, (raw) => UserModel.fromJson(raw as Map<String, dynamic>));

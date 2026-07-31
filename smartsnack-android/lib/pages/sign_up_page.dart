@@ -160,7 +160,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                       SizedBox(width: 8),
                       Expanded(
                         child: Text(
-                          'Umur dan jenis kelamin tidak bisa diubah setelah daftar',
+                          'Umur dan jenis kelamin bisa diubah nanti di profil',
                           style: TextStyle(fontSize: 12, color: Color(0xFF065F46)),
                         ),
                       ),

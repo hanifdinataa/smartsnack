@@ -21,6 +21,14 @@ class UserRepository
             $user->password = Hash::make($data['password']);
         }
 
+        if (isset($data['age'])) {
+            $user->age = (int) $data['age'];
+        }
+
+        if (isset($data['gender'])) {
+            $user->gender = $data['gender'];
+        }
+
         $user->save();
 
         return $user;

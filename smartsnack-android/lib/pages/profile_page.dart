@@ -117,6 +117,26 @@ class _ProfilePageState extends ConsumerState<ProfilePage> with SingleTickerProv
                         Text(user?.name ?? '-', style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 18, color: Colors.white, letterSpacing: -0.3)),
                         const SizedBox(height: 4),
                         Text(user?.email ?? '-', style: TextStyle(color: Colors.white.withOpacity(0.8), fontSize: 13, fontWeight: FontWeight.w500)),
+                        if (user?.age != null || user?.gender != null) ...[
+                          const SizedBox(height: 6),
+                          Row(
+                            children: [
+                              if (user?.age != null)
+                                Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                                  decoration: BoxDecoration(color: Colors.white.withOpacity(0.2), borderRadius: BorderRadius.circular(6)),
+                                  child: Text('${user!.age} thn', style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
+                                ),
+                              if (user?.age != null && user?.gender != null) const SizedBox(width: 8),
+                              if (user?.gender != null)
+                                Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                                  decoration: BoxDecoration(color: Colors.white.withOpacity(0.2), borderRadius: BorderRadius.circular(6)),
+                                  child: Text(user!.gender == 'Female' ? 'Perempuan' : 'Laki-laki', style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
+                                ),
+                            ],
+                          ),
+                        ]
                       ])),
                       Container(
                         decoration: BoxDecoration(color: Colors.white.withOpacity(0.2), borderRadius: BorderRadius.circular(12)),
