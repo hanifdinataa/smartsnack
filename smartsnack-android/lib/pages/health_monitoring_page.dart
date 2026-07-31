@@ -63,6 +63,35 @@ class _HealthMonitoringPageState extends ConsumerState<HealthMonitoringPage>
     return _weightKg! / (meter * meter);
   }
 
+  String? _localHeartStatus(double? hr) {
+    if (hr == null) return null;
+    int age = int.tryParse(_ageController.text) ?? 10;
+    if (age <= 12) {
+      if (hr < 70) return 'rendah';
+      if (hr > 110) return 'tinggi';
+      return 'normal';
+    } else {
+      if (hr < 60) return 'rendah';
+      if (hr > 100) return 'tinggi';
+      return 'normal';
+    }
+  }
+
+  String? _localTempStatus(double? temp) {
+    if (temp == null) return null;
+    if (temp < 36.0) return 'rendah';
+    if (temp > 37.5) return 'tinggi';
+    return 'normal';
+  }
+
+  String? _localBmiStatus(double? bmi) {
+    if (bmi == null) return null;
+    if (bmi < 18.5) return 'kurus';
+    if (bmi < 25.0) return 'normal';
+    if (bmi < 30.0) return 'gemuk';
+    return 'obesitas';
+  }
+
   bool get _canProcess =>
       _checkId != null &&
       _heartRate != null &&
@@ -279,7 +308,7 @@ class _HealthMonitoringPageState extends ConsumerState<HealthMonitoringPage>
       _successAnimController.forward(from: 0);
       _snack(result.isNormal
           ? '🎁 Selamat! Status kesehatan Normal. Kotak snack sedang dibuka!'
-          : '⚠️ Ada parameter yang perlu diperhatikan. Tetap perhatikan kesehatanmu ya!');
+          : '⚠️ Status Perlu Perhatian, tapi kotak snack tetap dibuka!');
     } catch (e) {
       if (!mounted) return;
       _snack(e.toString().replaceFirst('Exception: ', ''));
@@ -358,8 +387,8 @@ class _HealthMonitoringPageState extends ConsumerState<HealthMonitoringPage>
             iconBg: const Color(0xFFFEE2E2),
             title: 'Detak Jantung',
             value: _heartRate == null ? '-' : '${_heartRate!.toStringAsFixed(0)} bpm',
-            statusChip: _heartRate != null && _result != null
-                ? _statusChip(_result!.heartStatus) : null,
+            statusChip: _localHeartStatus(_heartRate) != null
+                ? _statusChip(_localHeartStatus(_heartRate)!) : null,
             buttonLabel: _loadingHeartRate ? 'Mengukur...' : 'Cek Detak Jantung',
             hint: 'Letakkan jari pada sensor MAX30102',
             loading: _loadingHeartRate,
@@ -380,8 +409,8 @@ class _HealthMonitoringPageState extends ConsumerState<HealthMonitoringPage>
             iconBg: const Color(0xFFFEF3C7),
             title: 'Suhu Tubuh',
             value: _bodyTemp == null ? '-' : '${_bodyTemp!.toStringAsFixed(1)} °C',
-            statusChip: _bodyTemp != null && _result != null
-                ? _statusChip(_result!.tempStatus) : null,
+            statusChip: _localTempStatus(_bodyTemp) != null
+                ? _statusChip(_localTempStatus(_bodyTemp)!) : null,
             buttonLabel: _loadingBodyTemp ? 'Membaca...' : 'Cek Suhu Tubuh',
             hint: 'Arahkan dahi ke sensor MLX90614',
             loading: _loadingBodyTemp,
@@ -465,9 +494,9 @@ class _HealthMonitoringPageState extends ConsumerState<HealthMonitoringPage>
                     ),
                   ),
                 ]),
-                if (_result != null) ...[
+                if (_localBmiStatus(bmi) != null) ...[
                   const Spacer(),
-                  _statusChip(_result!.bmiStatus),
+                  _statusChip(_localBmiStatus(bmi)!),
                 ],
               ]),
             ),
@@ -476,28 +505,7 @@ class _HealthMonitoringPageState extends ConsumerState<HealthMonitoringPage>
 
           const SizedBox(height: 16),
 
-          // ─── Progress indicator sensors ────────────────
-          if (!_canProcess) ...[
-            Container(
-              padding: const EdgeInsets.all(14),
-              decoration: BoxDecoration(
-                color: const Color(0xFFFFF7ED),
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: const Color(0xFFFED7AA)),
-              ),
-              child: Row(children: [
-                const Icon(Icons.info_outline, color: Color(0xFFD97706), size: 18),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Text(
-                    _processingHint(),
-                    style: const TextStyle(fontSize: 13, color: Color(0xFF92400E)),
-                  ),
-                ),
-              ]),
-            ),
-            const SizedBox(height: 16),
-          ],
+
 
           // ─── Tombol Proses ────────────────────────────
           SizedBox(
@@ -846,6 +854,12 @@ class _HealthMonitoringPageState extends ConsumerState<HealthMonitoringPage>
     } else if (isObesitas) {
       bgColor = const Color(0xFFFEE2E2); textColor = const Color(0xFF7F1D1D);
       label = 'Obesitas'; icon = Icons.error_rounded;
+    } else if (status == 'rendah') {
+      bgColor = const Color(0xFFFEF3C7); textColor = const Color(0xFF78350F);
+      label = 'Rendah'; icon = Icons.warning_rounded;
+    } else if (status == 'tinggi') {
+      bgColor = const Color(0xFFFEE2E2); textColor = const Color(0xFF7F1D1D);
+      label = 'Tinggi'; icon = Icons.warning_rounded;
     } else {
       bgColor = const Color(0xFFFEE2E2); textColor = const Color(0xFF7F1D1D);
       label = 'Perlu Perhatian'; icon = Icons.warning_rounded;
@@ -876,12 +890,5 @@ class _HealthMonitoringPageState extends ConsumerState<HealthMonitoringPage>
     return const Color(0xFFEF4444);
   }
 
-  String _processingHint() {
-    if (_checkId == null)   return 'Mulai dengan menekan "Cek Detak Jantung"';
-    if (_heartRate == null) return 'Tunggu hasil detak jantung...';
-    if (_bodyTemp == null)  return 'Lanjut cek suhu tubuh';
-    if (_weightKg == null)  return 'Lanjut timbang berat badan';
-    if (_heightCm == null)  return 'Lanjut ukur tinggi badan';
-    return 'Semua sensor selesai. Tekan proses!';
-  }
+
 }

@@ -128,6 +128,12 @@ class SessionController extends StateNotifier<SessionState> {
     return true;
   }
 
+  Future<bool> undoOnboarding() async {
+    await _storage.clearOnboardingDone();
+    state = state.copyWith(onboardingDone: false);
+    return true;
+  }
+
   Future<bool> signIn({required String email, required String password}) async {
     state = state.copyWith(loading: true, clearError: true);
     try {

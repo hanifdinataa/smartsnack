@@ -30,11 +30,11 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage> {
                   children: const [
                     _OnboardSlide(
                       imagePath: 'assets/images/screen22.png',
-                      title: 'Kenali produk kemasanmu dan pantau konsumsi gula harian dengan lebih mudah!',
+                      title: 'Pantau kesehatan fisik anak dengan mudah melalui pemeriksaan yang praktis dan terintegrasi.',
                     ),
                     _OnboardSlide(
                       imagePath: 'assets/images/screen33.png',
-                      title: 'Cek kesehatan dan lihat risiko dini diabetes untuk mengatur batas konsumsi gulamu.',
+                      title: 'Lihat hasil pemeriksaan, status BMI, dan riwayat kesehatan anak kapan saja.',
                     ),
                   ],
                 ),

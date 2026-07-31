@@ -28,6 +28,10 @@ class LocalStorageService {
     await _prefs.setBool(_keyOnboarding, true);
   }
 
+  Future<void> clearOnboardingDone() async {
+    await _prefs.remove(_keyOnboarding);
+  }
+
   HealthMonitoringRecord? getHealthMonitoringRecord() {
     final raw = _prefs.getString(_keyHealthMonitoring);
     if (raw == null || raw.isEmpty) return null;
