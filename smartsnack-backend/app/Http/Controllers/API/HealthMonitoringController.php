@@ -119,9 +119,14 @@ class HealthMonitoringController extends Controller
                 userId: (int) $request->user()->id
             );
 
+            $metric = BodyMetric::query()->where('check_id', $check->id)->first();
             BodyMetric::query()->updateOrCreate(
                 ['check_id' => $check->id],
-                ['weight' => round((float) $sensor['value'], 2)]
+                [
+                    'weight' => round((float) $sensor['value'], 2),
+                    'height' => $metric?->height ?? 0,
+                    'bmi'    => $metric?->bmi ?? 0,
+                ]
             );
 
             return successResponse([
@@ -149,9 +154,14 @@ class HealthMonitoringController extends Controller
                 userId: (int) $request->user()->id
             );
 
+            $metric = BodyMetric::query()->where('check_id', $check->id)->first();
             BodyMetric::query()->updateOrCreate(
                 ['check_id' => $check->id],
-                ['height' => round((float) $sensor['value'], 2)]
+                [
+                    'height' => round((float) $sensor['value'], 2),
+                    'weight' => $metric?->weight ?? 0,
+                    'bmi'    => $metric?->bmi ?? 0,
+                ]
             );
 
             return successResponse([

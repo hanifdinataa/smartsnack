@@ -1,0 +1,228 @@
+// SmartSnackBox.ino
+// Library yang dibutuhkan:
+// 1. Adafruit MLX90614 Library
+// 2. SparkFun MAX3010x Pulse and Proximity Sensor Library
+// 3. NewPing by Tim Eckel
+// 4. HX711 Arduino Library by Bogdan Necula
+// 5. ESP32Servo by Kevin Harrington
+// 6. LiquidCrystal_I2C by Frank de Brabander (untuk LCD I2C 16x2 / 20x4)
+
+#include <Wire.h>
+#include <Adafruit_MLX90614.h>
+#include "MAX30105.h"
+#include "heartRate.h"
+#include <NewPing.h>
+#include "HX711.h"
+#include <ESP32Servo.h>
+#include <LiquidCrystal_I2C.h>
+
+// ====================================================
+// KONFIGURASI PIN & ALAMAT I2C
+// ====================================================
+#define TRIG_PIN 26
+#define ECHO_PIN 27
+#define HX_DT 32
+#define HX_SCK 33
+#define SERVO_PIN 18
+#define BUZZER_PIN 19
+
+// Alamat I2C LCD (Biasanya 0x27 atau 0x3F). Ukuran 16 kolom x 2 baris.
+LiquidCrystal_I2C lcd(0x27, 16, 2);
+
+const float SENSOR_HEIGHT = 200.0;
+const float BODY_TEMP_OFFSET = 1.2;
+float calibration_factor = 7050;
+
+NewPing sonar(TRIG_PIN, ECHO_PIN, 400);
+Adafruit_MLX90614 mlx;
+MAX30105 particleSensor;
+HX711 scale;
+Servo snackServo;
+
+const byte RATE_SIZE = 4;
+byte rates[RATE_SIZE];
+byte rateSpot = 0;
+long lastBeat = 0;
+float bpm = 0;
+int beatAvg = 0;
+
+unsigned long lastPrint = 0;
+unsigned long lastLcdPageChange = 0;
+byte lcdPage = 0; // 0 = Suhu & BPM, 1 = Tinggi & Berat, 2 = Status Box
+
+float beratGlobal = 0.0;
+bool boxIsOpen = false;
+
+// Membaca jarak ultrasonik secara cepat
+float readDistance() {
+  unsigned int u = sonar.ping();
+  if (u == 0) return -1;
+  float d = u / 58.0;
+  if (d >= 2 && d <= 400) return d;
+  return -1;
+}
+
+void setup() {
+  Serial.begin(115200);
+  Wire.begin(21, 22);
+  Wire.setClock(100000); // 100 kHz I2C Speed
+
+  // Inisialisasi LCD 16x2 I2C
+  lcd.init();
+  lcd.backlight();
+  lcd.setCursor(0, 0);
+  lcd.print("SMART SNACK BOX");
+  lcd.setCursor(0, 1);
+  lcd.print("Inisialisasi...");
+
+  mlx.begin();
+
+  if (!particleSensor.begin(Wire, I2C_SPEED_STANDARD)) {
+    Serial.println("❌ MAX30102 tidak terdeteksi!");
+  } else {
+    particleSensor.setup();
+    particleSensor.setPulseAmplitudeRed(0x0A);
+    particleSensor.setPulseAmplitudeIR(0x1F);
+    particleSensor.setPulseAmplitudeGreen(0);
+  }
+
+  scale.begin(HX_DT, HX_SCK);
+  scale.set_scale(calibration_factor);
+  scale.tare();
+
+  snackServo.attach(SERVO_PIN);
+  snackServo.write(0);
+  pinMode(BUZZER_PIN, OUTPUT);
+  digitalWrite(BUZZER_PIN, LOW);
+
+  delay(1500);
+  lcd.clear();
+}
+
+void loop() {
+  // ==================================================
+  // 1. SAMPLING MAX30102 (DIPANGGIL SANGAAT CEPAT)
+  // ==================================================
+  long ir = particleSensor.getIR();
+
+  if (ir < 50000) {
+    beatAvg = 0;
+    bpm = 0;
+    rateSpot = 0;
+    for (byte i = 0; i < RATE_SIZE; i++) rates[i] = 0;
+  } else {
+    if (checkForBeat(ir)) {
+      long delta = millis() - lastBeat;
+      lastBeat = millis();
+      bpm = 60.0 / (delta / 1000.0);
+
+      if (bpm > 20 && bpm < 255) {
+        rates[rateSpot++] = (byte)bpm;
+        rateSpot %= RATE_SIZE;
+
+        int totalRates = 0;
+        byte validCount = 0;
+        for (byte i = 0; i < RATE_SIZE; i++) {
+          if (rates[i] > 0) {
+            totalRates += rates[i];
+            validCount++;
+          }
+        }
+        if (validCount > 0) beatAvg = totalRates / validCount;
+      }
+    }
+  }
+
+  // ==================================================
+  // 2. TIMBANGAN LOAD CELL NON-BLOCKING
+  // ==================================================
+  if (scale.is_ready()) {
+    float b = scale.get_units(1);
+    if (b < 0) b = 0;
+    beratGlobal = b;
+  }
+
+  // ==================================================
+  // 3. PEMBACAAN SENSOR & UPDATE LCD / SERIAL (TIAP 400MS)
+  // ==================================================
+  if (millis() - lastPrint > 400) {
+    lastPrint = millis();
+
+    float suhu = mlx.readObjectTempC() + BODY_TEMP_OFFSET;
+    float jarak = readDistance();
+    float tinggi = (jarak > 0) ? SENSOR_HEIGHT - jarak : 0;
+    float berat = beratGlobal;
+
+    bool tinggiOK = tinggi > 60;
+    bool suhuOK = suhu >= 35 && suhu <= 38;
+    bool bpmOK = beatAvg >= 60 && beatAvg <= 120;
+    bool beratOK = berat > 5;
+
+    bool allOK = tinggiOK && suhuOK && bpmOK && beratOK;
+
+    // Kontrol Servo & Buzzer
+    if (allOK) {
+      snackServo.write(90);
+      if (!boxIsOpen) {
+        tone(BUZZER_PIN, 2000, 250);
+        boxIsOpen = true;
+      }
+    } else {
+      snackServo.write(0);
+      noTone(BUZZER_PIN);
+      digitalWrite(BUZZER_PIN, LOW);
+      boxIsOpen = false;
+    }
+
+    // Pergantian Halaman LCD Setiap 2.5 Detik
+    if (millis() - lastLcdPageChange > 2500) {
+      lastLcdPageChange = millis();
+      lcdPage = (lcdPage + 1) % 2; // Pergantian 2 halaman info utama
+      lcd.clear();
+    }
+
+    // --- UPDATE TAMPILAN LCD 16x2 ---
+    if (allOK) {
+      // Jika makanan diberikan, tampilkan pesan Selamat
+      lcd.setCursor(0, 0);
+      lcd.print("STATUS: TERBUKA ");
+      lcd.setCursor(0, 1);
+      lcd.print("SNACK DIBERIKAN!");
+    } else {
+      if (lcdPage == 0) {
+        // Halaman 1: Suhu & BPM
+        char line0[17], line1[17];
+        snprintf(line0, sizeof(line0), "Suhu : %.1f C   ", suhu);
+        if (ir < 50000) {
+          snprintf(line1, sizeof(line1), "BPM  : Tempel   ");
+        } else {
+          snprintf(line1, sizeof(line1), "BPM  : %d bpm    ", beatAvg);
+        }
+        lcd.setCursor(0, 0); lcd.print(line0);
+        lcd.setCursor(0, 1); lcd.print(line1);
+      } else {
+        // Halaman 2: Tinggi & Berat
+        char line0[17], line1[17];
+        if (tinggi > 0) {
+          snprintf(line0, sizeof(line0), "Tinggi: %.1fcm  ", tinggi);
+        } else {
+          snprintf(line0, sizeof(line0), "Tinggi: -       ");
+        }
+        snprintf(line1, sizeof(line1), "Berat : %.2fkg  ", berat);
+        
+        lcd.setCursor(0, 0); lcd.print(line0);
+        lcd.setCursor(0, 1); lcd.print(line1);
+      }
+    }
+
+    // --- SERIAL MONITOR ---
+    Serial.println("===== SMART SNACK BOX =====");
+    Serial.printf("Tinggi : %.1f cm\n", tinggi);
+    Serial.printf("Berat  : %.2f kg\n", berat);
+    Serial.printf("Suhu   : %.1f C\n", suhu);
+    if (ir < 50000) Serial.println("BPM    : Tempelkan jari");
+    else Serial.printf("BPM    : %d\n", beatAvg);
+    Serial.printf("Servo  : %s\n", allOK ? "TERBUKA" : "TERTUTUP");
+    Serial.println();
+  }
+}
