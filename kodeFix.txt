@@ -1,3 +1,16 @@
+// =====================================================================
+//  SMART SNACK BOX — ESP32 FIRMWARE (KALIBRASI & DIVERIFIKASI FITUR FULL)
+//
+//  Hardware Pinout:
+//    - Ultrasonik HC-SR04 : Trig=26, Echo=27
+//    - Timbangan HX711   : DT=32, SCK=33
+//    - Servo Box          : GPIO 18
+//    - Buzzer             : GPIO 19
+//    - LCD 16x2 I2C       : SDA=21, SCL=22 (Alamat 0x27)
+//    - Suhu MLX90614      : SDA=21, SCL=22
+//    - Detak Jantung      : MAX30102 (SDA=21, SCL=22)
+// =====================================================================
+
 #include <Wire.h>
 #include <WiFi.h>
 #include <PubSubClient.h>
@@ -45,21 +58,18 @@ String boxOpenTopic;
 // ===== KALIBRASI SENSOR =====
 const float SENSOR_HEIGHT_CM      = 200.0f;
 const float BODY_TEMP_OFFSET      = 1.2f;
-// Faktor kalibrasi HX711 (nilai dasar, jangan diubah)
+// Faktor kalibrasi sama persis dengan kodeArduinoBerhasil.txt yang terbukti jalan
 const float CALIBRATION_FACTOR    = 7050.0f;
 
-// ─── KALIBRASI 2 TITIK LINIER (PRESISI TINGGI) ────────────────────────
-//  Rumus: actual_kg = (raw_val - WEIGHT_OFFSET) / WEIGHT_SLOPE
-//  Data Kalibrasi Fisik Anda:
-//    - BB Asli 42 kg -> Terbaca mentah (raw) ±125.5
-//    - BB Asli 66 kg -> Terbaca mentah (raw) ±145.0
-//  Hasil Perhitungan:
-//    - WEIGHT_SLOPE  = (145.0 - 125.5) / (66.0 - 42.0) = 0.8125
-//    - WEIGHT_OFFSET = 125.5 - (0.8125 * 42.0) = 91.375
-const float WEIGHT_SLOPE          = 0.8125f;
-const float WEIGHT_OFFSET         = 91.375f;
-//  Jika nilai raw di bawah threshold ini, timbangan dianggap kosong
-const float WEIGHT_RAW_THRESHOLD  = 94.0f;
+// ─── KALIBRASI 2 TITIK (LEBIH AKURAT) ─────────────────────────────────────────
+// Data kalibrasi Anda:
+//   Titik 1 : Berat asli 66 kg → terbaca  78 kg
+//   Titik 2 : Berat asli 43 kg → terbaca 46.5 kg
+// Rumus   : actual_kg = (raw_kg + WEIGHT_OFFSET) / WEIGHT_SLOPE
+// Verifikasi: (78 + 12.42) / 1.37 = 66.00 ✓
+//             (46.5 + 12.42) / 1.37 = 43.00 ✓
+const float WEIGHT_SLOPE          = 1.37f;
+const float WEIGHT_OFFSET         = 12.42f;
 
 const int   SERVO_CLOSED_ANGLE    = 0;
 const int   SERVO_OPEN_ANGLE      = 90;
@@ -199,14 +209,13 @@ float measureWeightKg(String& errorCode) {
     mqtt.loop();
   }
 
-  float rawAvg = (validCount > 0) ? (total / validCount) : 0.0f;
+  float rawAvg = (validCount > 0) ? (total / validCount) : beratGlobal;
 
-  float corrected = 0.0f;
-  if (rawAvg >= WEIGHT_RAW_THRESHOLD) {
-    corrected = (rawAvg - WEIGHT_OFFSET) / WEIGHT_SLOPE;
-  }
+  // Kalibrasi 2 titik: actual = (raw + WEIGHT_OFFSET) / WEIGHT_SLOPE
+  float corrected = (rawAvg + WEIGHT_OFFSET) / WEIGHT_SLOPE;
+  if (corrected < 0.0f) corrected = 0.0f;
 
-  Serial.printf("Raw Avg: %.2f | Aktual: %.2f kg\n", rawAvg, corrected);
+  Serial.printf("Raw: %.2f kg → Aktual: %.2f kg\n", rawAvg, corrected);
   return corrected;
 }
 
@@ -244,6 +253,7 @@ void publishBodyTemperature(const String& checkId, float tempVal) {
 void publishWeight(const String& checkId, float weightVal) {
   String payload = "{\"status\":\"ok\",\"action\":\"weight\",\"check_id\":" + checkId + ",\"weight_kg\":" + String(weightVal, 2) + ",\"device_id\":\"" + DEVICE_ID + "\"}";
   mqtt.publish(resultTopic.c_str(), payload.c_str());
+  beepBuzzer(200);
 }
 
 void publishHeight(const String& checkId, float heightVal) {
@@ -444,13 +454,9 @@ void loop() {
   if (scale.is_ready()) {
     float b = scale.get_units(1);
     if (b < 0.0f) b = 0.0f;
-    
-    if (b < WEIGHT_RAW_THRESHOLD) {
-      beratGlobal = 0.0f;
-    } else {
-      float corrected = (b - WEIGHT_OFFSET) / WEIGHT_SLOPE;
-      beratGlobal = (corrected < 0.0f) ? 0.0f : corrected;
-    }
+    // Kalibrasi 2 titik: actual = (raw + WEIGHT_OFFSET) / WEIGHT_SLOPE
+    beratGlobal = (b + WEIGHT_OFFSET) / WEIGHT_SLOPE;
+    if (beratGlobal < 0.0f) beratGlobal = 0.0f;
   }
 
   // 4. Update LCD & Serial Periodic Print (Tiap 400ms)

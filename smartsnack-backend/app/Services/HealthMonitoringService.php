@@ -107,10 +107,10 @@ class HealthMonitoringService
         );
 
         $value = $this->toFloat($response['weight_kg'] ?? null);
-        if ($value === null || $value <= 0) {
+        if ($value === null || $value < 0) {
             throw new RuntimeException('Berat badan tidak terbaca. Pastikan berdiri di atas timbangan dengan stabil.');
         }
-        if ($value < 1 || $value > 200) {
+        if ($value > 200) {
             throw new RuntimeException('Berat badan tidak valid (' . round($value, 1) . ' kg). Ulangi pengukuran.');
         }
 

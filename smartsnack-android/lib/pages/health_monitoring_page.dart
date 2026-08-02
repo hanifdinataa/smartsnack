@@ -33,6 +33,8 @@ class _HealthMonitoringPageState extends ConsumerState<HealthMonitoringPage>
   bool _loadingWeight    = false;
   bool _loadingHeight    = false;
   bool _processing       = false;
+  bool _isStreamingWeight = false;
+  Timer? _weightStreamTimer;
 
   // ── Countdown timers ─────────────────────────────────
   int    _heartRemainingSeconds  = 0;
@@ -97,6 +99,7 @@ class _HealthMonitoringPageState extends ConsumerState<HealthMonitoringPage>
       _heartRate != null &&
       _bodyTemp != null &&
       _weightKg != null &&
+      _weightKg! > 0 &&
       _heightCm != null;
 
   @override
@@ -117,6 +120,7 @@ class _HealthMonitoringPageState extends ConsumerState<HealthMonitoringPage>
     _heartTimer?.cancel();
     _tempTimer?.cancel();
     _weightTimer?.cancel();
+    _weightStreamTimer?.cancel();
     _heightTimer?.cancel();
     _successAnimController.dispose();
     _ageController.dispose();
@@ -230,32 +234,62 @@ class _HealthMonitoringPageState extends ConsumerState<HealthMonitoringPage>
     }
   }
 
-  Future<void> _checkWeight() async {
+  Future<void> _startWeightStreaming() async {
     _weightTimer?.cancel();
-    setState(() { _loadingWeight = true; _result = null; });
-    _startWeightCountdown();
-    _snack('Berdiri di atas timbangan. Sistem membaca berat badan...');
+    _weightStreamTimer?.cancel();
+
+    setState(() {
+      _isStreamingWeight = true;
+      _loadingWeight = true;
+      _result = null;
+    });
+
+    _snack('Membaca data timbangan secara realtime. Silakan berdiri di atas timbangan.');
+
+    // Jalankan langsung pengukuran pertama
+    await _fetchWeightStream();
+
+    // Lakukan polling berkala setiap 1.5 detik
+    _weightStreamTimer = Timer.periodic(const Duration(milliseconds: 1500), (timer) async {
+      if (!mounted || !_isStreamingWeight) {
+        timer.cancel();
+        return;
+      }
+      await _fetchWeightStream();
+    });
+  }
+
+  Future<void> _fetchWeightStream() async {
     try {
       final map = await ref.read(apiServiceProvider).checkWeight(checkId: _checkId);
       final raw = map['data'];
-      if (raw is! Map<String, dynamic>) throw Exception('Data berat badan tidak valid.');
+      if (raw is! Map<String, dynamic>) return;
       final nextCheckId = int.tryParse(raw['check_id'].toString());
       final nextWeight  = double.tryParse(raw['weight_kg'].toString());
-      if (nextWeight == null) throw Exception('Data berat badan dari server tidak lengkap.');
-      if (!mounted) return;
-      setState(() {
-        if (nextCheckId != null) _checkId = nextCheckId;
-        _weightKg = nextWeight;
-        _result = null;
-      });
-      _snack('✅ Berat badan berhasil diambil.');
+      if (nextWeight != null && mounted && _isStreamingWeight) {
+        setState(() {
+          if (nextCheckId != null) _checkId = nextCheckId;
+          _weightKg = nextWeight;
+          _result = null;
+        });
+      }
     } catch (e) {
-      if (!mounted) return;
-      _snack(e.toString().replaceFirst('Exception: ', ''));
-    } finally {
-      _weightTimer?.cancel();
-      if (mounted) setState(() { _loadingWeight = false; _weightRemainingSeconds = 0; });
+      debugPrint("Streaming error: $e");
     }
+  }
+
+  void _stopWeightStreaming() {
+    _weightStreamTimer?.cancel();
+    setState(() {
+      _isStreamingWeight = false;
+      _loadingWeight = false;
+    });
+    _snack('✅ Pengukuran dihentikan. Berat badan terakhir disimpan: ${_weightKg != null ? "${_weightKg!.toStringAsFixed(1)} kg" : "-"}');
+  }
+
+  Future<void> _checkWeight() async {
+    // Fungsi checkWeight default sekarang memicu mode streaming
+    _startWeightStreaming();
   }
 
   Future<void> _checkHeight() async {
@@ -431,17 +465,53 @@ class _HealthMonitoringPageState extends ConsumerState<HealthMonitoringPage>
             iconBg: const Color(0xFFEDE9FE),
             title: 'Berat Badan',
             value: _weightKg == null ? '-' : '${_weightKg!.toStringAsFixed(1)} kg',
-            statusChip: null, // berat badan tidak ada status sendiri, lihat BMI
-            buttonLabel: _loadingWeight ? 'Menimbang...' : 'Mulai Timbang',
+            statusChip: null,
+            buttonLabel: '',
             hint: 'Berdiri di atas timbangan (LoadCell)',
             loading: _loadingWeight,
-            onPressed: _loadingWeight ? null : _checkWeight,
-            countdown: _loadingWeight
-                ? (_weightRemainingSeconds > 0 ? 'Berdiri di timbangan... ${_weightRemainingSeconds}s' : 'Memproses...')
-                : null,
-            progress: _loadingWeight
-                ? ((_weightMeasureSeconds - _weightRemainingSeconds) / _weightMeasureSeconds).clamp(0.0, 1.0)
-                : null,
+            onPressed: null,
+            countdown: _isStreamingWeight ? 'Mengukur berat badan secara terus menerus (Realtime)...' : null,
+            progress: null,
+            customButtons: Row(children: [
+              Expanded(
+                child: SizedBox(
+                  height: 40,
+                  child: FilledButton.icon(
+                    onPressed: _isStreamingWeight ? null : _startWeightStreaming,
+                    style: FilledButton.styleFrom(
+                      backgroundColor: const Color(0xFF0D9F6E),
+                      disabledBackgroundColor: const Color(0xFF0D9F6E).withOpacity(0.3),
+                    ),
+                    icon: const Icon(Icons.play_arrow_rounded, size: 16),
+                    label: const Text('Mulai', style: TextStyle(fontSize: 13)),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: SizedBox(
+                  height: 40,
+                  child: FilledButton.icon(
+                    onPressed: _isStreamingWeight ? _stopWeightStreaming : null,
+                    style: FilledButton.styleFrom(
+                      backgroundColor: const Color(0xFFEF4444),
+                      disabledBackgroundColor: const Color(0xFFEF4444).withOpacity(0.3),
+                    ),
+                    icon: const Icon(Icons.stop_rounded, size: 16),
+                    label: const Text('Stop', style: TextStyle(fontSize: 13)),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 10),
+              Tooltip(
+                message: 'Berdiri di atas timbangan. Tekan Mulai untuk timbang secara realtime, tekan Stop untuk mengunci.',
+                child: Container(
+                  width: 40, height: 40,
+                  decoration: BoxDecoration(color: const Color(0xFFF3F4F6), borderRadius: BorderRadius.circular(10)),
+                  child: const Icon(Icons.help_outline_rounded, size: 18, color: Color(0xFF6B7280)),
+                ),
+              ),
+            ]),
           ),
           const SizedBox(height: 12),
 
@@ -640,6 +710,7 @@ class _HealthMonitoringPageState extends ConsumerState<HealthMonitoringPage>
     Widget? statusChip,
     String? countdown,
     double? progress,
+    Widget? customButtons,
   }) {
     return Container(
       padding: const EdgeInsets.all(18),
@@ -681,31 +752,34 @@ class _HealthMonitoringPageState extends ConsumerState<HealthMonitoringPage>
           ),
         ],
         const SizedBox(height: 12),
-        Row(children: [
-          Expanded(
-            child: SizedBox(
-              height: 40,
-              child: FilledButton.icon(
-                onPressed: onPressed,
-                style: FilledButton.styleFrom(
-                  backgroundColor: iconColor,
-                  disabledBackgroundColor: iconColor.withOpacity(0.3),
+        if (customButtons != null)
+          customButtons
+        else
+          Row(children: [
+            Expanded(
+              child: SizedBox(
+                height: 40,
+                child: FilledButton.icon(
+                  onPressed: onPressed,
+                  style: FilledButton.styleFrom(
+                    backgroundColor: iconColor,
+                    disabledBackgroundColor: iconColor.withOpacity(0.3),
+                  ),
+                  icon: Icon(icon, size: 16),
+                  label: Text(buttonLabel, style: const TextStyle(fontSize: 13)),
                 ),
-                icon: Icon(icon, size: 16),
-                label: Text(buttonLabel, style: const TextStyle(fontSize: 13)),
               ),
             ),
-          ),
-          const SizedBox(width: 10),
-          Tooltip(
-            message: hint,
-            child: Container(
-              width: 40, height: 40,
-              decoration: BoxDecoration(color: const Color(0xFFF3F4F6), borderRadius: BorderRadius.circular(10)),
-              child: const Icon(Icons.help_outline_rounded, size: 18, color: Color(0xFF6B7280)),
+            const SizedBox(width: 10),
+            Tooltip(
+              message: hint,
+              child: Container(
+                width: 40, height: 40,
+                decoration: BoxDecoration(color: const Color(0xFFF3F4F6), borderRadius: BorderRadius.circular(10)),
+                child: const Icon(Icons.help_outline_rounded, size: 18, color: Color(0xFF6B7280)),
+              ),
             ),
-          ),
-        ]),
+          ]),
       ]),
     );
   }
