@@ -43,23 +43,23 @@ String resultTopic;
 String boxOpenTopic;
 
 // ===== KALIBRASI SENSOR =====
-const float SENSOR_HEIGHT_CM      = 200.0f;
+const float SENSOR_HEIGHT_CM      = 174.0f;
 const float BODY_TEMP_OFFSET      = 1.2f;
 // Faktor kalibrasi HX711 (nilai dasar, jangan diubah)
 const float CALIBRATION_FACTOR    = 7050.0f;
 
 // ─── KALIBRASI 2 TITIK LINIER (PRESISI TINGGI) ────────────────────────
 //  Rumus: actual_kg = (raw_val - WEIGHT_OFFSET) / WEIGHT_SLOPE
-//  Data Kalibrasi Fisik Anda:
-//    - BB Asli 42 kg -> Terbaca mentah (raw) ±125.5
-//    - BB Asli 66 kg -> Terbaca mentah (raw) ±145.0
+//  Data Kalibrasi Fisik Aktual:
+//    - BB Asli 42 kg -> Terbaca mentah (raw) 121.28
+//    - BB Asli 66 kg -> Terbaca mentah (raw) 198.21
 //  Hasil Perhitungan:
-//    - WEIGHT_SLOPE  = (145.0 - 125.5) / (66.0 - 42.0) = 0.8125
-//    - WEIGHT_OFFSET = 125.5 - (0.8125 * 42.0) = 91.375
-const float WEIGHT_SLOPE          = 0.8125f;
-const float WEIGHT_OFFSET         = 91.375f;
+//    - WEIGHT_SLOPE  = (198.21 - 121.28) / (66.0 - 42.0) = 3.205f
+//    - WEIGHT_OFFSET = 121.28 - (3.205 * 42.0) = -13.35f
+const float WEIGHT_SLOPE          = 3.205f;
+const float WEIGHT_OFFSET         = -13.35f;
 //  Jika nilai raw di bawah threshold ini, timbangan dianggap kosong
-const float WEIGHT_RAW_THRESHOLD  = 94.0f;
+const float WEIGHT_RAW_THRESHOLD  = 15.0f;
 
 const int   SERVO_CLOSED_ANGLE    = 0;
 const int   SERVO_OPEN_ANGLE      = 90;
@@ -71,6 +71,7 @@ unsigned long lastWifiRetryMs     = 0;
 bool          servoIsOpen         = false;
 unsigned long servoOpenedAtMs     = 0;
 float         beratGlobal         = 0.0f;
+bool          isMeasuring         = false;  // Cegah re-entrancy MQTT callback
 
 // BPM Helper variables
 const byte RATE_SIZE = 4;
@@ -114,7 +115,8 @@ float measureHeartRateBpm(String& errorCode) {
   
   // Baca selama 60 detik untuk akurasi
   while (millis() - startTime < 60000) {
-    mqtt.loop();
+    // Panggil mqtt.loop() agar koneksi MQTT tetap hidup selama pengukuran
+    if (mqtt.connected()) mqtt.loop();
     long ir = particleSensor.getIR();
     if (ir > 50000) {
       if (checkForBeat(ir)) {
@@ -156,7 +158,8 @@ float measureBodyTemperatureC(String& errorCode) {
   int count = 0;
   // Pengambilan sampel selama 3 detik (30 x 100ms)
   for (int i = 0; i < 30; i++) {
-    mqtt.loop();
+    // Panggil mqtt.loop() agar koneksi MQTT tetap hidup selama pengukuran
+    if (mqtt.connected()) mqtt.loop();
     float t = mlx.readObjectTempC();
     if (!isnan(t) && t > 20.0f && t < 50.0f) {
       totalTemp += t;
@@ -182,31 +185,49 @@ float measureWeightKg(String& errorCode) {
   unsigned long startWait = millis();
   while (!scale.is_ready() && (millis() - startWait < 2000)) {
     delay(10);
-    mqtt.loop();
   }
 
-  // Ambil rata-rata 5 sampel
-  float total = 0.0f;
-  int validCount = 0;
+  // Ambil 5 sampel cepat
+  float samples[5];
+  int count = 0;
   for (int i = 0; i < 5; i++) {
     if (scale.is_ready()) {
       float raw = scale.get_units(1);
-      if (raw < 0.0f) raw = 0.0f;
-      total += raw;
-      validCount++;
+      Serial.printf("  Sample %d: raw = %.2f\n", i, raw);
+      samples[count++] = raw;
+    } else {
+      Serial.printf("  Sample %d: NOT READY\n", i);
     }
     delay(20);
-    mqtt.loop();
   }
 
-  float rawAvg = (validCount > 0) ? (total / validCount) : 0.0f;
+  if (count == 0) {
+    Serial.println("  No valid samples, returning beratGlobal");
+    return beratGlobal;
+  }
+
+  // Bubble sort untuk mencari median (menghilangkan noise spike)
+  for (int i = 0; i < count - 1; i++) {
+    for (int j = i + 1; j < count; j++) {
+      if (samples[j] < samples[i]) {
+        float tmp = samples[i];
+        samples[i] = samples[j];
+        samples[j] = tmp;
+      }
+    }
+  }
+
+  float rawMedian = samples[count / 2];
 
   float corrected = 0.0f;
-  if (rawAvg >= WEIGHT_RAW_THRESHOLD) {
-    corrected = (rawAvg - WEIGHT_OFFSET) / WEIGHT_SLOPE;
+  if (rawMedian >= WEIGHT_RAW_THRESHOLD) {
+    corrected = (rawMedian - WEIGHT_OFFSET) / WEIGHT_SLOPE;
   }
 
-  Serial.printf("Raw Avg: %.2f | Aktual: %.2f kg\n", rawAvg, corrected);
+  // Update agar LCD dan Serial print sinkron seketika
+  beratGlobal = corrected;
+
+  Serial.printf("Raw Median: %.2f | Aktual: %.2f kg\n", rawMedian, corrected);
   return corrected;
 }
 
@@ -225,28 +246,33 @@ float measureHeightCm(String& errorCode) {
 
 // ========== MQTT PUBLISH HELPERS ==========
 void publishError(const String& checkId, const String& action, const String& errorCode) {
+  connectMqtt();
   String payload = "{\"status\":\"error\",\"action\":\"" + action + "\",\"check_id\":" + checkId + ",\"error\":\"" + errorCode + "\",\"device_id\":\"" + DEVICE_ID + "\"}";
   mqtt.publish(resultTopic.c_str(), payload.c_str());
 }
 
 void publishHeartRate(const String& checkId, float bpmVal) {
+  connectMqtt();
   String payload = "{\"status\":\"ok\",\"action\":\"heart_rate\",\"check_id\":" + checkId + ",\"heart_rate\":" + String(bpmVal, 1) + ",\"device_id\":\"" + DEVICE_ID + "\"}";
   mqtt.publish(resultTopic.c_str(), payload.c_str());
   beepBuzzer(200);
 }
 
 void publishBodyTemperature(const String& checkId, float tempVal) {
+  connectMqtt();
   String payload = "{\"status\":\"ok\",\"action\":\"body_temperature\",\"check_id\":" + checkId + ",\"body_temp\":" + String(tempVal, 1) + ",\"device_id\":\"" + DEVICE_ID + "\"}";
   mqtt.publish(resultTopic.c_str(), payload.c_str());
   beepBuzzer(200);
 }
 
 void publishWeight(const String& checkId, float weightVal) {
+  connectMqtt();
   String payload = "{\"status\":\"ok\",\"action\":\"weight\",\"check_id\":" + checkId + ",\"weight_kg\":" + String(weightVal, 2) + ",\"device_id\":\"" + DEVICE_ID + "\"}";
   mqtt.publish(resultTopic.c_str(), payload.c_str());
 }
 
 void publishHeight(const String& checkId, float heightVal) {
+  connectMqtt();
   String payload = "{\"status\":\"ok\",\"action\":\"height\",\"check_id\":" + checkId + ",\"height_cm\":" + String(heightVal, 1) + ",\"device_id\":\"" + DEVICE_ID + "\"}";
   mqtt.publish(resultTopic.c_str(), payload.c_str());
   beepBuzzer(200);
@@ -316,7 +342,14 @@ void mqttCallback(char* topic, byte* payload, unsigned int length) {
   String incomingTopic = String(topic);
 
   if (incomingTopic == commandTopic) {
+    if (isMeasuring) {
+      // Abaikan perintah baru jika sedang mengukur (cegah re-entrancy)
+      Serial.println("[MQTT] Perintah diabaikan: sedang mengukur.");
+      return;
+    }
+    isMeasuring = true;
     handleCommandPayload(message);
+    isMeasuring = false;
   } else if (incomingTopic == boxOpenTopic) {
     openServo();
   }
@@ -440,16 +473,24 @@ void loop() {
     }
   }
 
-  // 3. Background Sampling Load Cell — Non-blocking, 1 sampel per loop
+  // 3. Background Sampling Load Cell — Non-blocking, 1 sampel per loop (dengan Low-Pass Filter)
   if (scale.is_ready()) {
     float b = scale.get_units(1);
     if (b < 0.0f) b = 0.0f;
     
     if (b < WEIGHT_RAW_THRESHOLD) {
-      beratGlobal = 0.0f;
+      // Reduksi berat secara smooth ke 0 agar stabil
+      beratGlobal = (beratGlobal * 0.8f);
+      if (beratGlobal < 1.0f) beratGlobal = 0.0f;
     } else {
       float corrected = (b - WEIGHT_OFFSET) / WEIGHT_SLOPE;
-      beratGlobal = (corrected < 0.0f) ? 0.0f : corrected;
+      if (corrected < 0.0f) corrected = 0.0f;
+      // Exponential Moving Average (Low Pass Filter) agar angka timbangan tidak lompat-lompat
+      if (beratGlobal == 0.0f) {
+        beratGlobal = corrected; // Respon langsung saat pertama kali diinjak
+      } else {
+        beratGlobal = (beratGlobal * 0.7f) + (corrected * 0.3f);
+      }
     }
   }
 
@@ -458,8 +499,10 @@ void loop() {
     lastPrintMs = millis();
     float suhu = mlx.readObjectTempC() + BODY_TEMP_OFFSET;
     float jarak = readDistance();
-    float tinggi = (jarak > 0) ? SENSOR_HEIGHT_CM - jarak : 0;
     float berat = beratGlobal;
+    // Hanya ukur tinggi jika ada orang di atas timbangan (berat > 15 kg)
+    // Ini membuang pantulan palsu ultrasonik saat alat kosong
+    float tinggi = (jarak > 0 && berat > 15.0f) ? SENSOR_HEIGHT_CM - jarak : 0.0f;
 
     // Pergantian Halaman LCD Setiap 2.5 Detik
     if (millis() - lastLcdPageMs > 2500) {
@@ -494,6 +537,16 @@ void loop() {
         lcd.setCursor(0, 1); lcd.print(line1);
       }
     }
+
+    // --- SERIAL MONITOR PRINT ---
+    Serial.println("===== SMART SNACK BOX =====");
+    Serial.printf("Tinggi : %.1f cm\n", tinggi);
+    Serial.printf("Berat  : %.2f kg (Raw: %.2f)\n", berat, scale.is_ready() ? scale.get_units(1) : -999.0f);
+    Serial.printf("Suhu   : %.1f C\n", suhu);
+    if (ir < 50000) Serial.println("BPM    : Tempelkan jari");
+    else Serial.printf("BPM    : %d bpm\n", beatAvg);
+    Serial.printf("Servo  : %s\n", servoIsOpen ? "TERBUKA" : "TERTUTUP");
+    Serial.println();
   }
 
   // 5. Auto Close Servo

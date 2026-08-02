@@ -246,17 +246,24 @@ class _HealthMonitoringPageState extends ConsumerState<HealthMonitoringPage>
 
     _snack('Membaca data timbangan secara realtime. Silakan berdiri di atas timbangan.');
 
-    // Jalankan langsung pengukuran pertama
-    await _fetchWeightStream();
+    // Jalankan loop polling secara paralel dengan target kecepatan 400ms
+    _runWeightStreamLoop();
+  }
 
-    // Lakukan polling berkala setiap 1.5 detik
-    _weightStreamTimer = Timer.periodic(const Duration(milliseconds: 1500), (timer) async {
-      if (!mounted || !_isStreamingWeight) {
-        timer.cancel();
-        return;
-      }
+  Future<void> _runWeightStreamLoop() async {
+    while (_isStreamingWeight && mounted) {
+      final startTime = DateTime.now();
       await _fetchWeightStream();
-    });
+      if (!mounted) break;
+      final elapsed = DateTime.now().difference(startTime).inMilliseconds;
+      // Target update rate: 400ms
+      final delay = 400 - elapsed;
+      if (delay > 0) {
+        await Future.delayed(Duration(milliseconds: delay));
+      } else {
+        await Future.delayed(const Duration(milliseconds: 50));
+      }
+    }
   }
 
   Future<void> _fetchWeightStream() async {

@@ -96,14 +96,25 @@ class SimpleMqttClient
 
     public function waitForPayload(string $topic, int $timeoutSeconds, callable $matcher): ?array
     {
-        $deadline = microtime(true) + $timeoutSeconds;
+        $deadline      = microtime(true) + $timeoutSeconds;
+        $lastPingAt    = microtime(true); // Kirim PINGREQ agar koneksi tidak di-drop broker
+        $pingIntervalS = 30;             // Kirim ping setiap 30 detik
+
         while (microtime(true) < $deadline) {
+            // Kirim PINGREQ jika sudah > 30 detik tidak ada aktivitas
+            if ((microtime(true) - $lastPingAt) >= $pingIntervalS) {
+                $this->sendPingReq();
+                $lastPingAt = microtime(true);
+            }
+
             $remaining = (int) ceil($deadline - microtime(true));
             if ($remaining <= 0) {
                 break;
             }
+            // Gunakan timeout baca pendek (1 detik) agar ping bisa dikirim tepat waktu
+            $readTimeout = min($remaining, 1);
             if (is_resource($this->socket)) {
-                stream_set_timeout($this->socket, $remaining);
+                stream_set_timeout($this->socket, $readTimeout);
             }
             try {
                 [$type, $data, $flags] = $this->readPacketWithFlags();
@@ -113,6 +124,11 @@ class SimpleMqttClient
                     continue;
                 }
                 throw $e;
+            }
+            if ($type === 13) {
+                // PINGRESP dari broker — normal, lanjutkan
+                $lastPingAt = microtime(true);
+                continue;
             }
             if ($type === 3) {
                 $parsed = $this->parsePublish($data, $flags);
@@ -143,6 +159,17 @@ class SimpleMqttClient
     public function __destruct()
     {
         $this->disconnect();
+    }
+
+    /**
+     * Kirim PINGREQ ke broker MQTT agar koneksi tidak diputus saat menunggu lama.
+     * Broker akan balas dengan PINGRESP (type=13).
+     */
+    public function sendPingReq(): void
+    {
+        if (is_resource($this->socket)) {
+            @fwrite($this->socket, chr(0xC0) . chr(0x00));
+        }
     }
 
     private function write(string $data): void
