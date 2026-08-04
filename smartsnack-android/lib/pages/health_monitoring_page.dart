@@ -68,9 +68,9 @@ class _HealthMonitoringPageState extends ConsumerState<HealthMonitoringPage>
   String? _localHeartStatus(double? hr) {
     if (hr == null) return null;
     int age = int.tryParse(_ageController.text) ?? 10;
-    if (age <= 12) {
+    if (age <= 10) {
       if (hr < 70) return 'rendah';
-      if (hr > 110) return 'tinggi';
+      if (hr > 120) return 'tinggi';
       return 'normal';
     } else {
       if (hr < 60) return 'rendah';
@@ -81,17 +81,20 @@ class _HealthMonitoringPageState extends ConsumerState<HealthMonitoringPage>
 
   String? _localTempStatus(double? temp) {
     if (temp == null) return null;
-    if (temp < 36.0) return 'rendah';
-    if (temp > 37.5) return 'tinggi';
-    return 'normal';
+    if (temp < 36.4) return 'rendah';
+    if (temp <= 37.5) return 'normal';
+    if (temp < 38.0) return 'hangat';
+    return 'demam';
   }
 
   String? _localBmiStatus(double? bmi) {
     if (bmi == null) return null;
-    if (bmi < 18.5) return 'kurus';
-    if (bmi < 25.0) return 'normal';
-    if (bmi < 30.0) return 'gemuk';
-    return 'obesitas';
+    if (bmi < 18.5) return 'underweight';
+    if (bmi <= 24.9) return 'normal';
+    if (bmi <= 29.9) return 'pre_obese';
+    if (bmi <= 34.9) return 'obese_class_1';
+    if (bmi <= 39.9) return 'obese_class_2';
+    return 'obese_class_3';
   }
 
   bool get _canProcess =>
@@ -912,38 +915,83 @@ class _HealthMonitoringPageState extends ConsumerState<HealthMonitoringPage>
   }
 
   Widget _statusChip(String status) {
-    final isNormal = status == 'normal';
-    // BMI statuses
-    final isKurus    = status == 'kurus';
-    final isGemuk    = status == 'gemuk';
-    final isObesitas = status == 'obesitas';
+    final s = status.toLowerCase();
 
     Color bgColor;
     Color textColor;
     String label;
     IconData icon;
 
-    if (isNormal) {
-      bgColor = const Color(0xFFD1FAE5); textColor = const Color(0xFF065F46);
-      label = 'Normal'; icon = Icons.check_circle_rounded;
-    } else if (isKurus) {
-      bgColor = const Color(0xFFDDD6FE); textColor = const Color(0xFF4C1D95);
-      label = 'Kurus'; icon = Icons.warning_rounded;
-    } else if (isGemuk) {
-      bgColor = const Color(0xFFFEF3C7); textColor = const Color(0xFF78350F);
-      label = 'Gemuk'; icon = Icons.warning_rounded;
-    } else if (isObesitas) {
-      bgColor = const Color(0xFFFEE2E2); textColor = const Color(0xFF7F1D1D);
-      label = 'Obesitas'; icon = Icons.error_rounded;
-    } else if (status == 'rendah') {
-      bgColor = const Color(0xFFFEF3C7); textColor = const Color(0xFF78350F);
-      label = 'Rendah'; icon = Icons.warning_rounded;
-    } else if (status == 'tinggi') {
-      bgColor = const Color(0xFFFEE2E2); textColor = const Color(0xFF7F1D1D);
-      label = 'Tinggi'; icon = Icons.warning_rounded;
-    } else {
-      bgColor = const Color(0xFFFEE2E2); textColor = const Color(0xFF7F1D1D);
-      label = 'Perlu Perhatian'; icon = Icons.warning_rounded;
+    switch (s) {
+      case 'normal':
+        bgColor = const Color(0xFFD1FAE5);
+        textColor = const Color(0xFF065F46);
+        label = 'Normal';
+        icon = Icons.check_circle_rounded;
+        break;
+      case 'rendah':
+        bgColor = const Color(0xFFFEF3C7);
+        textColor = const Color(0xFF78350F);
+        label = 'Rendah';
+        icon = Icons.warning_rounded;
+        break;
+      case 'tinggi':
+        bgColor = const Color(0xFFFEE2E2);
+        textColor = const Color(0xFF7F1D1D);
+        label = 'Tinggi';
+        icon = Icons.warning_rounded;
+        break;
+      case 'hangat':
+        bgColor = const Color(0xFFFEF3C7);
+        textColor = const Color(0xFF78350F);
+        label = 'Hangat';
+        icon = Icons.warning_rounded;
+        break;
+      case 'demam':
+        bgColor = const Color(0xFFFEE2E2);
+        textColor = const Color(0xFF7F1D1D);
+        label = 'Demam';
+        icon = Icons.error_rounded;
+        break;
+      case 'underweight':
+      case 'kurus':
+        bgColor = const Color(0xFFDDD6FE);
+        textColor = const Color(0xFF4C1D95);
+        label = 'Underweight';
+        icon = Icons.warning_rounded;
+        break;
+      case 'pre_obese':
+      case 'gemuk':
+        bgColor = const Color(0xFFFEF3C7);
+        textColor = const Color(0xFF78350F);
+        label = 'Pre-obese';
+        icon = Icons.warning_rounded;
+        break;
+      case 'obese_class_1':
+        bgColor = const Color(0xFFFEE2E2);
+        textColor = const Color(0xFF991B1B);
+        label = 'Obese class I';
+        icon = Icons.error_rounded;
+        break;
+      case 'obese_class_2':
+        bgColor = const Color(0xFFFEE2E2);
+        textColor = const Color(0xFF7F1D1D);
+        label = 'Obese class II';
+        icon = Icons.error_rounded;
+        break;
+      case 'obese_class_3':
+      case 'obesitas':
+        bgColor = const Color(0xFFFEE2E2);
+        textColor = const Color(0xFF581C87);
+        label = 'Obese class III';
+        icon = Icons.error_rounded;
+        break;
+      default:
+        bgColor = const Color(0xFFFEF3C7);
+        textColor = const Color(0xFF78350F);
+        label = status;
+        icon = Icons.warning_rounded;
+        break;
     }
 
     return Container(
@@ -958,17 +1006,21 @@ class _HealthMonitoringPageState extends ConsumerState<HealthMonitoringPage>
   }
 
   String _bmiLabel(double bmi) {
-    if (bmi < 18.5) return 'Kurus';
-    if (bmi < 25.0) return 'Normal';
-    if (bmi < 30.0) return 'Gemuk';
-    return 'Obesitas';
+    if (bmi < 18.5) return 'Underweight';
+    if (bmi <= 24.9) return 'Normal range';
+    if (bmi <= 29.9) return 'Pre-obese';
+    if (bmi <= 34.9) return 'Obese class I';
+    if (bmi <= 39.9) return 'Obese class II';
+    return 'Obese class III';
   }
 
   Color _bmiColor(double bmi) {
     if (bmi < 18.5) return const Color(0xFF7C3AED);
-    if (bmi < 25.0) return const Color(0xFF0D9F6E);
-    if (bmi < 30.0) return const Color(0xFFF59E0B);
-    return const Color(0xFFEF4444);
+    if (bmi <= 24.9) return const Color(0xFF0D9F6E);
+    if (bmi <= 29.9) return const Color(0xFFF59E0B);
+    if (bmi <= 34.9) return const Color(0xFFEF4444);
+    if (bmi <= 39.9) return const Color(0xFFDC2626);
+    return const Color(0xFF991B1B);
   }
 
 

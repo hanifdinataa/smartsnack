@@ -150,8 +150,10 @@ class HealthMonitoringService
 
     // ─── EVALUASI STATUS KESEHATAN (tanpa machine learning) ────────────────
 
-    // Evaluasi status kesehatan berdasarkan nilai sensor.
-    // Mengembalikan array berisi status per parameter dan status keseluruhan.
+    // Evaluasi status kesehatan berdasarkan standar referensi:
+    // 1. Detak Jantung: Siloam Hospitals / Kemenkes RI (1-10 thn: 70-120 bpm, 11-17+ thn: 60-100 bpm)
+    // 2. Suhu Tubuh: AAP (Normal: 36.4-37.5 °C, Demam: >= 38.0 °C)
+    // 3. BMI: FAO (<18.5 Underweight, 18.5-24.9 Normal, 25-29.9 Pre-obese, 30-34.9 Obese I, 35-39.9 Obese II, >=40 Obese III)
     public function evaluateHealthStatus(array $payload): array
     {
         $heartRate = (float) ($payload['heart_rate'] ?? 0);
@@ -159,37 +161,55 @@ class HealthMonitoringService
         $bmi       = (float) ($payload['bmi']        ?? 0);
         $age       = (int)   ($payload['age']         ?? 10);
 
-        // ─ Detak Jantung ─
-        // Nilai normal untuk anak: 70-110 bpm, dewasa: 60-100 bpm
-        // Pakai rentang 60-110 sebagai adaptif untuk anak-anak
-        if ($age <= 12) {
-            $heartNormal = ($heartRate >= 70 && $heartRate <= 110);
+        // ─ Detak Jantung (Siloam Hospitals / Kemenkes RI) ─
+        if ($age <= 10) {
+            if ($heartRate < 70) {
+                $heartStatus = 'rendah';
+            } elseif ($heartRate > 120) {
+                $heartStatus = 'tinggi';
+            } else {
+                $heartStatus = 'normal';
+            }
         } else {
-            $heartNormal = ($heartRate >= 60 && $heartRate <= 100);
+            if ($heartRate < 60) {
+                $heartStatus = 'rendah';
+            } elseif ($heartRate > 100) {
+                $heartStatus = 'tinggi';
+            } else {
+                $heartStatus = 'normal';
+            }
         }
-        $heartStatus = $heartNormal ? 'normal' : 'perlu_perhatian';
 
-        // ─ Suhu Tubuh ─
-        // Normal: 36.0 – 37.5 °C
-        $tempNormal = ($bodyTemp >= 36.0 && $bodyTemp <= 37.5);
-        $tempStatus = $tempNormal ? 'normal' : 'perlu_perhatian';
-
-        // ─ BMI (WHO) ─
-        if ($bmi <= 0) {
-            $bmiStatus = 'normal'; // tidak ada data BMI, anggap normal
-        } elseif ($bmi < 18.5) {
-            $bmiStatus = 'kurus';
-        } elseif ($bmi < 25.0) {
-            $bmiStatus = 'normal';
-        } elseif ($bmi < 30.0) {
-            $bmiStatus = 'gemuk';
+        // ─ Suhu Tubuh (AAP) ─
+        if ($bodyTemp < 36.4) {
+            $tempStatus = 'rendah';
+        } elseif ($bodyTemp <= 37.5) {
+            $tempStatus = 'normal';
+        } elseif ($bodyTemp < 38.0) {
+            $tempStatus = 'hangat';
         } else {
-            $bmiStatus = 'obesitas';
+            $tempStatus = 'demam';
+        }
+
+        // ─ BMI (FAO) ─
+        if ($bmi <= 0) {
+            $bmiStatus = 'normal';
+        } elseif ($bmi < 18.5) {
+            $bmiStatus = 'underweight';
+        } elseif ($bmi <= 24.9) {
+            $bmiStatus = 'normal';
+        } elseif ($bmi <= 29.9) {
+            $bmiStatus = 'pre_obese';
+        } elseif ($bmi <= 34.9) {
+            $bmiStatus = 'obese_class_1';
+        } elseif ($bmi <= 39.9) {
+            $bmiStatus = 'obese_class_2';
+        } else {
+            $bmiStatus = 'obese_class_3';
         }
 
         // ─ Status Keseluruhan ─
-        $bmiNormal = in_array($bmiStatus, ['normal'], true);
-        $allNormal = $heartNormal && $tempNormal && $bmiNormal;
+        $allNormal = ($heartStatus === 'normal') && ($tempStatus === 'normal') && ($bmiStatus === 'normal');
         $overallStatus = $allNormal ? 'normal' : 'perlu_perhatian';
 
         return [

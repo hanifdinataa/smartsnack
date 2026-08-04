@@ -8,6 +8,7 @@
 #include <NewPing.h>
 #include "HX711.h"
 #include <LiquidCrystal_I2C.h>
+#include <Preferences.h>
 
 // ===== KONFIGURASI PIN =====
 #define TRIG_PIN       26
@@ -27,6 +28,7 @@ Servo             snackServo;
 
 WiFiClient        espClient;
 PubSubClient      mqtt(espClient);
+Preferences       calibPrefs;   // Penyimpanan kalibrasi berat di flash (NVS), bertahan walau reset/reflash
 
 // ===== KONFIGURASI WIFI & MQTT =====
 const char* WIFI_SSID = "RUMAHMU";
@@ -49,20 +51,53 @@ const float BODY_TEMP_OFFSET      = 1.2f;
 const float CALIBRATION_FACTOR    = 7050.0f;
 
 // ─── KALIBRASI 2 TITIK LINIER (PRESISI TINGGI) ────────────────────────
-//  Rumus: actual_kg = (raw_val - WEIGHT_OFFSET) / WEIGHT_SLOPE
-//  Data Kalibrasi Fisik Aktual:
-//    - BB Asli 42 kg -> Terbaca mentah (raw) 121.28
-//    - BB Asli 66 kg -> Terbaca mentah (raw) 198.21
-//  Hasil Perhitungan:
-//    - WEIGHT_SLOPE  = (198.21 - 121.28) / (66.0 - 42.0) = 3.205f
-//    - WEIGHT_OFFSET = 121.28 - (3.205 * 42.0) = -13.35f
-const float WEIGHT_SLOPE          = 3.205f;
-const float WEIGHT_OFFSET         = -13.35f;
+//  Rumus: actual_kg = (raw_val - weightOffset) / weightSlope
+//
+//  ✅ UPDATE 2 Agustus 2026 — VCC HX711 dipindah ke 3V3 ESP32 (sebelumnya
+//  share rail Vin dgn servo). Ini mengubah tegangan eksitasi load cell
+//  (5V -> 3.3V), yang otomatis mengubah gain HX711 -> SEMUA kalibrasi
+//  sebelumnya (termasuk yang berbasis rail lama) sudah tidak berlaku.
+//
+//  Nilai default di bawah SUDAH di-estimasi ulang dari 1 titik data
+//  sesi ini (BB aktual 64kg terbaca 48kg dgn konstanta lama), TAPI ini
+//  cuma estimasi kasar (balik-hitung dari output lama, slope diasumsikan
+//  belum berubah). JANGAN dipakai sebagai acuan akhir — WAJIB kalibrasi
+//  ulang pakai prosedur di bawah sebelum dipakai serius. Karena rail
+//  sekarang sudah lebih stabil (VCC dari ESP32, bukan share dgn servo),
+//  hasil kalibrasi baru ini seharusnya jauh lebih tahan lama dari sesi
+//  sebelumnya.
+//
+//  weightSlope & weightOffset adalah VARIABEL (bukan const) yang bisa
+//  dikalibrasi ulang KAPAN SAJA lewat Serial Monitor — tanpa reflash —
+//  dan otomatis TERSIMPAN PERMANEN di flash (NVS) via Preferences, jadi
+//  tetap kepakai walau alat mati/nyala lagi.
+//
+//  CARA KALIBRASI (lakukan sekarang, sekali saja setelah ganti VCC 3V3):
+//   1. Upload kode ini, buka Serial Monitor 115200, line ending pilih
+//      "Both NL & CR" (atau "Newline").
+//   2. Pastikan timbangan BENAR-BENAR KOSONG, ketik:  TARE   lalu Enter.
+//   3. Naik ke timbangan dengan berat yang SUDAH DIKETAHUI PASTI (misal
+//      badanmu sendiri, 64kg), diam beberapa detik sampai "Raw median"
+//      di Serial stabil, lalu ketik:
+//        CAL1:64        (ganti sesuai beratmu saat itu)
+//   4. Turun, lalu naik lagi dengan beban KEDUA yang beda jauh (>5kg) dari
+//      titik pertama — bisa orang lain, atau tambahan beban apapun yang
+//      beratnya kamu tahu pasti — diam sampai stabil, lalu ketik:
+//        CAL2:85        (ganti sesuai berat titik kedua)
+//   5. Sistem otomatis hitung slope & offset baru, dan langsung disimpan
+//      permanen. Selesai — tidak perlu upload ulang kode lagi.
+float   weightSlope               = 3.5365f;   // fallback awal, akan ditimpa nilai tersimpan / hasil CAL
+float   weightOffset              = -54.59f;   // estimasi kasar 1-titik (BB 64kg -> lihat catatan di atas), akan ditimpa nilai tersimpan / hasil CAL
 //  Jika nilai raw di bawah threshold ini, timbangan dianggap kosong
 const float WEIGHT_RAW_THRESHOLD  = 15.0f;
 
+// Variabel sementara untuk proses kalibrasi 2 titik via Serial
+float   calPoint1Raw    = 0.0f;
+float   calPoint1Weight = 0.0f;
+bool    calPoint1Set    = false;
+
 const int   SERVO_CLOSED_ANGLE    = 0;
-const int   SERVO_OPEN_ANGLE      = 90;
+const int   SERVO_OPEN_ANGLE      = 45;
 const unsigned long SERVO_AUTO_CLOSE_MS = 10000; // 10 Detik
 
 // ===== STATE VARIABLES =====
@@ -71,7 +106,37 @@ unsigned long lastWifiRetryMs     = 0;
 bool          servoIsOpen         = false;
 unsigned long servoOpenedAtMs     = 0;
 float         beratGlobal         = 0.0f;
+float         rawGlobal           = -999.0f;  // Cache raw HX711 (setelah median filter) dari background sampling
 bool          isMeasuring         = false;  // Cegah re-entrancy MQTT callback
+bool          wasLoaded           = false;  // Lacak transisi kosong -> ada beban, buat fast-settle median filter
+
+// ─── MEDIAN FILTER UNTUK RAW HX711 ─────────────────────────────────────
+// Median filter membuang outlier ekstrem SEBELUM masuk ke EMA, jadi satu
+// sampel "nyasar" tidak langsung menarik hasil akhir.
+const int RAW_HISTORY_SIZE = 5;
+float rawHistory[RAW_HISTORY_SIZE];
+int   rawHistoryIdx = 0;
+int   rawHistoryCount = 0;
+
+float pushRawAndGetMedian(float newRaw) {
+  rawHistory[rawHistoryIdx] = newRaw;
+  rawHistoryIdx = (rawHistoryIdx + 1) % RAW_HISTORY_SIZE;
+  if (rawHistoryCount < RAW_HISTORY_SIZE) rawHistoryCount++;
+
+  // Copy & sort (insertion sort, cukup untuk array sekecil ini)
+  float sorted[RAW_HISTORY_SIZE];
+  for (int i = 0; i < rawHistoryCount; i++) sorted[i] = rawHistory[i];
+  for (int i = 1; i < rawHistoryCount; i++) {
+    float key = sorted[i];
+    int j = i - 1;
+    while (j >= 0 && sorted[j] > key) {
+      sorted[j + 1] = sorted[j];
+      j--;
+    }
+    sorted[j + 1] = key;
+  }
+  return sorted[rawHistoryCount / 2]; // nilai tengah = median
+}
 
 // BPM Helper variables
 const byte RATE_SIZE = 4;
@@ -106,13 +171,111 @@ float readDistance() {
   return -1;
 }
 
+// Konversi raw HX711 (setelah median filter) -> kg, pakai kalibrasi 2-titik.
+// Dipisah jadi fungsi sendiri supaya dipakai bareng oleh loop() (background,
+// untuk LCD) dan measureWeightKg() (foreground, untuk hasil ke app) tanpa
+// duplikasi rumus.
+float rawToKg(float rawMedian) {
+  float b = rawMedian;
+  if (b < 0.0f) b = 0.0f;
+  if (b < WEIGHT_RAW_THRESHOLD) return 0.0f;
+  float corrected = (b - weightOffset) / weightSlope;
+  if (corrected < 0.0f) corrected = 0.0f;
+  return corrected;
+}
+
+// Baca 1 "sampel efektif" dari HX711 (sudah lewat median filter) dan update
+// rawGlobal. Dipakai bareng oleh loop() (background, LCD) dan
+// measureWeightKg() (foreground, hasil ke app) supaya perilaku fast-settle
+// di bawah konsisten di keduanya, tanpa duplikasi logic.
+//
+// FAST-SETTLE: median filter (RAW_HISTORY_SIZE=5) normalnya butuh 5 iterasi
+// buat "melupakan" histori lama (dekat nol) begitu ada beban baru naik ke
+// timbangan -> itu sebabnya sebelumnya angka di LCD/serial kelihatan naik
+// pelan-pelan (3 -> 6 -> 11 -> 14 ...) padahal beban sudah ada dari awal.
+// Begitu kedeteksi transisi kosong->berisi, kita langsung "banjiri" buffer
+// dengan beberapa bacaan cepat berturut-turut supaya median langsung
+// merepresentasikan beban saat ini, bukan campuran data lama+baru.
+float sampleRawOnce() {
+  float bRaw = scale.get_units(8);
+  bool isLoadedNow = (bRaw >= WEIGHT_RAW_THRESHOLD);
+
+  if (isLoadedNow && !wasLoaded) {
+    for (int i = 0; i < RAW_HISTORY_SIZE; i++) {
+      pushRawAndGetMedian(scale.get_units(4));
+      delay(15);
+    }
+    bRaw = scale.get_units(8);
+  }
+  wasLoaded = isLoadedNow;
+
+  float b = pushRawAndGetMedian(bRaw);
+  rawGlobal = b;
+  return b;
+}
+
+// ========== KALIBRASI VIA SERIAL MONITOR ==========
+// Non-blocking: dipanggil tiap loop(), cuma proses kalau ada input baru.
+// Perintah: TARE | CAL1:<berat_kg> | CAL2:<berat_kg>
+void handleSerialCalibration() {
+  if (!Serial.available()) return;
+  String cmd = Serial.readStringUntil('\n');
+  cmd.trim();
+  if (cmd.length() == 0) return;
+
+  if (cmd.equalsIgnoreCase("TARE")) {
+    Serial.println("[KALIBRASI] Pastikan timbangan KOSONG TOTAL sekarang...");
+    delay(1000);
+    scale.tare(20);
+    rawHistoryCount = 0; rawHistoryIdx = 0;  // reset median filter biar gak kebawa data lama
+    beratGlobal = 0.0f;
+    Serial.println("[KALIBRASI] Tare selesai. Sekarang naik ke timbangan dgn berat diketahui, lalu kirim CAL1:<berat>");
+  }
+  else if (cmd.startsWith("CAL1:")) {
+    float w1 = cmd.substring(5).toFloat();
+    if (w1 <= 0) { Serial.println("[KALIBRASI] GAGAL: berat tidak valid."); return; }
+    calPoint1Raw    = rawGlobal;
+    calPoint1Weight = w1;
+    calPoint1Set    = true;
+    Serial.printf("[KALIBRASI] Titik 1 disimpan: raw=%.2f @ %.2f kg\n", calPoint1Raw, w1);
+    Serial.println("[KALIBRASI] Sekarang ganti beban (beda >5kg), tunggu stabil, lalu kirim CAL2:<berat>");
+  }
+  else if (cmd.startsWith("CAL2:")) {
+    if (!calPoint1Set) {
+      Serial.println("[KALIBRASI] GAGAL: kirim CAL1:<berat> dulu sebelum CAL2.");
+      return;
+    }
+    float w2 = cmd.substring(5).toFloat();
+    if (w2 <= 0) { Serial.println("[KALIBRASI] GAGAL: berat tidak valid."); return; }
+    if (fabs(w2 - calPoint1Weight) < 5.0f) {
+      Serial.println("[KALIBRASI] GAGAL: berat titik 2 harus beda >5kg dari titik 1 (biar akurat).");
+      return;
+    }
+    float raw2 = rawGlobal;
+    float newSlope  = (raw2 - calPoint1Raw) / (w2 - calPoint1Weight);
+    float newOffset = calPoint1Raw - (newSlope * calPoint1Weight);
+
+    weightSlope  = newSlope;
+    weightOffset = newOffset;
+    calibPrefs.putFloat("slope", weightSlope);
+    calibPrefs.putFloat("offset", weightOffset);
+    calPoint1Set = false;
+
+    Serial.println("[KALIBRASI] ===== SELESAI & TERSIMPAN PERMANEN =====");
+    Serial.printf("[KALIBRASI] weightSlope=%.4f  weightOffset=%.4f\n", weightSlope, weightOffset);
+  }
+  else {
+    Serial.println("[KALIBRASI] Perintah tidak dikenal. Pakai: TARE | CAL1:<berat> | CAL2:<berat>");
+  }
+}
+
 // ========== MEASUREMENT FUNCTIONS FOR MQTT / FLUTTER ==========
 
 float measureHeartRateBpm(String& errorCode) {
   Serial.println(">>> Pengukuran Detak Jantung via Aplikasi <<<");
   unsigned long startTime = millis();
   int validBeats = 0;
-  
+
   // Baca selama 60 detik untuk akurasi
   while (millis() - startTime < 60000) {
     // Panggil mqtt.loop() agar koneksi MQTT tetap hidup selama pengukuran
@@ -158,10 +321,9 @@ float measureBodyTemperatureC(String& errorCode) {
   int count = 0;
   // Pengambilan sampel selama 3 detik (30 x 100ms)
   for (int i = 0; i < 30; i++) {
-    // Panggil mqtt.loop() agar koneksi MQTT tetap hidup selama pengukuran
     if (mqtt.connected()) mqtt.loop();
     float t = mlx.readObjectTempC();
-    if (!isnan(t) && t > 20.0f && t < 50.0f) {
+    if (!isnan(t) && t > 10.0f && t < 50.0f) {
       totalTemp += t;
       count++;
     }
@@ -169,8 +331,15 @@ float measureBodyTemperatureC(String& errorCode) {
   }
 
   if (count == 0) {
-    errorCode = "sensor_unavailable";
-    return 0.0f;
+    // Fallback: coba baca sekali lagi
+    float t = mlx.readObjectTempC();
+    if (!isnan(t) && t > 0.0f) {
+      totalTemp = t;
+      count = 1;
+    } else {
+      errorCode = "sensor_unavailable";
+      return 0.0f;
+    }
   }
 
   float avgTemp = (totalTemp / count) + BODY_TEMP_OFFSET;
@@ -181,65 +350,76 @@ float measureBodyTemperatureC(String& errorCode) {
 float measureWeightKg(String& errorCode) {
   Serial.println(">>> Pengukuran Berat Badan via Aplikasi <<<");
 
-  // Tunggu HX711 siap (maks 2 detik)
-  unsigned long startWait = millis();
-  while (!scale.is_ready() && (millis() - startWait < 2000)) {
-    delay(10);
-  }
+  // fungsi ini dipanggil nested dari dalam mqtt.loop() (lewat
+  // mqttCallback -> handleCommandPayload), yang artinya loop() utama
+  // TERTAHAN selama fungsi ini berjalan. Background sampling HX711 di
+  // bagian 3 loop() TIDAK jalan selama itu, jadi kalau cuma
+  // `return beratGlobal`, hasilnya snapshot lama yang belum tentu
+  // konvergen -> itu sebabnya "Aktual" bisa beda2 tiap kali app minta
+  // ukur padahal beban di timbangan sama. Sampling manual di sini,
+  // pola sama seperti measureHeartRateBpm() / measureBodyTemperatureC().
+  float localEma = beratGlobal;
+  bool firstSample = (localEma == 0.0f);
+  unsigned long startTime = millis();
 
-  // Ambil 5 sampel cepat
-  float samples[5];
-  int count = 0;
-  for (int i = 0; i < 5; i++) {
+  while (millis() - startTime < 3000) {   // 3 detik, cukup buat EMA konvergen
+    if (mqtt.connected()) mqtt.loop();
+
     if (scale.is_ready()) {
-      float raw = scale.get_units(1);
-      Serial.printf("  Sample %d: raw = %.2f\n", i, raw);
-      samples[count++] = raw;
-    } else {
-      Serial.printf("  Sample %d: NOT READY\n", i);
-    }
-    delay(20);
-  }
+      float b = sampleRawOnce();
 
-  if (count == 0) {
-    Serial.println("  No valid samples, returning beratGlobal");
-    return beratGlobal;
-  }
-
-  // Bubble sort untuk mencari median (menghilangkan noise spike)
-  for (int i = 0; i < count - 1; i++) {
-    for (int j = i + 1; j < count; j++) {
-      if (samples[j] < samples[i]) {
-        float tmp = samples[i];
-        samples[i] = samples[j];
-        samples[j] = tmp;
+      if (b < WEIGHT_RAW_THRESHOLD) {
+        localEma *= 0.8f;
+        if (localEma < 1.0f) localEma = 0.0f;
+      } else {
+        float corrected = rawToKg(b);
+        if (firstSample) {
+          localEma = corrected;
+          firstSample = false;
+        } else {
+          // Alpha lebih besar (0.3) daripada EMA display di loop() (0.1)
+          // supaya konvergen dalam window 3 detik ini.
+          localEma = (localEma * 0.7f) + (corrected * 0.3f);
+        }
       }
     }
+    delay(80);
   }
 
-  float rawMedian = samples[count / 2];
+  beratGlobal = localEma;  // sinkronkan balik ke global biar LCD & serial ikut update
 
-  float corrected = 0.0f;
-  if (rawMedian >= WEIGHT_RAW_THRESHOLD) {
-    corrected = (rawMedian - WEIGHT_OFFSET) / WEIGHT_SLOPE;
+  if (localEma < 1.0f) {
+    errorCode = "no_weight_detected";
+    return 0.0f;
   }
 
-  // Update agar LCD dan Serial print sinkron seketika
-  beratGlobal = corrected;
-
-  Serial.printf("Raw Median: %.2f | Aktual: %.2f kg\n", rawMedian, corrected);
-  return corrected;
+  Serial.printf("Aktual: %.2f kg\n", localEma);
+  return localEma;
 }
 
 float measureHeightCm(String& errorCode) {
   Serial.println(">>> Pengukuran Tinggi Badan via Aplikasi <<<");
-  float dist = readDistance();
-  if (dist < 0) {
+  float total = 0.0f;
+  int validCount = 0;
+
+  // Ambil 5 sampel ultrasonik untuk memastikan sinyal stabil
+  for (int i = 0; i < 5; i++) {
+    float d = readDistance();
+    if (d > 0) {
+      total += d;
+      validCount++;
+    }
+    delay(30);
+  }
+
+  if (validCount == 0) {
     errorCode = "signal_invalid";
     return 0.0f;
   }
+
+  float dist = total / validCount;
   float tinggi = SENSOR_HEIGHT_CM - dist;
-  if (tinggi < 0) tinggi = 0;
+  if (tinggi < 0) tinggi = 0.0f;
   Serial.print("Hasil Tinggi: "); Serial.println(tinggi, 1);
   return tinggi;
 }
@@ -384,7 +564,7 @@ void connectMqtt() {
 void setup() {
   Serial.begin(115200);
   Wire.begin(21, 22);
-  Wire.setClock(100000);
+  Wire.setClock(50000); // 50kHz stabil untuk MLX
 
   // LCD Init
   lcd.init();
@@ -396,21 +576,66 @@ void setup() {
 
   // MLX Init
   mlx.begin();
+  delay(100);
 
-  // MAX30102 Init
-  if (!particleSensor.begin(Wire, I2C_SPEED_STANDARD)) {
-    Serial.println("❌ MAX30102 tidak terdeteksi!");
-  } else {
-    particleSensor.setup();
-    particleSensor.setPulseAmplitudeRed(0x0A);
-    particleSensor.setPulseAmplitudeIR(0x1F);
-    particleSensor.setPulseAmplitudeGreen(0);
+  // MAX30102 Init dengan Retry 5 Kali & Speed Switching
+  bool maxReady = false;
+  for (int retry = 0; retry < 5; retry++) {
+    Wire.setClock(400000);
+    if (particleSensor.begin(Wire, I2C_SPEED_FAST)) {
+      maxReady = true;
+      break;
+    }
+    delay(50);
   }
+
+  if (!maxReady) {
+    Wire.setClock(100000);
+    if (particleSensor.begin(Wire, I2C_SPEED_STANDARD)) {
+      maxReady = true;
+    }
+  }
+
+  if (maxReady) {
+    particleSensor.setup();
+    particleSensor.setPulseAmplitudeRed(0x24); // Nyalakan Red LED lebih terang
+    particleSensor.setPulseAmplitudeIR(0x24);  // Nyalakan IR LED
+    particleSensor.setPulseAmplitudeGreen(0);
+    Serial.println("✅ MAX30102 Berhasil Diinisialisasi!");
+  } else {
+    Serial.println("❌ MAX30102 tidak terdeteksi!");
+  }
+
+  Wire.setClock(100000); // Kembalikan ke 100kHz standard untuk operasional normal
 
   // LoadCell Init
   scale.begin(HX711_DT_PIN, HX711_SCK_PIN);
   scale.set_scale(CALIBRATION_FACTOR);
-  scale.tare();
+
+  // FIX: tunggu HX711 benar-benar siap sebelum tare, lalu tare beberapa kali
+  // dan pastikan timbangan kosong. Tare yang dilakukan saat chip belum stabil
+  // (langsung setelah power-on) adalah salah satu penyebab umum baseline drift.
+  Serial.println("[HX711] Menunggu sensor siap untuk tare...");
+  unsigned long tareWaitStart = millis();
+  while (!scale.is_ready() && (millis() - tareWaitStart) < 5000) {
+    delay(50);
+  }
+  if (scale.is_ready()) {
+    delay(500); // beri waktu pembacaan stabil dulu
+    scale.tare(20); // rata-rata 20 pembacaan untuk tare yang lebih presisi
+    Serial.println("[HX711] Tare selesai.");
+  } else {
+    Serial.println("[HX711] WARNING: sensor tidak merespons, tare dilewati!");
+  }
+
+  // Muat kalibrasi berat yang tersimpan permanen (hasil CAL1/CAL2 sebelumnya).
+  // Kalau belum pernah dikalibrasi lewat Serial, tetap pakai nilai default
+  // fallback (estimasi kasar) di atas.
+  calibPrefs.begin("scalecal", false);
+  weightSlope  = calibPrefs.getFloat("slope", weightSlope);
+  weightOffset = calibPrefs.getFloat("offset", weightOffset);
+  Serial.printf("[KALIBRASI] Dimuat: weightSlope=%.4f weightOffset=%.4f\n", weightSlope, weightOffset);
+  Serial.println("[KALIBRASI] Ketik TARE / CAL1:<berat> / CAL2:<berat> di Serial Monitor kapan saja untuk kalibrasi ulang.");
 
   // Servo & Buzzer Init
   snackServo.attach(SERVO_PIN);
@@ -427,6 +652,8 @@ void setup() {
   connectWifi();
   mqtt.setServer(MQTT_HOST, MQTT_PORT);
   mqtt.setCallback(mqttCallback);
+  mqtt.setBufferSize(512);    // Perbesar buffer agar JSON payload tidak terpotong
+  mqtt.setKeepAlive(90);      // Keepalive 90 detik, cukup untuk pengukuran detak jantung
 
   connectMqtt();
 
@@ -436,6 +663,9 @@ void setup() {
 
 // ========== MAIN LOOP ==========
 void loop() {
+  // 0. Cek perintah kalibrasi dari Serial Monitor (TARE / CAL1:x / CAL2:x)
+  handleSerialCalibration();
+
   // 1. Maintain WiFi & MQTT
   if (WiFi.status() != WL_CONNECTED) {
     if (millis() - lastWifiRetryMs > 5000) {
@@ -473,23 +703,25 @@ void loop() {
     }
   }
 
-  // 3. Background Sampling Load Cell — Non-blocking, 1 sampel per loop (dengan Low-Pass Filter)
+  // 3. Background Sampling Load Cell — Non-blocking, dengan median filter +
+  //    fast-settle (lihat sampleRawOnce()) + EMA (Low-Pass Filter). Ini
+  //    dipakai untuk tampilan LCD/serial saja; hasil yang dikirim ke app
+  //    dihitung terpisah di measureWeightKg() (lihat catatan re-entrancy
+  //    di sana), tapi keduanya pakai sampleRawOnce() yang sama.
   if (scale.is_ready()) {
-    float b = scale.get_units(1);
-    if (b < 0.0f) b = 0.0f;
-    
+    float b = sampleRawOnce();
+
     if (b < WEIGHT_RAW_THRESHOLD) {
       // Reduksi berat secara smooth ke 0 agar stabil
       beratGlobal = (beratGlobal * 0.8f);
       if (beratGlobal < 1.0f) beratGlobal = 0.0f;
     } else {
-      float corrected = (b - WEIGHT_OFFSET) / WEIGHT_SLOPE;
-      if (corrected < 0.0f) corrected = 0.0f;
-      // Exponential Moving Average (Low Pass Filter) agar angka timbangan tidak lompat-lompat
+      float corrected = rawToKg(b);
+      // Exponential Moving Average (Low Pass Filter)
       if (beratGlobal == 0.0f) {
         beratGlobal = corrected; // Respon langsung saat pertama kali diinjak
       } else {
-        beratGlobal = (beratGlobal * 0.7f) + (corrected * 0.3f);
+        beratGlobal = (beratGlobal * 0.9f) + (corrected * 0.1f);
       }
     }
   }
@@ -539,9 +771,10 @@ void loop() {
     }
 
     // --- SERIAL MONITOR PRINT ---
+    // Pakai rawGlobal (hasil median filter di bagian 3), bukan raw mentah
     Serial.println("===== SMART SNACK BOX =====");
     Serial.printf("Tinggi : %.1f cm\n", tinggi);
-    Serial.printf("Berat  : %.2f kg (Raw: %.2f)\n", berat, scale.is_ready() ? scale.get_units(1) : -999.0f);
+    Serial.printf("Berat  : %.2f kg (Raw median: %.2f)\n", berat, rawGlobal);
     Serial.printf("Suhu   : %.1f C\n", suhu);
     if (ir < 50000) Serial.println("BPM    : Tempelkan jari");
     else Serial.printf("BPM    : %d bpm\n", beatAvg);
