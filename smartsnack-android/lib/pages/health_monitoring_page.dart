@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -48,6 +49,12 @@ class _HealthMonitoringPageState extends ConsumerState<HealthMonitoringPage>
 
   // ── Result ───────────────────────────────────────────
   HealthMonitoringRecord? _result;
+
+  // ── Real-time chart data ─────────────────────────────
+  List<double> _heartChartData = [];
+  List<double> _tempChartData  = [];
+  Timer?       _heartPollTimer;
+  Timer?       _tempPollTimer;
 
   bool _profileInitialized = false;
   final TextEditingController _ageController = TextEditingController();
@@ -125,6 +132,8 @@ class _HealthMonitoringPageState extends ConsumerState<HealthMonitoringPage>
     _weightTimer?.cancel();
     _weightStreamTimer?.cancel();
     _heightTimer?.cancel();
+    _heartPollTimer?.cancel();
+    _tempPollTimer?.cancel();
     _successAnimController.dispose();
     _ageController.dispose();
     super.dispose();
@@ -181,10 +190,91 @@ class _HealthMonitoringPageState extends ConsumerState<HealthMonitoringPage>
   }
 
   // ─── SENSOR ACTIONS ──────────────────────────────────────────────────────
+
+  /// Pastikan check_id sudah ada sebelum mulai polling.
+  /// Jika belum ada, buat sesi baru dari backend agar Flutter tahu check_id
+  /// sebelum pengukuran selesai (diperlukan untuk polling chart real-time).
+  Future<void> _ensureSession() async {
+    if (_checkId != null) return;
+    try {
+      final newId = await ref.read(apiServiceProvider).createHealthSession();
+      if (newId != null && mounted) {
+        setState(() => _checkId = newId);
+      }
+    } catch (_) {
+      // Jika gagal, biarkan checkHeartRate/checkBodyTemperature membuat sesi sendiri
+    }
+  }
+
+  /// Mulai polling data raw detak jantung setiap 2 detik untuk update grafik.
+  void _startHeartPoll() {
+    _heartPollTimer?.cancel();
+    _heartPollTimer = Timer.periodic(const Duration(seconds: 2), (timer) async {
+      if (!mounted || !_loadingHeartRate) {
+        timer.cancel();
+        return;
+      }
+      final checkId = _checkId;
+      if (checkId == null) return;
+      try {
+        final data = await ref.read(apiServiceProvider).getRawSensorReadings(
+          checkId: checkId,
+          type: 'heart_rate',
+        );
+        if (mounted && data.isNotEmpty) {
+          setState(() => _heartChartData = data);
+        }
+      } catch (_) {}
+    });
+  }
+
+  void _stopHeartPoll() {
+    _heartPollTimer?.cancel();
+    _heartPollTimer = null;
+  }
+
+  /// Mulai polling data raw suhu tubuh setiap 400ms untuk update grafik.
+  void _startTempPoll() {
+    _tempPollTimer?.cancel();
+    _tempPollTimer = Timer.periodic(const Duration(milliseconds: 400), (timer) async {
+      if (!mounted || !_loadingBodyTemp) {
+        timer.cancel();
+        return;
+      }
+      final checkId = _checkId;
+      if (checkId == null) return;
+      try {
+        final data = await ref.read(apiServiceProvider).getRawSensorReadings(
+          checkId: checkId,
+          type: 'body_temp',
+        );
+        if (mounted && data.isNotEmpty) {
+          setState(() => _tempChartData = data);
+        }
+      } catch (_) {}
+    });
+  }
+
+  void _stopTempPoll() {
+    _tempPollTimer?.cancel();
+    _tempPollTimer = null;
+  }
+
   Future<void> _checkHeartRate() async {
     _heartTimer?.cancel();
-    setState(() { _loadingHeartRate = true; _result = null; });
+    setState(() {
+      _loadingHeartRate = true;
+      _result = null;
+      _heartChartData = [];  // Reset chart data setiap pengukuran baru
+    });
     _startHeartCountdown();
+
+    // Step 1: Pastikan check_id sudah ada agar bisa mulai poll chart
+    await _ensureSession();
+
+    // Step 2: Mulai polling grafik real-time (paralel dengan HTTP request)
+    _startHeartPoll();
+
     _snack('Letakkan jari ke sensor. Sistem mulai mengukur detak jantung...');
     try {
       final map = await ref.read(apiServiceProvider).checkHeartRate(checkId: _checkId);
@@ -205,14 +295,26 @@ class _HealthMonitoringPageState extends ConsumerState<HealthMonitoringPage>
       _snack(e.toString().replaceFirst('Exception: ', ''));
     } finally {
       _heartTimer?.cancel();
+      _stopHeartPoll();
       if (mounted) setState(() { _loadingHeartRate = false; _heartRemainingSeconds = 0; });
     }
   }
 
   Future<void> _checkBodyTemperature() async {
     _tempTimer?.cancel();
-    setState(() { _loadingBodyTemp = true; _result = null; });
+    setState(() {
+      _loadingBodyTemp = true;
+      _result = null;
+      _tempChartData = [];  // Reset chart data setiap pengukuran baru
+    });
     _startTempCountdown();
+
+    // Step 1: Pastikan check_id sudah ada
+    await _ensureSession();
+
+    // Step 2: Mulai polling grafik real-time
+    _startTempPoll();
+
     _snack('Arahkan dahi ke sensor sampai suhu terbaca...');
     try {
       final map = await ref.read(apiServiceProvider).checkBodyTemperature(checkId: _checkId);
@@ -233,6 +335,7 @@ class _HealthMonitoringPageState extends ConsumerState<HealthMonitoringPage>
       _snack(e.toString().replaceFirst('Exception: ', ''));
     } finally {
       _tempTimer?.cancel();
+      _stopTempPoll();
       if (mounted) setState(() { _loadingBodyTemp = false; _tempRemainingSeconds = 0; });
     }
   }
@@ -443,6 +546,9 @@ class _HealthMonitoringPageState extends ConsumerState<HealthMonitoringPage>
             progress: _loadingHeartRate
                 ? ((_heartMeasureSeconds - _heartRemainingSeconds) / _heartMeasureSeconds).clamp(0.0, 1.0)
                 : null,
+            chartWidget: (_loadingHeartRate || _heartChartData.isNotEmpty)
+                ? _buildHeartChart()
+                : null,
           ),
           const SizedBox(height: 12),
 
@@ -464,6 +570,9 @@ class _HealthMonitoringPageState extends ConsumerState<HealthMonitoringPage>
                 : null,
             progress: _loadingBodyTemp
                 ? ((_tempMeasureSeconds - _tempRemainingSeconds) / _tempMeasureSeconds).clamp(0.0, 1.0)
+                : null,
+            chartWidget: (_loadingBodyTemp || _tempChartData.isNotEmpty)
+                ? _buildTempChart()
                 : null,
           ),
           const SizedBox(height: 12),
@@ -707,6 +816,214 @@ class _HealthMonitoringPageState extends ConsumerState<HealthMonitoringPage>
     );
   }
 
+  /// Grafik real-time detak jantung (data BPM dari sensor MAX30102).
+  Widget _buildHeartChart() {
+    const accentColor = Color(0xFFEF4444); // merah
+    if (_heartChartData.isEmpty) {
+      return _chartPlaceholder(
+        accentColor,
+        'Menunggu sinyal dari sensor jari (MAX30102)...',
+        Icons.favorite_border_rounded,
+      );
+    }
+    final spots = _heartChartData.asMap().entries
+        .map((e) => FlSpot(e.key.toDouble(), e.value))
+        .toList();
+    final minRaw = _heartChartData.reduce((a, b) => a < b ? a : b);
+    final maxRaw = _heartChartData.reduce((a, b) => a > b ? a : b);
+    final minY   = (minRaw - 10).clamp(30.0, 100.0);
+    final maxY   = (maxRaw + 10).clamp(80.0, 180.0);
+
+    return _chartContainer(
+      accentColor,
+      label: 'BPM (detak jantung live)',
+      lastValue: '${_heartChartData.last.toStringAsFixed(1)} bpm',
+      child: LineChart(
+        LineChartData(
+          gridData: FlGridData(
+            show: true,
+            drawVerticalLine: false,
+            getDrawingHorizontalLine: (_) =>
+                const FlLine(color: Color(0x22FFFFFF), strokeWidth: 1),
+          ),
+          titlesData: FlTitlesData(
+            leftTitles: AxisTitles(
+              sideTitles: SideTitles(
+                showTitles: true,
+                reservedSize: 36,
+                getTitlesWidget: (v, _) => Text(
+                  v.toInt().toString(),
+                  style: const TextStyle(color: Color(0xAAFFFFFF), fontSize: 9),
+                ),
+              ),
+            ),
+            rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+            topTitles:   const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+            bottomTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+          ),
+          borderData: FlBorderData(show: false),
+          minY: minY, maxY: maxY,
+          extraLinesData: ExtraLinesData(horizontalLines: [
+            HorizontalLine(y: 60,  color: const Color(0x8022C55E), strokeWidth: 1, dashArray: [5, 4]),
+            HorizontalLine(y: 100, color: const Color(0x80F59E0B), strokeWidth: 1, dashArray: [5, 4]),
+          ]),
+          lineBarsData: [LineChartBarData(
+            spots: spots,
+            isCurved: true,
+            curveSmoothness: 0.35,
+            color: accentColor,
+            barWidth: 2.5,
+            isStrokeCapRound: true,
+            dotData: const FlDotData(show: false),
+            belowBarData: BarAreaData(
+              show: true,
+              gradient: LinearGradient(
+                colors: [accentColor.withOpacity(0.35), accentColor.withOpacity(0.0)],
+                begin: Alignment.topCenter, end: Alignment.bottomCenter,
+              ),
+            ),
+          )],
+          lineTouchData: const LineTouchData(enabled: false),
+        ),
+        duration: const Duration(milliseconds: 300),
+      ),
+    );
+  }
+
+  /// Grafik real-time suhu tubuh (data °C dari sensor MLX90614).
+  Widget _buildTempChart() {
+    const accentColor = Color(0xFFF59E0B); // amber
+    if (_tempChartData.isEmpty) {
+      return _chartPlaceholder(
+        accentColor,
+        'Menunggu sinyal dari sensor suhu (MLX90614)...',
+        Icons.thermostat_rounded,
+      );
+    }
+    final spots = _tempChartData.asMap().entries
+        .map((e) => FlSpot(e.key.toDouble(), e.value))
+        .toList();
+    final minRaw = _tempChartData.reduce((a, b) => a < b ? a : b);
+    final maxRaw = _tempChartData.reduce((a, b) => a > b ? a : b);
+    final minY   = (minRaw - 0.8).clamp(34.0, 37.0);
+    final maxY   = (maxRaw + 0.8).clamp(37.0, 42.0);
+
+    return _chartContainer(
+      accentColor,
+      label: 'Suhu tubuh live',
+      lastValue: '${_tempChartData.last.toStringAsFixed(2)} °C',
+      child: LineChart(
+        LineChartData(
+          gridData: FlGridData(
+            show: true,
+            drawVerticalLine: false,
+            getDrawingHorizontalLine: (_) =>
+                const FlLine(color: Color(0x22FFFFFF), strokeWidth: 1),
+          ),
+          titlesData: FlTitlesData(
+            leftTitles: AxisTitles(
+              sideTitles: SideTitles(
+                showTitles: true,
+                reservedSize: 40,
+                getTitlesWidget: (v, _) => Text(
+                  v.toStringAsFixed(1),
+                  style: const TextStyle(color: Color(0xAAFFFFFF), fontSize: 9),
+                ),
+              ),
+            ),
+            rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+            topTitles:   const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+            bottomTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+          ),
+          borderData: FlBorderData(show: false),
+          minY: minY, maxY: maxY,
+          extraLinesData: ExtraLinesData(horizontalLines: [
+            HorizontalLine(y: 36.4, color: const Color(0x8022C55E), strokeWidth: 1, dashArray: [5, 4]),
+            HorizontalLine(y: 37.5, color: const Color(0x80EF4444), strokeWidth: 1, dashArray: [5, 4]),
+          ]),
+          lineBarsData: [LineChartBarData(
+            spots: spots,
+            isCurved: true,
+            curveSmoothness: 0.4,
+            color: accentColor,
+            barWidth: 2.5,
+            isStrokeCapRound: true,
+            dotData: FlDotData(
+              show: _tempChartData.length <= 10,
+              getDotPainter: (_, __, ___, ____) => FlDotCirclePainter(
+                radius: 3, color: accentColor, strokeWidth: 1, strokeColor: Colors.white,
+              ),
+            ),
+            belowBarData: BarAreaData(
+              show: true,
+              gradient: LinearGradient(
+                colors: [accentColor.withOpacity(0.35), accentColor.withOpacity(0.0)],
+                begin: Alignment.topCenter, end: Alignment.bottomCenter,
+              ),
+            ),
+          )],
+          lineTouchData: const LineTouchData(enabled: false),
+        ),
+        duration: const Duration(milliseconds: 200),
+      ),
+    );
+  }
+
+  /// Wrapper container berwarna gelap untuk grafik dengan label dan nilai terakhir.
+  Widget _chartContainer(Color accent, {required String label, required String lastValue, required Widget child}) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.fromLTRB(10, 10, 10, 4),
+      height: 180,
+      decoration: BoxDecoration(
+        color: const Color(0xFF111827),
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+          Text(label, style: TextStyle(color: accent.withOpacity(0.85), fontSize: 10, fontWeight: FontWeight.w600)),
+          Text(lastValue, style: TextStyle(color: accent, fontSize: 11, fontWeight: FontWeight.w700)),
+        ]),
+        const SizedBox(height: 6),
+        Expanded(child: child),
+        const SizedBox(height: 4),
+        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+          Text('Normal (hijau)', style: const TextStyle(color: Color(0xFF22C55E), fontSize: 8)),
+          Text('Batas atas (kuning)', style: TextStyle(color: const Color(0xFFF59E0B).withOpacity(0.8), fontSize: 8)),
+        ]),
+      ]),
+    );
+  }
+
+  /// Placeholder chart saat menunggu data pertama dari sensor.
+  Widget _chartPlaceholder(Color accent, String msg, IconData icon) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 10),
+      height: 110,
+      decoration: BoxDecoration(
+        color: const Color(0xFF111827),
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+        Icon(icon, color: accent.withOpacity(0.4), size: 28),
+        const SizedBox(height: 8),
+        Text(
+          msg,
+          textAlign: TextAlign.center,
+          style: TextStyle(color: accent.withOpacity(0.6), fontSize: 11),
+        ),
+        const SizedBox(height: 8),
+        SizedBox(
+          width: 60,
+          child: LinearProgressIndicator(
+            backgroundColor: Colors.white12,
+            valueColor: AlwaysStoppedAnimation(accent.withOpacity(0.6)),
+          ),
+        ),
+      ]),
+    );
+  }
+
   Widget _sensorCard({
     required IconData icon,
     required Color iconColor,
@@ -721,6 +1038,7 @@ class _HealthMonitoringPageState extends ConsumerState<HealthMonitoringPage>
     String? countdown,
     double? progress,
     Widget? customButtons,
+    Widget? chartWidget,   // <<< grafik real-time (opsional)
   }) {
     return Container(
       padding: const EdgeInsets.all(18),
@@ -760,6 +1078,11 @@ class _HealthMonitoringPageState extends ConsumerState<HealthMonitoringPage>
               valueColor: AlwaysStoppedAnimation(iconColor),
             ),
           ),
+        ],
+        // ── Grafik real-time sensor (muncul saat loading atau data sudah ada) ──
+        if (chartWidget != null) ...[
+          const SizedBox(height: 12),
+          chartWidget,
         ],
         const SizedBox(height: 12),
         if (customButtons != null)

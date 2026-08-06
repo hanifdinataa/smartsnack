@@ -28,6 +28,7 @@ const char* DEVICE_ID = "esp32_health_01"; // ID Unik Perangkat ESP32 ini
 // Variable penyimpan nama Topik MQTT
 String commandTopic;     // Topik untuk menerima perintah ukur dari Backend (smartsnack/health/command/esp32_health_01)
 String resultTopic;      // Topik untuk mengirim hasil pengukuran ke Backend (smartsnack/health/result/esp32_health_01)
+String rawTopic;         // Topik untuk mengirim data mentah sensor secara real-time (grafik Flutter) (smartsnack/health/raw/esp32_health_01)
 String boxEventTopic;    // Topik untuk mengirim event tombol ditekan ke Backend (smartsnack/box/event/esp32_health_01)
 String boxDecisionTopic; // Topik untuk menerima keputusan buka kotak dari Backend (smartsnack/box/decision/esp32_health_01)
 
@@ -75,6 +76,8 @@ const unsigned long TEMP_CACHE_TTL_MS = 10UL * 60UL * 1000UL; // Masa berlaku ca
 // ========== FORWARD DECLARATIONS (DEKLARASI FUNGSI AWAL) ==========
 void connectMqtt();
 void connectWifi();
+float measureHeartRateBpm(String& errorCode, const String& checkId);
+float measureBodyTemperatureC(String& errorCode, const String& checkId);
 
 // ========== DIAGNOSTIC HELPERS (PEMBANTU LOGGING SERIAL) ==========
 // Fungsi mencetak garis pemisah di Serial Monitor
@@ -212,7 +215,8 @@ bool ensureMlxReady() {
 
 // ========== HEART RATE (PENGUKURAN DETAK JANTUNG) ==========
 // Fungsi utama untuk mengukur detak jantung (BPM) menggunakan sensor MAX30102
-float measureHeartRateBpm(String& errorCode) {
+// checkId diteruskan untuk dikirim bersama data raw ke topic grafik Flutter
+float measureHeartRateBpm(String& errorCode, const String& checkId) {
   // 1. Pastikan sensor MAX30102 siap diakses
   if (!ensureMax30102Ready()) {
     Serial.println("[HR] Pengukuran selesai.");
@@ -290,6 +294,11 @@ float measureHeartRateBpm(String& errorCode) {
   unsigned long lastProgressPrint = 0;
   int           lastProgressPct  = -1;
 
+  // Variabel untuk tracking waktu publish raw data (setiap 2 detik)
+  unsigned long lastRawPublish   = 0;
+  float         liveRateTotal    = 0.0f;
+  int           liveRateCount    = 0;
+
   Serial.println("Progress Pengukuran");
 
   while (millis() - startTime < HEART_DURATION_MS) {
@@ -311,10 +320,31 @@ float measureHeartRateBpm(String& errorCode) {
             if ((millis() - startTime) > WARMUP_MS && bpm >= 40.0f && bpm <= 180.0f) {
               if (validRates < MAX_RATE_SAMPLES) rates[validRates++] = bpm;
               beatCount++;
+              // Akumulasi untuk rata-rata live (grafik real-time)
+              liveRateTotal += bpm;
+              liveRateCount++;
             }
           }
         }
         lastBeatMs = nowMs;
+      }
+    }
+
+    // ── Publish data mentah ke rawTopic setiap 2 detik (untuk grafik Flutter) ──
+    if (millis() - lastRawPublish >= 2000) {
+      lastRawPublish = millis();
+      float liveBpm = (liveRateCount > 0) ? (liveRateTotal / liveRateCount) : 0.0f;
+      bool  fingerOn = (irValue > adaptiveThreshold);
+      String rawPayload = "{";
+      rawPayload += "\"action\":\"heart_rate_raw\",";
+      rawPayload += "\"check_id\":" + checkId + ",";
+      rawPayload += "\"bpm\":" + String(liveBpm, 1) + ",";
+      rawPayload += "\"ir\":" + String(irValue) + ",";
+      rawPayload += "\"finger_on\":" + String(fingerOn ? "true" : "false") + ",";
+      rawPayload += "\"device_id\":\"" + jsonEscape(DEVICE_ID) + "\"";
+      rawPayload += "}";
+      if (mqtt.connected()) {
+        mqtt.publish(rawTopic.c_str(), rawPayload.c_str());
       }
     }
 
@@ -383,7 +413,8 @@ float measureHeartRateBpm(String& errorCode) {
 
 // ========== BODY TEMPERATURE (PENGUKURAN SUHU TUBUH) ==========
 // Fungsi utama untuk mengukur suhu tubuh (°C) menggunakan sensor non-kontak MLX90614
-float measureBodyTemperatureC(String& errorCode) {
+// checkId diteruskan untuk dikirim bersama data raw ke topic grafik Flutter
+float measureBodyTemperatureC(String& errorCode, const String& checkId) {
   // 1. Pastikan sensor MLX90614 siap diakses
   if (!ensureMlxReady()) {
     if (!isnan(lastGoodBodyTempC) && (millis() - lastGoodBodyTempMs) <= TEMP_CACHE_TTL_MS) {
@@ -456,6 +487,18 @@ float measureBodyTemperatureC(String& errorCode) {
     }
 
     readings[count++] = t;
+
+    // ── Publish data mentah suhu ke rawTopic setiap sampel (untuk grafik Flutter) ──
+    float calibratedT = t + TEMP_CALIBRATION_OFFSET_C;
+    String rawPayload = "{";
+    rawPayload += "\"action\":\"body_temp_raw\",";
+    rawPayload += "\"check_id\":" + checkId + ",";
+    rawPayload += "\"temp\":" + String(calibratedT, 2) + ",";
+    rawPayload += "\"device_id\":\"" + jsonEscape(DEVICE_ID) + "\"";
+    rawPayload += "}";
+    if (mqtt.connected()) {
+      mqtt.publish(rawTopic.c_str(), rawPayload.c_str());
+    }
 
     // Cetak progress bar persentase di Serial Monitor
     int pct = (int)((i + 1) * 100 / TEMP_SAMPLES);
@@ -591,16 +634,16 @@ void handleCommandPayload(const String& payload) {
   String errorCode = "";
   // Perintah ukur detak jantung
   if (action == "heart_rate") {
-    float bpm = measureHeartRateBpm(errorCode);
+    float bpm = measureHeartRateBpm(errorCode, checkId);
     if (errorCode.length() > 0) { publishError(checkId, action, errorCode); return; }
     publishHeartRate(checkId, bpm);
     return;
   }
   // Perintah ukur suhu tubuh
   if (action == "body_temperature") {
-    float temp = measureBodyTemperatureC(errorCode);
+    float tempVal = measureBodyTemperatureC(errorCode, checkId);
     if (errorCode.length() > 0) { publishError(checkId, action, errorCode); return; }
-    publishBodyTemperature(checkId, temp);
+    publishBodyTemperature(checkId, tempVal);
     return;
   }
   publishError(checkId, action, "unknown_action");
@@ -829,6 +872,7 @@ void setup() {
   // Buat topik MQTT spesifik berdasarkan DEVICE_ID
   commandTopic     = String("smartsnack/health/command/") + DEVICE_ID;
   resultTopic      = String("smartsnack/health/result/")  + DEVICE_ID;
+  rawTopic         = String("smartsnack/health/raw/")     + DEVICE_ID;  // Topik data mentah real-time (grafik Flutter)
   boxEventTopic    = String("smartsnack/box/event/")       + DEVICE_ID;
   boxDecisionTopic = String("smartsnack/box/decision/")    + DEVICE_ID;
 

@@ -1878,6 +1878,49 @@ class ApiService {
     return envelope.data ?? 0; 
   }
 
+  /// Buat sesi monitoring kesehatan baru dan dapatkan check_id segera.
+  /// Dipakai sebelum memulai pengukuran agar Flutter bisa mulai polling
+  /// data grafik real-time sebelum pengukuran selesai.
+  Future<int?> createHealthSession() async {
+    try {
+      final map = await _postWithTimeout(
+        '/api/health-monitoring/create-session',
+        data: {},
+        connectTimeout: const Duration(seconds: 15),
+        sendTimeout: const Duration(seconds: 10),
+        receiveTimeout: const Duration(seconds: 15),
+      );
+      final data = map['data'];
+      if (data is Map<String, dynamic>) {
+        return int.tryParse(data['check_id'].toString());
+      }
+      return null;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  /// Ambil daftar data mentah sensor untuk check_id tertentu.
+  /// [type]: 'heart_rate' atau 'body_temp'.
+  /// Digunakan untuk polling real-time chart di halaman monitoring kesehatan.
+  Future<List<double>> getRawSensorReadings({
+    required int checkId,
+    required String type,
+  }) async {
+    try {
+      final map = await _get(
+        '/api/health-monitoring/raw-readings?check_id=$checkId&type=$type',
+      );
+      final data = map['data'] as List<dynamic>? ?? [];
+      return data
+          .map<double>((e) => double.tryParse((e['v'] ?? 0).toString()) ?? 0.0)
+          .where((v) => v > 0)
+          .toList();
+    } catch (_) {
+      return [];
+    }
+  }
+
   Future<Map<String, dynamic>> checkHeartRate({int? checkId}) async {
     return _postWithTimeout(
       '/api/health-monitoring/check-heart-rate',

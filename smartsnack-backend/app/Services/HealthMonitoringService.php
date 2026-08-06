@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\SensorRawReading;
 use RuntimeException;
 
 // Service ini menangani semua logika monitoring kesehatan:
@@ -51,11 +52,34 @@ class HealthMonitoringService
 
     public function fetchHeartRate(int $checkId, int $userId): array
     {
+        // Simpan indeks pembacaan real-time untuk grafik Flutter
+        $readingIndex = 0;
+
         $response = $this->sendMqttCommandAndWait(
             checkId: $checkId,
             userId: $userId,
             action: 'heart_rate',
-            timeoutSeconds: max(90, $this->mqttTimeoutSeconds())
+            timeoutSeconds: max(90, $this->mqttTimeoutSeconds()),
+            rawCallback: static function (array $msg) use ($checkId, &$readingIndex): void {
+                if (($msg['action'] ?? '') !== 'heart_rate_raw') {
+                    return;
+                }
+                $bpm = (float) ($msg['bpm'] ?? 0);
+                if ($bpm <= 10 || $bpm > 250) {
+                    return;
+                }
+                try {
+                    SensorRawReading::create([
+                        'check_id'      => $checkId,
+                        'sensor_type'   => 'heart_rate',
+                        'value'         => round($bpm, 1),
+                        'reading_index' => $readingIndex++,
+                        'recorded_at'   => now(),
+                    ]);
+                } catch (\Throwable) {
+                    // Jangan gagalkan pengukuran jika pencatatan raw gagal
+                }
+            }
         );
 
         $value = $this->toFloat($response['heart_rate'] ?? null);
@@ -76,11 +100,34 @@ class HealthMonitoringService
 
     public function fetchBodyTemperature(int $checkId, int $userId): array
     {
+        // Simpan indeks pembacaan real-time untuk grafik Flutter
+        $readingIndex = 0;
+
         $response = $this->sendMqttCommandAndWait(
             checkId: $checkId,
             userId: $userId,
             action: 'body_temperature',
-            timeoutSeconds: min(45, $this->mqttTimeoutSeconds())
+            timeoutSeconds: min(45, $this->mqttTimeoutSeconds()),
+            rawCallback: static function (array $msg) use ($checkId, &$readingIndex): void {
+                if (($msg['action'] ?? '') !== 'body_temp_raw') {
+                    return;
+                }
+                $temp = (float) ($msg['temp'] ?? 0);
+                if ($temp <= 20 || $temp > 50) {
+                    return;
+                }
+                try {
+                    SensorRawReading::create([
+                        'check_id'      => $checkId,
+                        'sensor_type'   => 'body_temp',
+                        'value'         => round($temp, 2),
+                        'reading_index' => $readingIndex++,
+                        'recorded_at'   => now(),
+                    ]);
+                } catch (\Throwable) {
+                    // Jangan gagalkan pengukuran jika pencatatan raw gagal
+                }
+            }
         );
 
         $value = $this->toFloat($response['body_temp'] ?? null);
@@ -262,11 +309,22 @@ class HealthMonitoringService
 
     // ─── MQTT INTERNAL ─────────────────────────────────────────────────────
 
-    private function sendMqttCommandAndWait(int $checkId, int $userId, string $action, int $timeoutSeconds): array
-    {
+    /**
+     * Kirim perintah MQTT ke sensor dan tunggu hasilnya.
+     * Jika $rawCallback diberikan, backend juga subscribe ke rawTopic
+     * dan memanggil callback tiap kali ada data mentah masuk (untuk grafik real-time).
+     */
+    private function sendMqttCommandAndWait(
+        int $checkId,
+        int $userId,
+        string $action,
+        int $timeoutSeconds,
+        ?callable $rawCallback = null
+    ): array {
         $deviceId     = $this->mqttDeviceId();
         $commandTopic = "smartsnack/health/command/{$deviceId}";
         $resultTopic  = "smartsnack/health/result/{$deviceId}";
+        $rawTopic     = "smartsnack/health/raw/{$deviceId}";
 
         $client = new SimpleMqttClient(
             host:     $this->mqttHost(),
@@ -279,6 +337,11 @@ class HealthMonitoringService
         try {
             $client->connect(10);
             $client->subscribe($resultTopic);
+
+            // Juga subscribe ke raw topic jika ada callback (untuk grafik real-time)
+            if ($rawCallback !== null) {
+                $client->subscribe($rawTopic);
+            }
 
             $commandPayload = json_encode([
                 'action'       => $action,
@@ -293,13 +356,24 @@ class HealthMonitoringService
 
             $client->publish($commandTopic, $commandPayload);
 
-            $response = $client->waitForPayload(
-                topic: $resultTopic,
-                timeoutSeconds: $timeoutSeconds,
-                matcher: static function (array $message) use ($checkId): bool {
-                    return (int) ($message['check_id'] ?? 0) === $checkId;
-                }
-            );
+            $matcher = static function (array $message) use ($checkId): bool {
+                return (int) ($message['check_id'] ?? 0) === $checkId;
+            };
+
+            // Gunakan method yang mendengarkan dua topik sekaligus jika ada rawCallback
+            $response = $rawCallback !== null
+                ? $client->waitForPayloadWithSideEffect(
+                    primaryTopic: $resultTopic,
+                    timeoutSeconds: $timeoutSeconds,
+                    matcher: $matcher,
+                    rawTopic: $rawTopic,
+                    rawCallback: $rawCallback
+                )
+                : $client->waitForPayload(
+                    topic: $resultTopic,
+                    timeoutSeconds: $timeoutSeconds,
+                    matcher: $matcher
+                );
 
             if ($response === null) {
                 throw new RuntimeException('Perangkat tidak merespons dalam batas waktu.');

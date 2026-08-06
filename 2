@@ -43,7 +43,6 @@ const char* DEVICE_ID = "esp32_health_01";
 String commandTopic;
 String resultTopic;
 String boxOpenTopic;
-String rawTopic;         // Topik data mentah real-time (grafik Flutter)
 
 // ===== KALIBRASI SENSOR =====
 const float SENSOR_HEIGHT_CM      = 174.0f;
@@ -272,11 +271,10 @@ void handleSerialCalibration() {
 
 // ========== MEASUREMENT FUNCTIONS FOR MQTT / FLUTTER ==========
 
-float measureHeartRateBpm(String& errorCode, const String& checkId) {
+float measureHeartRateBpm(String& errorCode) {
   Serial.println(">>> Pengukuran Detak Jantung via Aplikasi <<<");
   unsigned long startTime = millis();
   int validBeats = 0;
-  unsigned long lastRawPublish = 0;
 
   // Baca selama 60 detik untuk akurasi
   while (millis() - startTime < 60000) {
@@ -295,25 +293,6 @@ float measureHeartRateBpm(String& errorCode, const String& checkId) {
         }
       }
     }
-
-    // Publish data mentah ke rawTopic setiap 2 detik (untuk grafik real-time Flutter)
-    if (millis() - lastRawPublish >= 2000) {
-      lastRawPublish = millis();
-      int totalRates = 0, validCount = 0;
-      for (byte i = 0; i < RATE_SIZE; i++) {
-        if (rates[i] > 0) {
-          totalRates += rates[i];
-          validCount++;
-        }
-      }
-      float liveBpm = (validCount > 0) ? ((float)totalRates / validCount) : 0.0f;
-      bool fingerOn = (ir > 50000);
-      String rawPayload = "{\"action\":\"heart_rate_raw\",\"check_id\":" + checkId + ",\"bpm\":" + String(liveBpm, 1) + ",\"ir\":" + String(ir) + ",\"finger_on\":" + (fingerOn ? "true" : "false") + ",\"device_id\":\"" + DEVICE_ID + "\"}";
-      if (mqtt.connected()) {
-        mqtt.publish(rawTopic.c_str(), rawPayload.c_str());
-      }
-    }
-
     delay(10);
   }
 
@@ -336,7 +315,7 @@ float measureHeartRateBpm(String& errorCode, const String& checkId) {
   return (float)beatAvg;
 }
 
-float measureBodyTemperatureC(String& errorCode, const String& checkId) {
+float measureBodyTemperatureC(String& errorCode) {
   Serial.println(">>> Pengukuran Suhu Tubuh via Aplikasi <<<");
   float totalTemp = 0.0f;
   int count = 0;
@@ -347,11 +326,6 @@ float measureBodyTemperatureC(String& errorCode, const String& checkId) {
     if (!isnan(t) && t > 10.0f && t < 50.0f) {
       totalTemp += t;
       count++;
-      float calibratedT = t + BODY_TEMP_OFFSET;
-      String rawPayload = "{\"action\":\"body_temp_raw\",\"check_id\":" + checkId + ",\"temp\":" + String(calibratedT, 2) + ",\"device_id\":\"" + DEVICE_ID + "\"}";
-      if (mqtt.connected()) {
-        mqtt.publish(rawTopic.c_str(), rawPayload.c_str());
-      }
     }
     delay(100);
   }
@@ -524,11 +498,11 @@ void handleCommandPayload(const String& payload) {
   String errorCode = "";
 
   if (action == "heart_rate") {
-    float bpmVal = measureHeartRateBpm(errorCode, checkId);
+    float bpmVal = measureHeartRateBpm(errorCode);
     if (errorCode.length() > 0) publishError(checkId, action, errorCode);
     else publishHeartRate(checkId, bpmVal);
   } else if (action == "body_temperature") {
-    float tempVal = measureBodyTemperatureC(errorCode, checkId);
+    float tempVal = measureBodyTemperatureC(errorCode);
     if (errorCode.length() > 0) publishError(checkId, action, errorCode);
     else publishBodyTemperature(checkId, tempVal);
   } else if (action == "weight") {
@@ -673,7 +647,6 @@ void setup() {
   commandTopic = String("smartsnack/health/command/") + DEVICE_ID;
   resultTopic  = String("smartsnack/health/result/")  + DEVICE_ID;
   boxOpenTopic = String("smartsnack/box/open/")        + DEVICE_ID;
-  rawTopic     = String("smartsnack/health/raw/")     + DEVICE_ID;
 
   // WiFi & MQTT Startup
   connectWifi();

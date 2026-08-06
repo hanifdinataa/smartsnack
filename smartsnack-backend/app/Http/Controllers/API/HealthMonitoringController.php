@@ -8,6 +8,7 @@ use App\Models\BodyTemperature;
 use App\Models\HealthCheck;
 use App\Models\HealthResult;
 use App\Models\HeartRate;
+use App\Models\SensorRawReading;
 use App\Services\HealthMonitoringService;
 use Carbon\Carbon;
 use Carbon\CarbonInterface;
@@ -46,6 +47,57 @@ class HealthMonitoringController extends Controller
             'user_id'    => $request->user()->id,
             'created_at' => now(),
         ]);
+    }
+
+    // Buat sesi monitoring kesehatan baru dan kembalikan check_id segera.
+    // Dipakai Flutter sebelum memanggil cek sensor, agar check_id tersedia
+    // untuk memulai polling data grafik real-time sebelum pengukuran selesai.
+    public function createSession(Request $request): JsonResponse
+    {
+        $check = HealthCheck::create([
+            'user_id'    => $request->user()->id,
+            'created_at' => now(),
+        ]);
+
+        return successResponse(
+            ['check_id' => $check->id],
+            'Sesi monitoring kesehatan dibuat.'
+        );
+    }
+
+    // Ambil data mentah (raw) sensor untuk check_id tertentu.
+    // Dipakai Flutter untuk menggambar grafik real-time selama pengukuran berlangsung.
+    public function rawReadings(Request $request): JsonResponse
+    {
+        $checkId = (int) $request->query('check_id', 0);
+        $type    = (string) $request->query('type', 'heart_rate'); // 'heart_rate' atau 'body_temp'
+
+        if ($checkId <= 0) {
+            return errorResponse('Parameter check_id diperlukan.', null, 422);
+        }
+
+        // Pastikan sesi milik user yang sedang login (keamanan)
+        $check = HealthCheck::query()
+            ->where('id', $checkId)
+            ->where('user_id', $request->user()->id)
+            ->first();
+
+        if ($check === null) {
+            return errorResponse('Sesi monitoring tidak ditemukan.', null, 404);
+        }
+
+        $readings = SensorRawReading::query()
+            ->where('check_id', $checkId)
+            ->where('sensor_type', $type)
+            ->orderBy('reading_index')
+            ->get(['reading_index', 'value'])
+            ->map(static fn ($r) => [
+                'i' => (int) $r->reading_index,
+                'v' => (float) $r->value,
+            ])
+            ->values();
+
+        return successResponse($readings, 'Data raw sensor berhasil diambil.');
     }
 
     // Alur: app trigger cek detak jantung → backend command device via MQTT → simpan hasil → kirim ke app.

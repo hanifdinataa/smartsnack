@@ -88,6 +88,10 @@ Route::middleware('auth:sanctum')->group(function () {
     // MONITORING KESEHATAN (sensor + evaluasi status)
     // =====================================================
     Route::prefix('health-monitoring')->group(function () {
+        // Buat sesi baru dan dapatkan check_id segera (untuk mulai polling grafik real-time).
+        Route::post('/create-session', [HealthMonitoringController::class, 'createSession']);
+        // Ambil data mentah sensor (untuk grafik real-time di Flutter).
+        Route::get('/raw-readings', [HealthMonitoringController::class, 'rawReadings']);
         // Trigger cek detak jantung (MAX30102 via MQTT).
         Route::post('/check-heart-rate', [HealthMonitoringController::class, 'checkHeartRate']);
         // Trigger cek suhu tubuh dari perangkat (MLX90614 via MQTT).

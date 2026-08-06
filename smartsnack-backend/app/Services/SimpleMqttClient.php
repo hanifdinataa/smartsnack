@@ -147,6 +147,86 @@ class SimpleMqttClient
         return null;
     }
 
+    /**
+     * Sama seperti waitForPayload, tetapi juga mendengarkan topik MQTT kedua (rawTopic)
+     * untuk efek samping (misalnya menyimpan data mentah sensor ke database secara real-time).
+     *
+     * @param  string        $primaryTopic  Topik yang ditunggu untuk hasil akhir.
+     * @param  int           $timeoutSeconds
+     * @param  callable      $matcher       Fungsi pencocok untuk pesan dari primaryTopic.
+     * @param  string        $rawTopic      Topik MQTT untuk data mentah sensor.
+     * @param  callable      $rawCallback   Dipanggil setiap ada pesan di rawTopic.
+     * @return array|null
+     */
+    public function waitForPayloadWithSideEffect(
+        string $primaryTopic,
+        int $timeoutSeconds,
+        callable $matcher,
+        string $rawTopic,
+        callable $rawCallback
+    ): ?array {
+        $deadline      = microtime(true) + $timeoutSeconds;
+        $lastPingAt    = microtime(true);
+        $pingIntervalS = 30;
+
+        while (microtime(true) < $deadline) {
+            // Kirim PINGREQ agar koneksi tidak di-drop broker
+            if ((microtime(true) - $lastPingAt) >= $pingIntervalS) {
+                $this->sendPingReq();
+                $lastPingAt = microtime(true);
+            }
+
+            $remaining = (int) ceil($deadline - microtime(true));
+            if ($remaining <= 0) {
+                break;
+            }
+            $readTimeout = min($remaining, 1);
+            if (is_resource($this->socket)) {
+                stream_set_timeout($this->socket, $readTimeout);
+            }
+
+            try {
+                [$type, $data, $flags] = $this->readPacketWithFlags();
+            } catch (RuntimeException $e) {
+                if (str_contains($e->getMessage(), 'Tidak menerima data dari broker MQTT')) {
+                    continue;
+                }
+                throw $e;
+            }
+
+            if ($type === 13) {
+                // PINGRESP dari broker — normal, lanjutkan
+                $lastPingAt = microtime(true);
+                continue;
+            }
+
+            if ($type === 3) {
+                $parsed  = $this->parsePublish($data, $flags);
+                $decoded = json_decode($parsed['payload'], true);
+                if (!is_array($decoded)) {
+                    continue;
+                }
+
+                // ── Pesan dari rawTopic: jalankan efek samping (simpan ke DB, dll) ──
+                if ($parsed['topic'] === $rawTopic) {
+                    $rawCallback($decoded);
+                    continue;
+                }
+
+                // ── Pesan dari primaryTopic: cek apakah ini yang kita tunggu ──
+                if ($parsed['topic'] !== $primaryTopic) {
+                    continue;
+                }
+
+                if ($matcher($decoded) === true) {
+                    return $decoded;
+                }
+            }
+        }
+
+        return null;
+    }
+
     public function disconnect(): void
     {
         if (is_resource($this->socket)) {
