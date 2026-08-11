@@ -241,8 +241,6 @@ class _ProfilePageState extends ConsumerState<ProfilePage> with SingleTickerProv
       ]),
     );
   }
-
-  }
 }
 
 String _formatStatusLabel(String status) {
