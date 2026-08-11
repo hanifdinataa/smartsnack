@@ -201,12 +201,18 @@ class HealthMonitoringService
     // 1. Detak Jantung: Siloam Hospitals / Kemenkes RI (1-10 thn: 70-120 bpm, 11-17+ thn: 60-100 bpm)
     // 2. Suhu Tubuh: AAP (Normal: 36.4-37.5 °C, Demam: >= 38.0 °C)
     // 3. BMI: FAO (<18.5 Underweight, 18.5-24.9 Normal, 25-29.9 Pre-obese, 30-34.9 Obese I, 35-39.9 Obese II, >=40 Obese III)
+    // Evaluasi status kesehatan berdasarkan standar referensi:
+    // 1. Detak Jantung: Siloam Hospitals / Kemenkes RI (1-10 thn: 70-120 bpm, 11-17+ thn: 60-100 bpm)
+    // 2. Suhu Tubuh: AAP (Normal: 36.4-37.5 °C, Demam: >= 38.0 °C)
+    // 3. BMI Anak (5-19 thn): Standar WHO 2007 BMI-for-age Z-scores (Severe Thinness < -3SD, Thinness < -2SD, Normal -2SD s/d +1SD, Overweight > +1SD, Obese > +2SD)
+    // 4. BMI Dewasa (>19 thn): WHO Adult (<18.5 Underweight, 18.5-24.9 Normal, 25-29.9 Pre-obese, >=30 Obese)
     public function evaluateHealthStatus(array $payload): array
     {
         $heartRate = (float) ($payload['heart_rate'] ?? 0);
         $bodyTemp  = (float) ($payload['body_temp']  ?? 0);
         $bmi       = (float) ($payload['bmi']        ?? 0);
         $age       = (int)   ($payload['age']         ?? 10);
+        $gender    = (string)($payload['gender']      ?? 'Male');
 
         // ─ Detak Jantung (Siloam Hospitals / Kemenkes RI) ─
         if ($age <= 10) {
@@ -238,25 +244,12 @@ class HealthMonitoringService
             $tempStatus = 'demam';
         }
 
-        // ─ BMI (FAO) ─
-        if ($bmi <= 0) {
-            $bmiStatus = 'normal';
-        } elseif ($bmi < 18.5) {
-            $bmiStatus = 'underweight';
-        } elseif ($bmi <= 24.9) {
-            $bmiStatus = 'normal';
-        } elseif ($bmi <= 29.9) {
-            $bmiStatus = 'pre_obese';
-        } elseif ($bmi <= 34.9) {
-            $bmiStatus = 'obese_class_1';
-        } elseif ($bmi <= 39.9) {
-            $bmiStatus = 'obese_class_2';
-        } else {
-            $bmiStatus = 'obese_class_3';
-        }
+        // ─ Status Gizi / BMI (WHO 2007 untuk anak 5-19 tahun, WHO Dewasa untuk >19 tahun) ─
+        $bmiStatus = $this->classifyBmiWho2007($bmi, $age, $gender);
 
         // ─ Status Keseluruhan ─
-        $allNormal = ($heartStatus === 'normal') && ($tempStatus === 'normal') && ($bmiStatus === 'normal');
+        $isBmiNormal = in_array($bmiStatus, ['normal', 'gizi_baik'], true);
+        $allNormal = ($heartStatus === 'normal') && ($tempStatus === 'normal') && $isBmiNormal;
         $overallStatus = $allNormal ? 'normal' : 'perlu_perhatian';
 
         return [
@@ -265,6 +258,88 @@ class HealthMonitoringService
             'bmi_status'     => $bmiStatus,
             'overall_status' => $overallStatus,
         ];
+    }
+
+    // Klasifikasi status gizi / BMI berbasis WHO 2007 BMI-for-age Z-Score Table
+    private function classifyBmiWho2007(float $bmi, int $age, string $gender): string
+    {
+        if ($bmi <= 0) {
+            return 'normal';
+        }
+
+        // WHO 2007 BMI-for-age Z-scores cutoffs table [ -3SD, -2SD, +1SD, +2SD ]
+        // Boys (Laki-laki) usia 5-19 tahun
+        $whoBoys = [
+            5  => [12.1, 13.0, 16.6, 18.3],
+            6  => [12.1, 13.0, 16.8, 18.5],
+            7  => [12.3, 13.1, 17.0, 19.0],
+            8  => [12.4, 13.3, 17.4, 19.7],
+            9  => [12.6, 13.5, 17.9, 20.5],
+            10 => [12.8, 13.7, 18.5, 21.4],
+            11 => [13.1, 14.1, 19.2, 22.5],
+            12 => [13.4, 14.5, 19.9, 23.6],
+            13 => [13.8, 14.9, 20.8, 24.8],
+            14 => [14.3, 15.5, 21.8, 25.9],
+            15 => [14.7, 16.0, 22.7, 27.0],
+            16 => [15.1, 16.5, 23.5, 27.9],
+            17 => [15.4, 16.9, 24.3, 28.6],
+            18 => [15.7, 17.3, 24.9, 29.2],
+            19 => [15.9, 17.6, 25.4, 29.7],
+        ];
+
+        // Girls (Perempuan) usia 5-19 tahun
+        $whoGirls = [
+            5  => [11.8, 12.7, 16.8, 18.8],
+            6  => [11.7, 12.7, 17.0, 19.2],
+            7  => [11.8, 12.7, 17.3, 19.8],
+            8  => [11.9, 12.9, 17.7, 20.6],
+            9  => [12.1, 13.1, 18.3, 21.5],
+            10 => [12.4, 13.5, 19.0, 22.6],
+            11 => [12.7, 13.9, 19.9, 23.7],
+            12 => [13.2, 14.4, 20.8, 25.0],
+            13 => [13.6, 14.9, 21.8, 26.2],
+            14 => [14.0, 15.4, 22.7, 27.3],
+            15 => [14.4, 15.9, 23.5, 28.2],
+            16 => [14.6, 16.2, 24.1, 28.9],
+            17 => [14.7, 16.4, 24.5, 29.3],
+            18 => [14.7, 16.4, 24.8, 29.5],
+            19 => [14.7, 16.5, 25.0, 29.7],
+        ];
+
+        if ($age >= 5 && $age <= 19) {
+            $table = (strcasecmp($gender, 'Female') === 0 || strcasecmp($gender, 'Perempuan') === 0)
+                ? $whoGirls
+                : $whoBoys;
+
+            $cutoffs = $table[$age] ?? $table[10];
+            $sd_neg3 = $cutoffs[0];
+            $sd_neg2 = $cutoffs[1];
+            $sd_pos1 = $cutoffs[2];
+            $sd_pos2 = $cutoffs[3];
+
+            if ($bmi < $sd_neg3) {
+                return 'gizi_buruk';
+            } elseif ($bmi < $sd_neg2) {
+                return 'gizi_kurang';
+            } elseif ($bmi <= $sd_pos1) {
+                return 'gizi_baik';
+            } elseif ($bmi <= $sd_pos2) {
+                return 'gizi_lebih';
+            } else {
+                return 'obesitas';
+            }
+        }
+
+        // Dewasa (>19 tahun) - Klasifikasi WHO Dewasa
+        if ($bmi < 18.5) {
+            return 'underweight';
+        } elseif ($bmi <= 24.9) {
+            return 'normal';
+        } elseif ($bmi <= 29.9) {
+            return 'pre_obese';
+        } else {
+            return 'obesitas';
+        }
     }
 
     // ─── MQTT: BUKA SERVO BOX ──────────────────────────────────────────────

@@ -1243,11 +1243,9 @@ class _HealthMonitoringPageState extends ConsumerState<HealthMonitoringPage>
     // Status tinggi badan (dihitung lokal karena server tidak mengembalikannya)
     final String? heightStatus = _localHeightStatus(r.heightCm);
 
-    // Status berat badan:
-    // - Usia 1-10 tahun : pakai BB/U standar WHO
-    // - Usia >10 tahun  : pakai bmiStatus dari server
-    final String? weightStatusLocal = _localWeightStatus(r.weightKg, r.age, r.gender);
-    final String? weightStatus = weightStatusLocal ?? r.bmiStatus;
+    // Status berat badan & BMI:
+    // Menggunakan status resmi WHO 2007 dari server (r.bmiStatus) agar selalu selaras dan konsisten
+    final String weightStatus = r.bmiStatus;
 
     // Warna & label final result
     final Color finalColor  = isNormal ? const Color(0xFF0D9F6E) : const Color(0xFFF59E0B);
@@ -1282,28 +1280,16 @@ class _HealthMonitoringPageState extends ConsumerState<HealthMonitoringPage>
       adviceList.add('📏 Sangat pendek (potensi stunting) - Segera konsultasikan ke dokter atau puskesmas untuk evaluasi pertumbuhan lebih lanjut.');
     }
 
-    // ── Berat badan ──
-    // Usia 1-10: gunakan status BB/U (gizi buruk/kurang/baik/lebih)
-    // Usia >10 : gunakan BMI
-    if (r.age <= 10 && weightStatusLocal != null) {
-      if (weightStatusLocal == 'gizi_buruk') {
-        adviceList.add('⚖️ Gizi buruk - Segera konsultasikan ke dokter atau puskesmas. Anak membutuhkan penanganan gizi intensif secepatnya.');
-      } else if (weightStatusLocal == 'gizi_kurang') {
-        adviceList.add('⚖️ Gizi kurang - Perbanyak asupan protein (telur, ikan, daging), karbohidrat kompleks, dan lemak sehat. Makan 3x sehari + 2 camilan bergizi.');
-      } else if (weightStatusLocal == 'gizi_lebih') {
-        adviceList.add('⚖️ Berat badan berlebih - Kurangi makanan tinggi gula & lemak jenuh. Perbanyak sayur, buah, dan ajak anak aktif bergerak minimal 60 menit/hari.');
-      } else if (weightStatusLocal == 'obesitas') {
-        adviceList.add('⚖️ Obesitas - Konsultasikan ke dokter anak atau ahli gizi untuk program pengelolaan berat badan yang aman sesuai usianya.');
-      }
-    } else {
-      final String bmi = r.bmiStatus.toLowerCase();
-      if (bmi == 'kurus' || bmi == 'underweight') {
-        adviceList.add('⚖️ Berat badan kurang - Perbanyak asupan kalori bergizi (protein, karbohidrat kompleks), makan 3x sehari + 2 camilan sehat.');
-      } else if (bmi == 'gemuk' || bmi == 'pre_obese') {
-        adviceList.add('⚖️ Berat badan berlebih - Kurangi makanan tinggi gula & lemak jenuh, perbanyak sayur, buah, dan olahraga minimal 30 menit/hari.');
-      } else if (bmi.startsWith('obese') || bmi == 'obesitas') {
-        adviceList.add('⚖️ Obesitas - Disarankan berkonsultasi dengan dokter atau ahli gizi untuk program penurunan berat badan yang aman dan terstruktur.');
-      }
+    // ── Status Gizi / Berat Badan & BMI (WHO 2007) ──
+    final String bmi = r.bmiStatus.toLowerCase();
+    if (bmi == 'gizi_buruk') {
+      adviceList.add('⚖️ Gizi buruk (Severe Thinness) - Segera konsultasikan ke dokter atau puskesmas. Anak membutuhkan penanganan gizi intensif.');
+    } else if (bmi == 'gizi_kurang' || bmi == 'underweight' || bmi == 'kurus') {
+      adviceList.add('⚖️ Gizi kurang - Tingkatkan asupan kalori & protein (telur, susu, ikan, daging) untuk menunjang tumbuh kembang anak.');
+    } else if (bmi == 'gizi_lebih' || bmi == 'pre_obese' || bmi == 'gemuk') {
+      adviceList.add('⚖️ Gizi lebih (Overweight) - Kurangi camilan manis & berlemak jenuh. Perbanyak buah, sayur, dan ajak anak aktif bermain minimal 60 menit/hari.');
+    } else if (bmi == 'obesitas' || bmi.startsWith('obese')) {
+      adviceList.add('⚖️ Obesitas - Konsultasikan ke dokter anak atau ahli gizi untuk program pola makan seimbang sesuai usia anak.');
     }
 
     // ── Jika semua normal ──

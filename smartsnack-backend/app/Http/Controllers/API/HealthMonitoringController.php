@@ -294,6 +294,7 @@ class HealthMonitoringController extends Controller
             'body_temp'  => (float) $temp->temperature,
             'bmi'        => $bmi,
             'age'        => $age,
+            'gender'     => $gender,
         ]);
 
         DB::transaction(function () use ($check, $user, $weightKg, $heightCm, $bmi, $age, $gender, $evaluation): void {
