@@ -1610,10 +1610,15 @@ class _HealthMonitoringPageState extends ConsumerState<HealthMonitoringPage>
         icon = Icons.error_rounded;
         break;
       case 'obese_class_3':
-      case 'obesitas':
         bgColor = const Color(0xFFFEE2E2);
         textColor = const Color(0xFF581C87);
         label = 'Obese class III';
+        icon = Icons.error_rounded;
+        break;
+      case 'obesitas':
+        bgColor = const Color(0xFFFEE2E2);
+        textColor = const Color(0xFF581C87);
+        label = 'Obesitas';
         icon = Icons.error_rounded;
         break;
       // ── Status tinggi badan (WHO/Kemenkes RI) ──
