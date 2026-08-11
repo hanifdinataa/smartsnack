@@ -1,8 +1,18 @@
 Web Backend Laravel:  http://54.144.6.206:8000
 phpMyAdmin (Administrasi Database):  http://54.144.6.206:8081
 
+
+
+git add .
+git commit -m "Fix"
+git push origin main
+
+------------------------------
+
 sudo git pull origin main
 sudo docker compose up -d --build backend
+sudo docker restart smartsnack-backend
+
 
 flutter run -d chrome --web-port 8080
 flutter run -d chrome --web-port 8080 --dart-define=API_BASE_URL=http://54.144.6.206:8000/api

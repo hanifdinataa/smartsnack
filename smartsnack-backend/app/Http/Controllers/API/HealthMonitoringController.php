@@ -171,19 +171,27 @@ class HealthMonitoringController extends Controller
                 userId: (int) $request->user()->id
             );
 
-            $metric = BodyMetric::query()->where('check_id', $check->id)->first();
-            BodyMetric::query()->updateOrCreate(
-                ['check_id' => $check->id],
-                [
-                    'weight' => round((float) $sensor['value'], 2),
-                    'height' => $metric?->height ?? 0,
-                    'bmi'    => $metric?->bmi ?? 0,
-                ]
-            );
+            $newWeight = round((float) $sensor['value'], 2);
+            $metric    = BodyMetric::query()->where('check_id', $check->id)->first();
+
+            // Simpan HANYA jika berat badan baru lebih besar dari yang tersimpan (peak weight).
+            // Ini mencegah nilai transisi saat orang turun dari timbangan menimpa
+            // nilai puncak yang sudah benar di DB.
+            $currentWeight = (float) ($metric?->weight ?? 0);
+            if ($newWeight > $currentWeight) {
+                BodyMetric::query()->updateOrCreate(
+                    ['check_id' => $check->id],
+                    [
+                        'weight' => $newWeight,
+                        'height' => $metric?->height ?? 0,
+                        'bmi'    => $metric?->bmi ?? 0,
+                    ]
+                );
+            }
 
             return successResponse([
                 'check_id'   => $check->id,
-                'weight_kg'  => (float) $sensor['value'],
+                'weight_kg'  => $newWeight,
                 'source'     => (string) $sensor['source'],
                 'transport'  => (string) ($sensor['transport'] ?? 'mqtt'),
                 'device_id'  => (string) ($sensor['device_id'] ?? ''),

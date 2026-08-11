@@ -17,7 +17,7 @@ class _HealthMonitoringPageState extends ConsumerState<HealthMonitoringPage>
     with TickerProviderStateMixin {
   // ── Countdown constants ──────────────────────────────
   static const int _heartMeasureSeconds = 60;
-  static const int _tempMeasureSeconds  = 5;
+  static const int _tempMeasureSeconds  = 2;
   static const int _weightMeasureSeconds = 15;
   static const int _heightMeasureSeconds = 10;
 
@@ -26,6 +26,7 @@ class _HealthMonitoringPageState extends ConsumerState<HealthMonitoringPage>
   double? _heartRate;
   double? _bodyTemp;
   double? _weightKg;
+  double  _peakWeight = 0.0;
   double? _heightCm;
 
   // ── Loading flags ────────────────────────────────────
@@ -433,6 +434,8 @@ class _HealthMonitoringPageState extends ConsumerState<HealthMonitoringPage>
     setState(() {
       _isStreamingWeight = true;
       _loadingWeight = true;
+      _peakWeight = 0.0;
+      _weightKg = null;
       _result = null;
     });
 
@@ -468,8 +471,10 @@ class _HealthMonitoringPageState extends ConsumerState<HealthMonitoringPage>
       if (nextWeight != null && mounted && _isStreamingWeight) {
         setState(() {
           if (nextCheckId != null) _checkId = nextCheckId;
-          // Pertahankan berat badan yang valid (>= 1.0 kg) jika pengguna turun dari timbangan
-          if (nextWeight >= 1.0 || _weightKg == null) {
+          // Kunci berat badan puncak (peak weight) selama penimbangan berlangsung.
+          // Ini mencegah angka turun/berubah saat pengguna melangkah turun dari timbangan.
+          if (nextWeight > _peakWeight) {
+            _peakWeight = nextWeight;
             _weightKg = nextWeight;
           }
           _result = null;
@@ -523,16 +528,27 @@ class _HealthMonitoringPageState extends ConsumerState<HealthMonitoringPage>
   }
 
   Future<void> _process() async {
-    // Otomatis matikan mode streaming timbangan saat menekan proses
+    // Tangkap peak weight SEBELUM menghentikan streaming
+    // agar race condition antara loop async & setState tidak menimpa nilainya
+    final capturedWeight = _peakWeight > 0.0 ? _peakWeight : _weightKg;
+    final capturedHeight = _heightCm;
+
+    // Matikan streaming setelah nilai sudah ditangkap
     if (_isStreamingWeight) {
-      _stopWeightStreaming();
+      _weightStreamTimer?.cancel();
+      setState(() {
+        _isStreamingWeight = false;
+        _loadingWeight = false;
+        // Kunci tampilan ke peak weight yang sudah ditangkap
+        if (capturedWeight != null) _weightKg = capturedWeight;
+      });
     }
 
     final checkId = _checkId;
     if (checkId == null || _heartRate == null) { _snack('Cek Detak Jantung dulu.'); return; }
     if (_bodyTemp == null) { _snack('Cek Suhu Tubuh dulu.'); return; }
-    if (_weightKg == null) { _snack('Cek Berat Badan dulu.'); return; }
-    if (_heightCm == null) { _snack('Cek Tinggi Badan dulu.'); return; }
+    if (capturedWeight == null || capturedWeight <= 0) { _snack('Cek Berat Badan dulu.'); return; }
+    if (capturedHeight == null || capturedHeight <= 0) { _snack('Cek Tinggi Badan dulu.'); return; }
 
     setState(() => _processing = true);
     try {
@@ -540,8 +556,8 @@ class _HealthMonitoringPageState extends ConsumerState<HealthMonitoringPage>
         checkId: checkId,
         age: int.tryParse(_ageController.text),
         gender: _selectedGender,
-        weightKg: _weightKg,
-        heightCm: _heightCm,
+        weightKg: capturedWeight,
+        heightCm: capturedHeight,
       );
       await ref.read(localStorageProvider).saveHealthMonitoringRecord(result);
       await ref.read(localStorageProvider).appendHealthMonitoringHistory(result);

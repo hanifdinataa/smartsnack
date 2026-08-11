@@ -340,8 +340,8 @@ float measureBodyTemperatureC(String& errorCode, const String& checkId) {
   Serial.println(">>> Pengukuran Suhu Tubuh via Aplikasi <<<");
   float totalTemp = 0.0f;
   int count = 0;
-  // Pengambilan sampel selama 3 detik (30 x 100ms)
-  for (int i = 0; i < 30; i++) {
+  // Pengambilan sampel selama 2 detik (20 x 100ms)
+  for (int i = 0; i < 20; i++) {
     if (mqtt.connected()) mqtt.loop();
     float t = mlx.readObjectTempC();
     if (!isnan(t) && t > 10.0f && t < 50.0f) {
