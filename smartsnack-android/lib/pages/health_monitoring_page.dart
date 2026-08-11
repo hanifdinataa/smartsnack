@@ -96,13 +96,66 @@ class _HealthMonitoringPageState extends ConsumerState<HealthMonitoringPage>
   }
 
   String? _localBmiStatus(double? bmi) {
-    if (bmi == null) return null;
+    if (bmi == null || bmi <= 0) return null;
+    final int age = int.tryParse(_ageController.text) ?? 10;
+    final String gender = _selectedGender ?? 'Male';
+    return _classifyWho2007(bmi, age, gender);
+  }
+
+  // WHO 2007 BMI-for-age Z-Scores Cutoffs [-3SD, -2SD, +1SD, +2SD]
+  static const Map<int, List<double>> _whoBoys = {
+    5:  [12.1, 13.0, 16.6, 18.3],
+    6:  [12.1, 13.0, 16.8, 18.5],
+    7:  [12.3, 13.1, 17.0, 19.0],
+    8:  [12.4, 13.3, 17.4, 19.7],
+    9:  [12.6, 13.5, 17.9, 20.5],
+    10: [12.8, 13.7, 18.5, 21.4],
+    11: [13.1, 14.1, 19.2, 22.5],
+    12: [13.4, 14.5, 19.9, 23.6],
+    13: [13.8, 14.9, 20.8, 24.8],
+    14: [14.3, 15.5, 21.8, 25.9],
+    15: [14.7, 16.0, 22.7, 27.0],
+    16: [15.1, 16.5, 23.5, 27.9],
+    17: [15.4, 16.9, 24.3, 28.6],
+    18: [15.7, 17.3, 24.9, 29.2],
+    19: [15.9, 17.6, 25.4, 29.7],
+  };
+
+  static const Map<int, List<double>> _whoGirls = {
+    5:  [11.8, 12.7, 16.8, 18.8],
+    6:  [11.7, 12.7, 17.0, 19.2],
+    7:  [11.8, 12.7, 17.3, 19.8],
+    8:  [11.9, 12.9, 17.7, 20.6],
+    9:  [12.1, 13.1, 18.3, 21.5],
+    10: [12.4, 13.5, 19.0, 22.6],
+    11: [12.7, 13.9, 19.9, 23.7],
+    12: [13.2, 14.4, 20.8, 25.0],
+    13: [13.6, 14.9, 21.8, 26.2],
+    14: [14.0, 15.4, 22.7, 27.3],
+    15: [14.4, 15.9, 23.5, 28.2],
+    16: [14.6, 16.2, 24.1, 28.9],
+    17: [14.7, 16.4, 24.5, 29.3],
+    18: [14.7, 16.4, 24.8, 29.5],
+    19: [14.7, 16.5, 25.0, 29.7],
+  };
+
+  String _classifyWho2007(double bmi, int age, String gender) {
+    if (age >= 5 && age <= 19) {
+      final isFemale = gender.toLowerCase() == 'female' || gender.toLowerCase() == 'perempuan';
+      final table = isFemale ? _whoGirls : _whoBoys;
+      final cutoffs = table[age] ?? table[10]!;
+      if (bmi < cutoffs[0]) return 'gizi_buruk';
+      if (bmi < cutoffs[1]) return 'gizi_kurang';
+      if (bmi <= cutoffs[2]) return 'gizi_baik';
+      if (bmi <= cutoffs[3]) return 'gizi_lebih';
+      return 'obesitas';
+    }
+
+    // Dewasa (> 19 tahun)
     if (bmi < 18.5) return 'underweight';
     if (bmi <= 24.9) return 'normal';
     if (bmi <= 29.9) return 'pre_obese';
-    if (bmi <= 34.9) return 'obese_class_1';
-    if (bmi <= 39.9) return 'obese_class_2';
-    return 'obese_class_3';
+    return 'obesitas';
   }
 
   // ── Status tinggi badan berdasarkan usia dan jenis kelamin ──
@@ -789,10 +842,10 @@ class _HealthMonitoringPageState extends ConsumerState<HealthMonitoringPage>
                   const Text('BMI (dihitung otomatis)', style: TextStyle(fontSize: 13, color: Color(0xFF6B7280))),
                   const SizedBox(height: 2),
                   Text(
-                    bmi == null ? '-' : '${bmi.toStringAsFixed(2)}  •  ${_bmiLabel(bmi)}',
-                    style: TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.w800,
-                      color: bmi == null ? const Color(0xFF9CA3AF) : _bmiColor(bmi),
+                    bmi == null ? '-' : bmi.toStringAsFixed(2),
+                    style: const TextStyle(
+                      fontSize: 20, fontWeight: FontWeight.w800,
+                      color: Color(0xFF111827),
                     ),
                   ),
                 ]),
@@ -1665,12 +1718,12 @@ class _HealthMonitoringPageState extends ConsumerState<HealthMonitoringPage>
   }
 
   String _bmiLabel(double bmi) {
-    if (bmi < 18.5) return 'Underweight';
-    if (bmi <= 24.9) return 'Normal range';
-    if (bmi <= 29.9) return 'Pre-obese';
-    if (bmi <= 34.9) return 'Obese class I';
-    if (bmi <= 39.9) return 'Obese class II';
-    return 'Obese class III';
+    if (bmi < 18.5) return '';
+    if (bmi <= 24.9) return '';
+    if (bmi <= 29.9) return '';
+    if (bmi <= 34.9) return '';
+    if (bmi <= 39.9) return '';
+    return '';
   }
 
   Color _bmiColor(double bmi) {
