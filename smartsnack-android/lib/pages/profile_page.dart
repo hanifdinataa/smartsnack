@@ -242,29 +242,31 @@ class _ProfilePageState extends ConsumerState<ProfilePage> with SingleTickerProv
     );
   }
 
-  String _formatStatusLabel(String status) {
-    switch (status.toLowerCase()) {
-      case 'gizi_baik':
-      case 'normal':
-        return 'Normal / Gizi Baik';
-      case 'gizi_kurang':
-      case 'underweight':
-      case 'kurus':
-        return 'Gizi Kurang (Underweight)';
-      case 'gizi_buruk':
-        return 'Gizi Buruk';
-      case 'gizi_lebih':
-      case 'pre_obese':
-      case 'gemuk':
-        return 'Gizi Lebih (Overweight)';
-      case 'obesitas':
-      case 'obese_class_1':
-      case 'obese_class_2':
-      case 'obese_class_3':
-        return 'Obesitas';
-      default:
-        return status;
-    }
+  }
+}
+
+String _formatStatusLabel(String status) {
+  switch (status.toLowerCase()) {
+    case 'gizi_baik':
+    case 'normal':
+      return 'Normal / Gizi Baik';
+    case 'gizi_kurang':
+    case 'underweight':
+    case 'kurus':
+      return 'Gizi Kurang (Underweight)';
+    case 'gizi_buruk':
+      return 'Gizi Buruk';
+    case 'gizi_lebih':
+    case 'pre_obese':
+    case 'gemuk':
+      return 'Gizi Lebih (Overweight)';
+    case 'obesitas':
+    case 'obese_class_1':
+    case 'obese_class_2':
+    case 'obese_class_3':
+      return 'Obesitas';
+    default:
+      return status;
   }
 }
 
