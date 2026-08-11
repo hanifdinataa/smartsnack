@@ -7,3 +7,8 @@ sudo docker compose up -d --build backend
 flutter run -d chrome --web-port 8080
 flutter run -d chrome --web-port 8080 --dart-define=API_BASE_URL=http://54.144.6.206:8000/api
 flutter run --dart-define=API_BASE_URL=http://54.144.6.206:8000/api
+
+
+memberi tahu jika project ini aman: 
+git config --global --add safe.directory C:/Hanif-Dinata/SEMESTER6/TA/ANDROID_SERVER
+

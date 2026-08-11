@@ -235,9 +235,11 @@ class HealthMonitoringController extends Controller
     public function analyze(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'check_id' => 'required|integer|exists:health_checks,id',
-            'age' => 'nullable|integer|min:1',
-            'gender' => 'nullable|in:Male,Female',
+            'check_id'  => 'required|integer|exists:health_checks,id',
+            'age'       => 'nullable|integer|min:1',
+            'gender'    => 'nullable|in:Male,Female',
+            'weight_kg' => 'nullable|numeric|min:0.1',
+            'height_cm' => 'nullable|numeric|min:0.1',
         ]);
 
         $check = HealthCheck::query()
@@ -254,8 +256,14 @@ class HealthMonitoringController extends Controller
             return errorResponse('Data sensor belum lengkap. Cek detak jantung dan suhu tubuh terlebih dahulu.', null, 422);
         }
 
-        $weightKg = $metric ? (float) $metric->weight : null;
-        $heightCm = $metric ? (float) $metric->height : null;
+        // Prioritaskan weight_kg & height_cm yang dikirim dari Flutter jika ada
+        $weightKg = isset($validated['weight_kg'])
+            ? (float) $validated['weight_kg']
+            : ($metric ? (float) $metric->weight : null);
+
+        $heightCm = isset($validated['height_cm'])
+            ? (float) $validated['height_cm']
+            : ($metric ? (float) $metric->height : null);
 
         if ($weightKg === null || $weightKg <= 0) {
             return errorResponse('Data berat badan belum tersedia. Lakukan cek berat badan terlebih dahulu.', null, 422);

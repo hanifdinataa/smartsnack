@@ -1969,11 +1969,15 @@ class ApiService {
     required int checkId,
     int? age,
     String? gender,
+    double? weightKg,
+    double? heightCm,
   }) async {
     final map = await _post('/api/health-monitoring/analyze', data: {
       'check_id': checkId,
       if (age != null) 'age': age,
       if (gender != null) 'gender': gender,
+      if (weightKg != null) 'weight_kg': weightKg,
+      if (heightCm != null) 'height_cm': heightCm,
     });
     final envelope = ApiEnvelope<HealthMonitoringRecord>.fromJson(
       map,

@@ -220,8 +220,10 @@ class _ProfilePageState extends ConsumerState<ProfilePage> with SingleTickerProv
           const SizedBox(height: 16),
           _healthRow(Icons.favorite_rounded, 'Denyut Jantung', data == null ? '-' : '${data.heartRate.toStringAsFixed(0)} bpm'),
           _healthRow(Icons.thermostat_rounded, 'Suhu Tubuh', data == null ? '-' : '${data.bodyTemp.toStringAsFixed(1)} °C'),
+          _healthRow(Icons.height_rounded, 'Tinggi Badan', data == null ? '-' : '${data.heightCm.toStringAsFixed(1)} cm'),
+          _healthRow(Icons.monitor_weight_rounded, 'Berat Badan', data == null ? '-' : '${data.weightKg.toStringAsFixed(1)} kg'),
           _healthRow(Icons.wc_rounded, 'Gender', data == null ? '-' : (data.gender == 'Female' ? 'Perempuan' : 'Laki-laki')),
-          _healthRow(Icons.speed_rounded, 'BMI', data == null ? '-' : data.bmi.toStringAsFixed(2)),
+          _healthRow(Icons.speed_rounded, 'BMI', data == null ? '-' : '${data.bmi.toStringAsFixed(2)} (${_bmiLabel(data.bmi)})'),
           _healthRow(Icons.health_and_safety_rounded, 'Status Kesehatan', data == null ? '-' : (data.isNormal ? 'Normal ✅' : 'Perlu Perhatian ⚠️')),
 //          const SizedBox(height: 14),
 //          Container(height: 1, color: const Color(0xFFF3F4F6)),
@@ -253,6 +255,15 @@ class _ProfilePageState extends ConsumerState<ProfilePage> with SingleTickerProv
         Expanded(child: Text(value, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: Color(0xFF111827)), textAlign: TextAlign.right)),
       ]),
     );
+  }
+
+  String _bmiLabel(double bmi) {
+    if (bmi < 18.5) return 'Underweight';
+    if (bmi <= 24.9) return 'Normal';
+    if (bmi <= 29.9) return 'Pre-obese';
+    if (bmi <= 34.9) return 'Obese I';
+    if (bmi <= 39.9) return 'Obese II';
+    return 'Obese III';
   }
 }
 

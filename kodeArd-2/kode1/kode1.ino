@@ -31,8 +31,8 @@ PubSubClient      mqtt(espClient);
 Preferences       calibPrefs;   // Penyimpanan kalibrasi berat di flash (NVS), bertahan walau reset/reflash
 
 // ===== KONFIGURASI WIFI & MQTT =====
-const char* WIFI_SSID = "RUMAHMU";
-const char* WIFI_PASS = "77777777";
+const char* WIFI_SSID = "Ngrox";
+const char* WIFI_PASS = "llllllll";
 
 const char* MQTT_HOST = "54.144.6.206";
 const int   MQTT_PORT = 1884;
@@ -198,15 +198,15 @@ float rawToKg(float rawMedian) {
 // dengan beberapa bacaan cepat berturut-turut supaya median langsung
 // merepresentasikan beban saat ini, bukan campuran data lama+baru.
 float sampleRawOnce() {
-  float bRaw = scale.get_units(8);
+  float bRaw = scale.get_units(1);
   bool isLoadedNow = (bRaw >= WEIGHT_RAW_THRESHOLD);
 
   if (isLoadedNow && !wasLoaded) {
     for (int i = 0; i < RAW_HISTORY_SIZE; i++) {
-      pushRawAndGetMedian(scale.get_units(4));
-      delay(15);
+      pushRawAndGetMedian(scale.get_units(1));
+      delay(5);
     }
-    bRaw = scale.get_units(8);
+    bRaw = scale.get_units(1);
   }
   wasLoaded = isLoadedNow;
 
@@ -376,49 +376,32 @@ float measureBodyTemperatureC(String& errorCode, const String& checkId) {
 float measureWeightKg(String& errorCode) {
   Serial.println(">>> Pengukuran Berat Badan via Aplikasi <<<");
 
-  // fungsi ini dipanggil nested dari dalam mqtt.loop() (lewat
-  // mqttCallback -> handleCommandPayload), yang artinya loop() utama
-  // TERTAHAN selama fungsi ini berjalan. Background sampling HX711 di
-  // bagian 3 loop() TIDAK jalan selama itu, jadi kalau cuma
-  // `return beratGlobal`, hasilnya snapshot lama yang belum tentu
-  // konvergen -> itu sebabnya "Aktual" bisa beda2 tiap kali app minta
-  // ukur padahal beban di timbangan sama. Sampling manual di sini,
-  // pola sama seperti measureHeartRateBpm() / measureBodyTemperatureC().
+  // Ambil sampling cepat (100ms) dari sensor HX711 agar respon realtime & tidak delay
   float localEma = beratGlobal;
-  bool firstSample = (localEma == 0.0f);
   unsigned long startTime = millis();
 
-  while (millis() - startTime < 3000) {   // 3 detik, cukup buat EMA konvergen
+  while (millis() - startTime < 100) {
     if (mqtt.connected()) mqtt.loop();
 
     if (scale.is_ready()) {
       float b = sampleRawOnce();
 
       if (b < WEIGHT_RAW_THRESHOLD) {
-        localEma *= 0.8f;
-        if (localEma < 1.0f) localEma = 0.0f;
+        localEma *= 0.7f;
+        if (localEma < 0.5f) localEma = 0.0f;
       } else {
         float corrected = rawToKg(b);
-        if (firstSample) {
-          localEma = corrected;
-          firstSample = false;
-        } else {
-          // Alpha lebih besar (0.3) daripada EMA display di loop() (0.1)
-          // supaya konvergen dalam window 3 detik ini.
-          localEma = (localEma * 0.7f) + (corrected * 0.3f);
-        }
+        localEma = (localEma * 0.4f) + (corrected * 0.6f);
       }
     }
-    delay(80);
+    delay(10);
   }
 
-  beratGlobal = localEma;  // sinkronkan balik ke global biar LCD & serial ikut update
-
-  if (localEma < 1.0f) {
-    errorCode = "no_weight_detected";
-    return 0.0f;
+  if (localEma < 0.5f) {
+    localEma = 0.0f; // Beban kosong = 0.0 kg (data valid, BUKAN error)
   }
 
+  beratGlobal = localEma;  // sinkronkan balik ke global
   Serial.printf("Aktual: %.2f kg\n", localEma);
   return localEma;
 }
@@ -591,6 +574,7 @@ void setup() {
   Serial.begin(115200);
   Wire.begin(21, 22);
   Wire.setClock(50000); // 50kHz stabil untuk MLX
+  Wire.setTimeOut(100); // Timeout 100ms cegah bus I2C hang
 
   // LCD Init
   lcd.init();

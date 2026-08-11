@@ -104,6 +104,92 @@ class _HealthMonitoringPageState extends ConsumerState<HealthMonitoringPage>
     return 'obese_class_3';
   }
 
+  // ── Status tinggi badan berdasarkan usia dan jenis kelamin ──
+  // Sumber: WHO & Kementerian Kesehatan RI
+  // Mengembalikan: 'normal', 'pendek', atau 'sangat_pendek'
+  // Batas 'pendek' = ambang batas WHO (nilai di tabel), kurang dari itu = 'sangat_pendek'
+  String? _localHeightStatus(double? heightCm) {
+    if (heightCm == null || heightCm <= 0) return null;
+
+    final int age  = int.tryParse(_ageController.text) ?? 0;
+    final String gender = _selectedGender ?? '';
+    if (age <= 0 || gender.isEmpty) return null;
+
+    // Batas MINIMUM tinggi badan (cm) berdasarkan WHO
+    // Di bawah nilai ini = PENDEK. Di bawah 80% nilai ini = SANGAT PENDEK.
+    // Data usia 1-5 tahun: kisaran bawah berdasarkan Kemenkes RI
+    // Data usia 6-18 tahun: ambang batas 'pendek' dari WHO
+    final Map<int, Map<String, double>> _minHeight = {
+      1:  {'Male': 72.0, 'Female': 70.0},
+      2:  {'Male': 82.0, 'Female': 80.0},
+      3:  {'Male': 83.0, 'Female': 82.0},
+      4:  {'Male': 84.0, 'Female': 83.0},
+      5:  {'Male': 85.0, 'Female': 84.0},
+      6:  {'Male': 106.1, 'Female': 104.9},
+      7:  {'Male': 111.2, 'Female': 109.9},
+      8:  {'Male': 116.0, 'Female': 115.0},
+      9:  {'Male': 120.5, 'Female': 120.3},
+      10: {'Male': 125.0, 'Female': 125.8},
+      11: {'Male': 129.7, 'Female': 131.7},
+      12: {'Male': 134.9, 'Female': 137.6},
+      13: {'Male': 141.2, 'Female': 142.5},
+      14: {'Male': 147.8, 'Female': 145.9},
+      15: {'Male': 153.4, 'Female': 147.9},
+      16: {'Male': 157.4, 'Female': 148.9},
+      17: {'Male': 159.9, 'Female': 149.5},
+      18: {'Male': 161.2, 'Female': 149.8},
+    };
+
+    // Jika usia di luar rentang 1-18, kembalikan null (tidak bisa dievaluasi)
+    if (age < 1 || age > 18) return null;
+
+    final double? minNormal = _minHeight[age]?[gender];
+    if (minNormal == null) return null;
+
+    // Ambang batas sangat pendek = 80% dari batas normal (estimasi konservatif)
+    final double veryShortThreshold = minNormal * 0.935;
+
+    if (heightCm < veryShortThreshold) return 'sangat_pendek';
+    if (heightCm < minNormal)          return 'pendek';
+    return 'normal';
+  }
+
+  // ── Status berat badan berdasarkan standar WHO BB/U ──
+  // Sumber: WHO Child Growth Standards & hellosehat.com
+  // Untuk usia 1–10 tahun: menggunakan berat badan menurut umur (BB/U)
+  // Untuk usia >10 tahun: kembalikan null → pakai bmiStatus dari server
+  String? _localWeightStatus(double weightKg, int age, String gender) {
+    if (weightKg <= 0 || age <= 0) return null;
+    if (age > 10) return null; // usia >10 pakai BMI
+
+    // Berat badan ideal (rata-rata WHO) berdasarkan usia dan jenis kelamin
+    final Map<int, Map<String, double>> idealWeight = {
+      1:  {'Male': 9.6,  'Female': 8.9},
+      2:  {'Male': 12.2, 'Female': 11.5},
+      3:  {'Male': 14.3, 'Female': 13.9},
+      4:  {'Male': 16.3, 'Female': 16.1},
+      5:  {'Male': 18.3, 'Female': 18.2},
+      6:  {'Male': 20.5, 'Female': 20.2},
+      7:  {'Male': 22.9, 'Female': 22.4},
+      8:  {'Male': 25.6, 'Female': 25.0},
+      9:  {'Male': 28.6, 'Female': 28.2},
+      10: {'Male': 31.9, 'Female': 31.9},
+    };
+
+    if (age < 1 || age > 10) return null;
+    final double? ideal = idealWeight[age]?[gender];
+    if (ideal == null) return null;
+
+    final double ratio = weightKg / ideal;
+
+    // Klasifikasi berdasarkan rasio terhadap berat ideal WHO
+    if (ratio < 0.80)  return 'gizi_buruk';   // < 80% berat ideal = gizi buruk
+    if (ratio < 0.90)  return 'gizi_kurang';  // 80–90% = gizi kurang
+    if (ratio <= 1.20) return 'gizi_baik';    // 90–120% = gizi baik / normal
+    if (ratio <= 1.40) return 'gizi_lebih';   // 120–140% = gizi lebih
+    return 'obesitas';                        // >140% = obesitas
+  }
+
   bool get _canProcess =>
       _checkId != null &&
       _heartRate != null &&
@@ -362,12 +448,12 @@ class _HealthMonitoringPageState extends ConsumerState<HealthMonitoringPage>
       await _fetchWeightStream();
       if (!mounted) break;
       final elapsed = DateTime.now().difference(startTime).inMilliseconds;
-      // Target update rate: 400ms
-      final delay = 400 - elapsed;
+      // Target update rate: 150ms (respon sangat cepat sesuai Serial Monitor)
+      final delay = 150 - elapsed;
       if (delay > 0) {
         await Future.delayed(Duration(milliseconds: delay));
       } else {
-        await Future.delayed(const Duration(milliseconds: 50));
+        await Future.delayed(const Duration(milliseconds: 20));
       }
     }
   }
@@ -382,7 +468,10 @@ class _HealthMonitoringPageState extends ConsumerState<HealthMonitoringPage>
       if (nextWeight != null && mounted && _isStreamingWeight) {
         setState(() {
           if (nextCheckId != null) _checkId = nextCheckId;
-          _weightKg = nextWeight;
+          // Pertahankan berat badan yang valid (>= 1.0 kg) jika pengguna turun dari timbangan
+          if (nextWeight >= 1.0 || _weightKg == null) {
+            _weightKg = nextWeight;
+          }
           _result = null;
         });
       }
@@ -434,6 +523,11 @@ class _HealthMonitoringPageState extends ConsumerState<HealthMonitoringPage>
   }
 
   Future<void> _process() async {
+    // Otomatis matikan mode streaming timbangan saat menekan proses
+    if (_isStreamingWeight) {
+      _stopWeightStreaming();
+    }
+
     final checkId = _checkId;
     if (checkId == null || _heartRate == null) { _snack('Cek Detak Jantung dulu.'); return; }
     if (_bodyTemp == null) { _snack('Cek Suhu Tubuh dulu.'); return; }
@@ -446,6 +540,8 @@ class _HealthMonitoringPageState extends ConsumerState<HealthMonitoringPage>
         checkId: checkId,
         age: int.tryParse(_ageController.text),
         gender: _selectedGender,
+        weightKg: _weightKg,
+        heightCm: _heightCm,
       );
       await ref.read(localStorageProvider).saveHealthMonitoringRecord(result);
       await ref.read(localStorageProvider).appendHealthMonitoringHistory(result);
@@ -546,9 +642,9 @@ class _HealthMonitoringPageState extends ConsumerState<HealthMonitoringPage>
             progress: _loadingHeartRate
                 ? ((_heartMeasureSeconds - _heartRemainingSeconds) / _heartMeasureSeconds).clamp(0.0, 1.0)
                 : null,
-            chartWidget: (_loadingHeartRate || _heartChartData.isNotEmpty)
-                ? _buildHeartChart()
-                : null,
+            // chartWidget: (_loadingHeartRate || _heartChartData.isNotEmpty)
+            //     ? _buildHeartChart()
+            //     : null,
           ),
           const SizedBox(height: 12),
 
@@ -571,9 +667,9 @@ class _HealthMonitoringPageState extends ConsumerState<HealthMonitoringPage>
             progress: _loadingBodyTemp
                 ? ((_tempMeasureSeconds - _tempRemainingSeconds) / _tempMeasureSeconds).clamp(0.0, 1.0)
                 : null,
-            chartWidget: (_loadingBodyTemp || _tempChartData.isNotEmpty)
-                ? _buildTempChart()
-                : null,
+            // chartWidget: (_loadingBodyTemp || _tempChartData.isNotEmpty)
+            //     ? _buildTempChart()
+            //     : null,
           ),
           const SizedBox(height: 12),
 
@@ -641,7 +737,8 @@ class _HealthMonitoringPageState extends ConsumerState<HealthMonitoringPage>
             iconBg: const Color(0xFFCFFAFE),
             title: 'Tinggi Badan',
             value: _heightCm == null ? '-' : '${_heightCm!.toStringAsFixed(1)} cm',
-            statusChip: null,
+            statusChip: _localHeightStatus(_heightCm) != null
+                ? _statusChip(_localHeightStatus(_heightCm)!) : null,
             buttonLabel: _loadingHeight ? 'Mengukur...' : 'Mulai Ukur',
             hint: 'Berdiri tegak di bawah sensor ultrasonik',
             loading: _loadingHeight,
@@ -1119,104 +1216,298 @@ class _HealthMonitoringPageState extends ConsumerState<HealthMonitoringPage>
 
   Widget _buildResultCard(HealthMonitoringRecord r) {
     final isNormal = r.isNormal;
-    final cardColor   = isNormal ? const Color(0xFF0D9F6E) : const Color(0xFFF59E0B);
-    final bgColor     = isNormal ? const Color(0xFFECFDF5) : const Color(0xFFFFFBEB);
-    final borderColor = isNormal ? const Color(0xFF6EE7B7) : const Color(0xFFFCD34D);
+
+    // Format tanggal dari checkedAtIso
+    final DateTime checkedAt = DateTime.tryParse(r.checkedAtIso) ?? DateTime.now();
+    final String dateStr =
+        '${checkedAt.day.toString().padLeft(2, '0')}-'
+        '${checkedAt.month.toString().padLeft(2, '0')}-'
+        '${checkedAt.year}';
+
+    // Status tinggi badan (dihitung lokal karena server tidak mengembalikannya)
+    final String? heightStatus = _localHeightStatus(r.heightCm);
+
+    // Status berat badan:
+    // - Usia 1-10 tahun : pakai BB/U standar WHO
+    // - Usia >10 tahun  : pakai bmiStatus dari server
+    final String? weightStatusLocal = _localWeightStatus(r.weightKg, r.age, r.gender);
+    final String? weightStatus = weightStatusLocal ?? r.bmiStatus;
+
+    // Warna & label final result
+    final Color finalColor  = isNormal ? const Color(0xFF0D9F6E) : const Color(0xFFF59E0B);
+    final String finalLabel = isNormal ? '🟢 NORMAL' : '🟡 PERLU PERHATIAN';
+
+    // Pesan rekomendasi - dibuat otomatis berdasarkan parameter yang bermasalah
+    final List<String> adviceList = [];
+
+    // ── Detak jantung ──
+    final String hr = r.heartStatus.toLowerCase();
+    if (hr == 'rendah') {
+      adviceList.add('❤️ Detak jantung rendah - Istirahat yang cukup, hindari aktivitas berat tiba-tiba, dan pastikan hidrasi tubuh.');
+    } else if (hr == 'tinggi' || hr == 'perlu_perhatian') {
+      adviceList.add('❤️ Detak jantung tinggi - Tenangkan diri, tarik napas dalam-dalam, kurangi kafein, dan hindari stres berlebihan.');
+    }
+
+    // ── Suhu tubuh ──
+    final String tmp = r.tempStatus.toLowerCase();
+    if (tmp == 'rendah') {
+      adviceList.add('🌡️ Suhu tubuh rendah - Kenakan pakaian hangat, konsumsi minuman hangat, dan istirahat di tempat yang nyaman.');
+    } else if (tmp == 'hangat') {
+      adviceList.add('🌡️ Suhu tubuh hangat - Minum air putih yang cukup dan istirahat sebentar.');
+    } else if (tmp == 'demam' || tmp == 'perlu_perhatian') {
+      adviceList.add('🌡️ Demam - Minum paracetamol jika perlu, banyak minum air, kompres dahi, dan segera konsultasi dokter jika suhu di atas 39°C.');
+    }
+
+    // ── Tinggi badan ──
+    final String? hs = heightStatus;
+    if (hs == 'pendek') {
+      adviceList.add('📏 Tinggi badan pendek - Perhatikan asupan nutrisi terutama protein, kalsium, dan vitamin D. Konsultasikan ke dokter anak atau ahli gizi.');
+    } else if (hs == 'sangat_pendek') {
+      adviceList.add('📏 Sangat pendek (potensi stunting) - Segera konsultasikan ke dokter atau puskesmas untuk evaluasi pertumbuhan lebih lanjut.');
+    }
+
+    // ── Berat badan ──
+    // Usia 1-10: gunakan status BB/U (gizi buruk/kurang/baik/lebih)
+    // Usia >10 : gunakan BMI
+    if (r.age <= 10 && weightStatusLocal != null) {
+      if (weightStatusLocal == 'gizi_buruk') {
+        adviceList.add('⚖️ Gizi buruk - Segera konsultasikan ke dokter atau puskesmas. Anak membutuhkan penanganan gizi intensif secepatnya.');
+      } else if (weightStatusLocal == 'gizi_kurang') {
+        adviceList.add('⚖️ Gizi kurang - Perbanyak asupan protein (telur, ikan, daging), karbohidrat kompleks, dan lemak sehat. Makan 3x sehari + 2 camilan bergizi.');
+      } else if (weightStatusLocal == 'gizi_lebih') {
+        adviceList.add('⚖️ Berat badan berlebih - Kurangi makanan tinggi gula & lemak jenuh. Perbanyak sayur, buah, dan ajak anak aktif bergerak minimal 60 menit/hari.');
+      } else if (weightStatusLocal == 'obesitas') {
+        adviceList.add('⚖️ Obesitas - Konsultasikan ke dokter anak atau ahli gizi untuk program pengelolaan berat badan yang aman sesuai usianya.');
+      }
+    } else {
+      final String bmi = r.bmiStatus.toLowerCase();
+      if (bmi == 'kurus' || bmi == 'underweight') {
+        adviceList.add('⚖️ Berat badan kurang - Perbanyak asupan kalori bergizi (protein, karbohidrat kompleks), makan 3x sehari + 2 camilan sehat.');
+      } else if (bmi == 'gemuk' || bmi == 'pre_obese') {
+        adviceList.add('⚖️ Berat badan berlebih - Kurangi makanan tinggi gula & lemak jenuh, perbanyak sayur, buah, dan olahraga minimal 30 menit/hari.');
+      } else if (bmi.startsWith('obese') || bmi == 'obesitas') {
+        adviceList.add('⚖️ Obesitas - Disarankan berkonsultasi dengan dokter atau ahli gizi untuk program penurunan berat badan yang aman dan terstruktur.');
+      }
+    }
+
+    // ── Jika semua normal ──
+    if (adviceList.isEmpty) {
+      adviceList.add('✅ Semua parameter dalam batas normal. Pertahankan pola makan sehat, olahraga rutin, dan tidur yang cukup!');
+    }
 
     return Container(
-      padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: borderColor, width: 1.5),
-        boxShadow: [BoxShadow(color: cardColor.withOpacity(0.12), blurRadius: 24, offset: const Offset(0, 8))],
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: const Color(0xFFE5E7EB), width: 1),
+        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.06), blurRadius: 20, offset: const Offset(0, 6))],
       ),
-      child: Column(children: [
-        // ── Header ──
-        Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-          Container(
-            width: 56, height: 56,
-            decoration: BoxDecoration(color: bgColor, borderRadius: BorderRadius.circular(14)),
-            child: Icon(isNormal ? Icons.check_circle_rounded : Icons.warning_rounded, size: 32, color: cardColor),
-          ),
-        ]),
-        const SizedBox(height: 12),
-        const Text('HASIL CEK KESEHATAN', style: TextStyle(fontSize: 11, color: Color(0xFF6B7280), fontWeight: FontWeight.w600, letterSpacing: 1.2)),
-        const SizedBox(height: 4),
-        Text(
-          isNormal ? 'Status Normal ✅' : 'Perlu Perhatian ⚠️',
-          style: TextStyle(fontWeight: FontWeight.w800, fontSize: 22, color: cardColor, letterSpacing: -0.3),
-        ),
-        const SizedBox(height: 20),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
 
-        // ── Per-parameter status ──
+        // ══ HEADER ══════════════════════════════════════════
         Container(
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(color: bgColor, borderRadius: BorderRadius.circular(16)),
-          child: Column(children: [
-            _resultRow(Icons.favorite_rounded, const Color(0xFFEF4444), 'Detak Jantung',
-                '${r.heartRate.toStringAsFixed(0)} bpm', r.heartStatus),
-            const SizedBox(height: 10),
-            _resultRow(Icons.thermostat_rounded, const Color(0xFFF59E0B), 'Suhu Tubuh',
-                '${r.bodyTemp.toStringAsFixed(1)} °C', r.tempStatus),
-            const SizedBox(height: 10),
-            _resultRow(Icons.monitor_weight_rounded, const Color(0xFF6366F1), 'Berat Badan',
-                '${r.weightKg.toStringAsFixed(1)} kg', null),
-            const SizedBox(height: 10),
-            _resultRow(Icons.height_rounded, const Color(0xFF0891B2), 'Tinggi Badan',
-                '${r.heightCm.toStringAsFixed(1)} cm', null),
-            const SizedBox(height: 10),
-            _resultRow(Icons.speed_rounded, const Color(0xFF0D9F6E), 'BMI',
-                '${r.bmi.toStringAsFixed(2)}  •  ${_bmiLabel(r.bmi)}', r.bmiStatus),
+          padding: const EdgeInsets.symmetric(vertical: 22, horizontal: 20),
+          decoration: const BoxDecoration(
+            color: Color(0xFF111827),
+            borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+          ),
+          child: const Column(children: [
+            Text('SMART SNACK BOX', style: TextStyle(color: Colors.white70, fontSize: 11, fontWeight: FontWeight.w600, letterSpacing: 2.5)),
+            SizedBox(height: 4),
+            Text('HEALTH REPORT', style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w800, letterSpacing: 1.5)),
           ]),
         ),
-        const SizedBox(height: 16),
 
-        // ── Pesan ──
-        if (isNormal) ...[
-          Container(
-            padding: const EdgeInsets.all(16),
+        // ══ DIVIDER ══════════════════════════════════════════
+        _reportDivider(),
+
+        // ── Tanggal ─────────────────────────────────────────
+        _reportDateRow(dateStr),
+        _reportDivider(),
+
+        // ── Heart Rate ──────────────────────────────────────
+        _reportMetricRow(
+          emoji: '❤️',
+          label: 'Heart Rate',
+          value: '${r.heartRate.toStringAsFixed(0)} bpm',
+          status: r.heartStatus,
+        ),
+        _reportDivider(),
+
+        // ── Suhu Tubuh ──────────────────────────────────────
+        _reportMetricRow(
+          emoji: '🌡️',
+          label: 'Body Temperature',
+          value: '${r.bodyTemp.toStringAsFixed(1)}°C',
+          status: r.tempStatus,
+        ),
+        _reportDivider(),
+
+        // ── Tinggi Badan ─────────────────────────────────────
+        _reportMetricRow(
+          emoji: '📏',
+          label: 'Height',
+          value: '${r.heightCm.toStringAsFixed(1)} cm',
+          status: heightStatus,
+        ),
+        _reportDivider(),
+
+        // ── Berat Badan ─────────────────────────────────────
+        _reportMetricRow(
+          emoji: '⚖️',
+          label: 'Weight',
+          value: '${r.weightKg.toStringAsFixed(1)} kg',
+          // Usia 1-10: status BB/U WHO | Usia >10: status BMI
+          status: weightStatus,
+        ),
+        _reportDivider(),
+
+        // ── BMI ─────────────────────────────────────────────
+        _reportMetricRow(
+          emoji: '🧮',
+          label: 'BMI',
+          value: r.bmi.toStringAsFixed(2),
+          status: r.bmiStatus,
+        ),
+        _reportDivider(),
+
+        // ══ FINAL RESULT ═════════════════════════════════════
+        Padding(
+          padding: const EdgeInsets.fromLTRB(20, 18, 20, 8),
+          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            const Row(children: [
+              Text('📋', style: TextStyle(fontSize: 16)),
+              SizedBox(width: 8),
+              Text('Final Result', style: TextStyle(fontSize: 12, color: Color(0xFF6B7280), fontWeight: FontWeight.w600, letterSpacing: 0.5)),
+            ]),
+            const SizedBox(height: 10),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 18),
+              decoration: BoxDecoration(
+                color: finalColor.withOpacity(0.10),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: finalColor.withOpacity(0.35), width: 1.5),
+              ),
+              child: Text(
+                finalLabel,
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 17, fontWeight: FontWeight.w800, color: finalColor, letterSpacing: 0.8),
+              ),
+            ),
+            const SizedBox(height: 12),
+
+            // Advice / recommendation - satu item per masalah
+            Column(
+              children: adviceList.map((item) => Container(
+                margin: const EdgeInsets.only(bottom: 8),
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFF9FAFB),
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: const Color(0xFFE5E7EB)),
+                ),
+                child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  const Text('💡', style: TextStyle(fontSize: 15)),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      item,
+                      style: const TextStyle(fontSize: 12.5, color: Color(0xFF374151), height: 1.55),
+                    ),
+                  ),
+                ]),
+              )).toList(),
+            ),
+          ]),
+        ),
+
+        // ── Kotak snack info ────────────────────────────────
+        Padding(
+          padding: const EdgeInsets.fromLTRB(20, 4, 20, 20),
+          child: Container(
+            padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [Color(0xFF0D9F6E), Color(0xFF059669)],
+              gradient: LinearGradient(
+                colors: isNormal
+                    ? [const Color(0xFF0D9F6E), const Color(0xFF059669)]
+                    : [const Color(0xFFF59E0B), const Color(0xFFD97706)],
                 begin: Alignment.topLeft, end: Alignment.bottomRight,
               ),
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(12),
             ),
             child: Row(children: [
-              const Text('🎁', style: TextStyle(fontSize: 28)),
+              Text(isNormal ? '🎁' : '💪', style: const TextStyle(fontSize: 24)),
               const SizedBox(width: 12),
-              const Expanded(
+              Expanded(
                 child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  Text('Kotak Snack Terbuka!',
-                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 15)),
-                  SizedBox(height: 4),
-                  Text('Ambil snack kamu dalam 10 detik ya! Kotak akan menutup otomatis.',
-                      style: TextStyle(color: Colors.white70, fontSize: 12)),
+                  Text(
+                    isNormal ? 'Kotak Snack Terbuka!' : 'Tetap Semangat!',
+                    style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 14),
+                  ),
+                  const SizedBox(height: 3),
+                  Text(
+                    isNormal
+                        ? 'Ambil snack kamu dalam 10 detik. Kotak menutup otomatis.'
+                        : 'Kotak snack tetap terbuka. Jaga pola makan & hidrasi ya!',
+                    style: const TextStyle(color: Colors.white70, fontSize: 11.5, height: 1.4),
+                  ),
                 ]),
               ),
             ]),
           ),
-        ] else ...[
-          Container(
-            padding: const EdgeInsets.all(14),
-            decoration: BoxDecoration(
-              color: const Color(0xFFFFFBEB),
-              borderRadius: BorderRadius.circular(14),
-              border: Border.all(color: const Color(0xFFFCD34D)),
-            ),
-            child: const Row(children: [
-              Text('💪', style: TextStyle(fontSize: 24)),
-              SizedBox(width: 12),
-              Expanded(
-                child: Text(
-                  'Tetap semangat menjaga kesehatan! Konsultasikan ke dokter jika diperlukan.',
-                  style: TextStyle(fontSize: 13, color: Color(0xFF78350F), height: 1.4),
-                ),
-              ),
+        ),
+
+      ]),
+    );
+  }
+
+  /// Satu baris divider bergaya "report" dengan dashes
+  Widget _reportDivider() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Divider(height: 1, thickness: 1, color: const Color(0xFFE5E7EB)),
+    );
+  }
+
+  /// Baris tanggal di report
+  Widget _reportDateRow(String date) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+      child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+        const Text('Tanggal', style: TextStyle(fontSize: 12, color: Color(0xFF6B7280), fontWeight: FontWeight.w500)),
+        Text(date, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: Color(0xFF111827))),
+      ]),
+    );
+  }
+
+  /// Satu blok metrik dalam report card
+  Widget _reportMetricRow({
+    required String emoji,
+    required String label,
+    required String value,
+    required String? status,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        // Label baris atas
+        Row(children: [
+          Text(emoji, style: const TextStyle(fontSize: 16)),
+          const SizedBox(width: 8),
+          Text(label, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: Color(0xFF111827))),
+        ]),
+        const SizedBox(height: 8),
+        // Nilai + Status dalam satu baris
+        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, crossAxisAlignment: CrossAxisAlignment.center, children: [
+          Text(value, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w800, color: Color(0xFF111827), letterSpacing: -0.5)),
+          if (status != null)
+            Row(children: [
+              const Text('Status', style: TextStyle(fontSize: 11, color: Color(0xFF6B7280))),
+              const SizedBox(width: 8),
+              _statusChip(status),
             ]),
-          ),
-        ],
+        ]),
       ]),
     );
   }
@@ -1308,6 +1599,44 @@ class _HealthMonitoringPageState extends ConsumerState<HealthMonitoringPage>
         textColor = const Color(0xFF581C87);
         label = 'Obese class III';
         icon = Icons.error_rounded;
+        break;
+      // ── Status tinggi badan (WHO/Kemenkes RI) ──
+      case 'pendek':
+        bgColor = const Color(0xFFFEF3C7);
+        textColor = const Color(0xFF78350F);
+        label = 'Pendek';
+        icon = Icons.warning_rounded;
+        break;
+      case 'sangat_pendek':
+        bgColor = const Color(0xFFFEE2E2);
+        textColor = const Color(0xFF7F1D1D);
+        label = 'Sangat Pendek';
+        icon = Icons.error_rounded;
+        break;
+      // ── Status berat badan BB/U (WHO, usia 1-10 tahun) ──
+      case 'gizi_baik':
+        bgColor = const Color(0xFFD1FAE5);
+        textColor = const Color(0xFF065F46);
+        label = 'Gizi Baik';
+        icon = Icons.check_circle_rounded;
+        break;
+      case 'gizi_kurang':
+        bgColor = const Color(0xFFFEF3C7);
+        textColor = const Color(0xFF78350F);
+        label = 'Gizi Kurang';
+        icon = Icons.warning_rounded;
+        break;
+      case 'gizi_buruk':
+        bgColor = const Color(0xFFFEE2E2);
+        textColor = const Color(0xFF7F1D1D);
+        label = 'Gizi Buruk';
+        icon = Icons.error_rounded;
+        break;
+      case 'gizi_lebih':
+        bgColor = const Color(0xFFFEF3C7);
+        textColor = const Color(0xFF78350F);
+        label = 'Gizi Lebih';
+        icon = Icons.warning_rounded;
         break;
       default:
         bgColor = const Color(0xFFFEF3C7);
