@@ -223,23 +223,8 @@ class _ProfilePageState extends ConsumerState<ProfilePage> with SingleTickerProv
           _healthRow(Icons.height_rounded, 'Tinggi Badan', data == null ? '-' : '${data.heightCm.toStringAsFixed(1)} cm'),
           _healthRow(Icons.monitor_weight_rounded, 'Berat Badan', data == null ? '-' : '${data.weightKg.toStringAsFixed(1)} kg'),
           _healthRow(Icons.wc_rounded, 'Gender', data == null ? '-' : (data.gender == 'Female' ? 'Perempuan' : 'Laki-laki')),
-          _healthRow(Icons.speed_rounded, 'BMI', data == null ? '-' : '${data.bmi.toStringAsFixed(2)} (${_bmiLabel(data.bmi)})'),
+          _healthRow(Icons.speed_rounded, 'BMI', data == null ? '-' : '${data.bmi.toStringAsFixed(2)} (${_formatStatusLabel(data.bmiStatus)})'),
           _healthRow(Icons.health_and_safety_rounded, 'Status Kesehatan', data == null ? '-' : (data.isNormal ? 'Normal ✅' : 'Perlu Perhatian ⚠️')),
-//          const SizedBox(height: 14),
-//          Container(height: 1, color: const Color(0xFFF3F4F6)),
-//          const SizedBox(height: 14),
-//          Row(children: [
-//            Container(width: 36, height: 36, decoration: BoxDecoration(color: const Color(0xFFFEF3C7), borderRadius: BorderRadius.circular(10)),
-//              child: const Icon(Icons.inventory_2_rounded, size: 18, color: Color(0xFFD97706))),
-//            const SizedBox(width: 10),
-//            const Text('Smart Snack Box', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15, color: Color(0xFF111827))),
-//          ]),
-//          const SizedBox(height: 12),
-//          _healthRow(Icons.water_drop_rounded, 'Limit gula', status == null ? '-' : '${status.sugarLimit.toStringAsFixed(0)} g'),
-//          _healthRow(Icons.today_rounded, 'Konsumsi hari ini', status == null ? '-' : '${status.todaySugar.toStringAsFixed(2)} g'),
-//          _healthRow(Icons.hourglass_bottom_rounded, 'Sisa kuota', status == null ? '-' : '${status.remainingSugar.toStringAsFixed(2)} g'),
-//          _healthRow(Icons.lock_open_rounded, 'Servo', status == null ? '-' : (status.canOpenServo ? 'Bisa dibuka' : 'Terkunci')),
-//          if (status != null) Padding(padding: const EdgeInsets.only(top: 8), child: Text(status.message, style: const TextStyle(fontSize: 13, color: Color(0xFF6B7280), fontStyle: FontStyle.italic))),
         ]),
       ),
     );
@@ -257,13 +242,29 @@ class _ProfilePageState extends ConsumerState<ProfilePage> with SingleTickerProv
     );
   }
 
-  String _bmiLabel(double bmi) {
-    if (bmi < 18.5) return 'Underweight';
-    if (bmi <= 24.9) return 'Normal';
-    if (bmi <= 29.9) return 'Pre-obese';
-    if (bmi <= 34.9) return 'Obese I';
-    if (bmi <= 39.9) return 'Obese II';
-    return 'Obese III';
+  String _formatStatusLabel(String status) {
+    switch (status.toLowerCase()) {
+      case 'gizi_baik':
+      case 'normal':
+        return 'Normal / Gizi Baik';
+      case 'gizi_kurang':
+      case 'underweight':
+      case 'kurus':
+        return 'Gizi Kurang (Underweight)';
+      case 'gizi_buruk':
+        return 'Gizi Buruk';
+      case 'gizi_lebih':
+      case 'pre_obese':
+      case 'gemuk':
+        return 'Gizi Lebih (Overweight)';
+      case 'obesitas':
+      case 'obese_class_1':
+      case 'obese_class_2':
+      case 'obese_class_3':
+        return 'Obesitas';
+      default:
+        return status;
+    }
   }
 }
 
@@ -355,7 +356,7 @@ class _HealthHistoryList extends StatelessWidget {
           _row('Gender', item.gender == 'Female' ? 'Perempuan' : 'Laki-laki'),
           _row('Tinggi', '${item.heightCm.toStringAsFixed(1)} cm'),
           _row('Berat', '${item.weightKg.toStringAsFixed(1)} kg'),
-          _row('BMI', item.bmi.toStringAsFixed(2)),
+          _row('BMI', '${item.bmi.toStringAsFixed(2)} (${_formatStatusLabel(item.bmiStatus)})'),
           const SizedBox(height: 6),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
