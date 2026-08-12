@@ -98,7 +98,7 @@ float   calPoint1Weight = 0.0f;
 bool    calPoint1Set    = false;
 
 const int   SERVO_CLOSED_ANGLE    = 0;
-const int   SERVO_OPEN_ANGLE      = 45;
+const int   SERVO_OPEN_ANGLE      = 35;
 const unsigned long SERVO_AUTO_CLOSE_MS = 10000; // 10 Detik
 
 // ===== STATE VARIABLES =====

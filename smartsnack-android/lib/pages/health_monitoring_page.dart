@@ -160,8 +160,11 @@ class _HealthMonitoringPageState extends ConsumerState<HealthMonitoringPage>
 
   // ── Status tinggi badan berdasarkan usia dan jenis kelamin ──
   // Sumber: WHO & Kementerian Kesehatan RI
-  // Mengembalikan: 'normal', 'pendek', atau 'sangat_pendek'
-  // Batas 'pendek' = ambang batas WHO (nilai di tabel), kurang dari itu = 'sangat_pendek'
+  // Kategori (Opsi B - 4 Kategori Lengkap WHO):
+  //   'sangat_pendek' = Severely Stunted (< -3SD)
+  //   'pendek'        = Stunted (-3SD s/d < -2SD)
+  //   'normal'        = Normal (-2SD s/d +3SD)
+  //   'tinggi'        = Tall (> +3SD)
   String? _localHeightStatus(double? heightCm) {
     if (heightCm == null || heightCm <= 0) return null;
 
@@ -169,16 +172,16 @@ class _HealthMonitoringPageState extends ConsumerState<HealthMonitoringPage>
     final String gender = _selectedGender ?? '';
     if (age <= 0 || gender.isEmpty) return null;
 
-    // Batas MINIMUM tinggi badan (cm) berdasarkan WHO
-    // Di bawah nilai ini = PENDEK. Di bawah 80% nilai ini = SANGAT PENDEK.
+    // Batas MINIMUM tinggi badan (cm) = ambang -2SD (batas bawah normal)
+    // Di bawah nilai ini = PENDEK. Di bawah veryShortThreshold = SANGAT PENDEK.
     // Data usia 1-5 tahun: kisaran bawah berdasarkan Kemenkes RI
-    // Data usia 6-18 tahun: ambang batas 'pendek' dari WHO
+    // Data usia 6-18 tahun: ambang batas WHO
     final Map<int, Map<String, double>> _minHeight = {
-      1:  {'Male': 72.0, 'Female': 70.0},
-      2:  {'Male': 82.0, 'Female': 80.0},
-      3:  {'Male': 83.0, 'Female': 82.0},
-      4:  {'Male': 84.0, 'Female': 83.0},
-      5:  {'Male': 85.0, 'Female': 84.0},
+      1:  {'Male': 72.0,  'Female': 70.0},
+      2:  {'Male': 82.0,  'Female': 80.0},
+      3:  {'Male': 83.0,  'Female': 82.0},
+      4:  {'Male': 84.0,  'Female': 83.0},
+      5:  {'Male': 85.0,  'Female': 84.0},
       6:  {'Male': 106.1, 'Female': 104.9},
       7:  {'Male': 111.2, 'Female': 109.9},
       8:  {'Male': 116.0, 'Female': 115.0},
@@ -194,19 +197,46 @@ class _HealthMonitoringPageState extends ConsumerState<HealthMonitoringPage>
       18: {'Male': 161.2, 'Female': 149.8},
     };
 
+    // Batas MAKSIMUM tinggi badan (cm) = ambang +3SD (batas atas normal)
+    // Di atas nilai ini = TINGGI (Tall)
+    // Estimasi berdasarkan WHO Growth Reference Data
+    final Map<int, Map<String, double>> _maxHeight = {
+      1:  {'Male': 84.0,  'Female': 83.0},
+      2:  {'Male': 97.0,  'Female': 96.0},
+      3:  {'Male': 104.0, 'Female': 103.0},
+      4:  {'Male': 111.0, 'Female': 110.0},
+      5:  {'Male': 118.0, 'Female': 117.0},
+      6:  {'Male': 123.5, 'Female': 122.0},
+      7:  {'Male': 129.7, 'Female': 128.2},
+      8:  {'Male': 135.7, 'Female': 134.5},
+      9:  {'Male': 141.5, 'Female': 140.7},
+      10: {'Male': 147.5, 'Female': 147.2},
+      11: {'Male': 154.2, 'Female': 154.0},
+      12: {'Male': 161.2, 'Female': 160.0},
+      13: {'Male': 168.0, 'Female': 165.0},
+      14: {'Male': 174.0, 'Female': 168.0},
+      15: {'Male': 178.5, 'Female': 170.5},
+      16: {'Male': 181.5, 'Female': 171.5},
+      17: {'Male': 183.5, 'Female': 172.5},
+      18: {'Male': 185.0, 'Female': 173.0},
+    };
+
     // Jika usia di luar rentang 1-18, kembalikan null (tidak bisa dievaluasi)
     if (age < 1 || age > 18) return null;
 
     final double? minNormal = _minHeight[age]?[gender];
+    final double? maxNormal = _maxHeight[age]?[gender];
     if (minNormal == null) return null;
 
-    // Ambang batas sangat pendek = 80% dari batas normal (estimasi konservatif)
+    // Ambang sangat pendek = 93.5% dari batas minimum normal (estimasi -3SD)
     final double veryShortThreshold = minNormal * 0.935;
 
-    if (heightCm < veryShortThreshold) return 'sangat_pendek';
-    if (heightCm < minNormal)          return 'pendek';
-    return 'normal';
+    if (heightCm < veryShortThreshold)            return 'sangat_pendek'; // < -3SD
+    if (heightCm < minNormal)                     return 'pendek';        // -3SD s/d < -2SD
+    if (maxNormal != null && heightCm > maxNormal) return 'tinggi';       // > +3SD
+    return 'normal';                                                       // -2SD s/d +3SD
   }
+
 
   // ── Status berat badan berdasarkan standar WHO BB/U ──
   // Sumber: WHO Child Growth Standards & hellosehat.com
@@ -1331,6 +1361,8 @@ class _HealthMonitoringPageState extends ConsumerState<HealthMonitoringPage>
       adviceList.add('📏 Tinggi badan pendek - Perhatikan asupan nutrisi terutama protein, kalsium, dan vitamin D. Konsultasikan ke dokter anak atau ahli gizi.');
     } else if (hs == 'sangat_pendek') {
       adviceList.add('📏 Sangat pendek (potensi stunting) - Segera konsultasikan ke dokter atau puskesmas untuk evaluasi pertumbuhan lebih lanjut.');
+    } else if (hs == 'tinggi') {
+      adviceList.add('📏 Tinggi badan di atas rata-rata (Tall) - Pertumbuhan sangat baik! Pastikan tetap menjaga pola makan bergizi seimbang dan olahraga rutin.');
     }
 
     // ── Status Gizi / Berat Badan & BMI (WHO 2007) ──
@@ -1672,6 +1704,12 @@ class _HealthMonitoringPageState extends ConsumerState<HealthMonitoringPage>
         textColor = const Color(0xFF7F1D1D);
         label = 'Sangat Pendek';
         icon = Icons.error_rounded;
+        break;
+      case 'tinggi':
+        bgColor = const Color(0xFFDBEAFE);
+        textColor = const Color(0xFF1E40AF);
+        label = 'Tinggi';
+        icon = Icons.arrow_upward_rounded;
         break;
       // ── Status berat badan BB/U (WHO, usia 1-10 tahun) ──
       case 'gizi_baik':
